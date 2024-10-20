@@ -7,8 +7,6 @@
 
 struct HomeUiState {
     var isLoading: Bool
-    var userFirstName: String? = "Anonymous"
-    var userPhotoUrl: String? = "https://placeholder.com/200x200"
     var weeklySummary: WeeklySummaryModel?
     var sections: [Section]?
     var error: Error?

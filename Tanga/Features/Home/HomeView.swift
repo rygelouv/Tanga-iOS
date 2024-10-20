@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @Binding var navigationPath: NavigationPath
     @StateObject var viewModel = HomeViewModel()
+    @StateObject var profileViewModel = ProfileViewModel()
     
     var body: some View {
         VStack {
@@ -17,9 +18,9 @@ struct HomeView: View {
                 SummaryRowShimmerAnimation()
             } else {
                 Spacer(minLength: 20)
-                HomeHeader()
+                HomeHeader(profilePhotoUrl: profileViewModel.photoUrl)
                 Spacer(minLength: 25)
-                GreetingMessage(userFirsName: viewModel.uiState.userFirstName)
+                GreetingMessage(userFirsName: profileViewModel.firstName)
                 ScrollView(.vertical, showsIndicators: false) {
                     Spacer(minLength: 15)
                     WeeklySummary(weeklySummary: viewModel.uiState.weeklySummary)
@@ -36,18 +37,19 @@ struct HomeView: View {
         .padding(.horizontal)
         .onAppear {
             viewModel.loadHomeData()
+            profileViewModel.loadProfileData()
         }
     }
     
     struct HomeHeader: View {
-        // @Binding var navigationPath: NavigationPath
         @State var path: NavigationPath = NavigationPath()
+        var profilePhotoUrl: String?
         
         var body: some View {
             HStack {
                 SearchButton()
                 Spacer()
-                ProfilePictureView(url: "https://picsum.photos/i/237/400/400")
+                ProfilePictureView(url: profilePhotoUrl ?? "")
                     .frame(width: 40, height: 40)
             }
         }

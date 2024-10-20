@@ -142,7 +142,7 @@ struct AuthView: View {
     func skipAuth() {
         Task {
             do {
-                try await authManager.signInAnonymously()
+                let _ = try await authManager.signInAnonymously()
             }
             catch {
                 print("Error signing in anonymously: \(error)")
