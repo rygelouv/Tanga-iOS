@@ -18,6 +18,7 @@
 		980DBAB32CB0250600141DA3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBAB22CB0250600141DA3 /* FirebaseStorage */; };
 		980DBABE2CB18F7C00141DA3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABD2CB18F7C00141DA3 /* GoogleSignIn */; };
 		980DBAC02CB18F7C00141DA3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABF2CB18F7C00141DA3 /* GoogleSignInSwift */; };
+		98A0563F2CC4049B00D45063 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 98A0563E2CC4049300D45063 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 		9840A6FC2CA05A5700194500 /* Tanga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tanga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A70D2CA05A5800194500 /* TangaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A7172CA05A5800194500 /* TangaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		98A0563E2CC4049300D45063 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -120,6 +122,7 @@
 		9840A6F32CA05A5700194500 = {
 			isa = PBXGroup;
 			children = (
+				98A0563E2CC4049300D45063 /* README.md */,
 				9840A6FE2CA05A5700194500 /* Tanga */,
 				9840A7102CA05A5800194500 /* TangaTests */,
 				9840A71A2CA05A5800194500 /* TangaUITests */,
@@ -273,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98A0563F2CC4049B00D45063 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

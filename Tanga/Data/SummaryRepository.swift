@@ -25,7 +25,7 @@ class SummaryRepository {
     /*
      * Unused for now until we see if there is a real performance problem with UI side search filetering
      */
-    func searchSummaries(query: String, selectedCategories: [CategoryId]) async -> Result<[Summary], Error> {
+    /*func searchSummaries(query: String, selectedCategories: [CategoryId]) async -> Result<[Summary], Error> {
         let query = db.summaryCollection
             .whereField(FirestoreDatabase.Summaries.Fields.IS_VISIBLE, isEqualTo: true)
             .whereField(FirestoreDatabase.Summaries.Fields.TITLE, arrayContains: query)
@@ -41,7 +41,7 @@ class SummaryRepository {
         } catch {
             return .failure(error)
         }
-    }
+    }*/
     
     func getSummariesForCategory(categoryId: CategoryId) async -> Result<[Summary], Error> {
         let query = db.summaryCollection

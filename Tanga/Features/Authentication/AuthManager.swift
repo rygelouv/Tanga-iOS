@@ -10,7 +10,9 @@ import AuthenticationServices
 import FirebaseAuth
 import FirebaseCore
 import GoogleSignIn
+import SwiftUI
 
+typealias FirebaseUser = FirebaseAuth.User
 
 enum AuthState {
     case anonymous // Anonymously authenticated in the app.
@@ -21,8 +23,11 @@ enum AuthState {
 
 @MainActor
 class AuthManager: ObservableObject {
+    @AppStorage(sessionIdKey) var sessionId: String = ""
     
-    @Published var user: User?
+    let userRepository: UserRepository = UserRepository()
+    
+    @Published var user: FirebaseUser?
     @Published var authState: AuthState = .signedOut
     
     private var authStateHandle: AuthStateDidChangeListenerHandle!
@@ -46,15 +51,32 @@ class AuthManager: ObservableObject {
         }
     }
     
-    func updateState(user: User?) {
+    func updateState(user: FirebaseUser?) {
         self.user = user
         let isAuthenticated = user != nil
         let isAnonymous = user?.isAnonymous ?? false
-         
+        if !isAnonymous {
+            createOrUpdateUser(user: user)
+        }
+        
         if isAuthenticated {
             self.authState = isAnonymous ? .anonymous : .signedIn
         } else {
             self.authState = .signedOut
+        }
+    }
+    
+    func createOrUpdateUser(user: FirebaseUser?) {
+        Task {
+            if let firebaseUser = user {
+                let result = await userRepository.createUser(user: firebaseUser.toUser())
+                switch result {
+                case .success(let tangaUser):
+                    sessionId = tangaUser.id ?? UUID().uuidString
+                case .failure(let error):
+                    print("Error creating or updating user: \(error)")
+                }
+            }
         }
     }
     
@@ -109,7 +131,7 @@ class AuthManager: ObservableObject {
         }
     }
     
-    private func updateDisplayName(for user: User) async {
+    private func updateDisplayName(for user: FirebaseUser) async {
         let currentDisplayName = Auth.auth().currentUser?.displayName
         if currentDisplayName?.isEmpty == true {
             let displayName = user.providerData.first?.displayName
