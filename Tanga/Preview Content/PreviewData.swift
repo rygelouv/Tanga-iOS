@@ -68,8 +68,6 @@ let weeklySummaryModel = WeeklySummaryModel(category: weeklySummaryCategory, sum
 // Create the dummy HomeUiState instance
 let dummyHomeUiState = HomeUiState(
     isLoading: false,
-    userFirstName: "Jane Doe",
-    userPhotoUrl: "https://example.com/jane-doe.jpg",
     weeklySummary: weeklySummaryModel,
     sections: sections,
 

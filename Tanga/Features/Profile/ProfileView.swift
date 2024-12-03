@@ -10,14 +10,21 @@ import FirebaseAuth
 
 struct ProfileView: View {
     @EnvironmentObject var authManager: AuthManager
+    @StateObject var viewModel = ProfileViewModel()
 
     var body: some View {
         VStack {
-            if let user = authManager.user {
-                Text("Welcome, \(user.displayName ?? "Anonymous")")
-            } else {
-                Text("No user signed in")
-            }
+            ProfilePictureView(
+                url: viewModel.photoUrl ?? "",
+                imageType: .squircle
+            )
+                .frame(width: 120, height: 120)
+            
+            Text(viewModel.fullName ?? "Anonymous")
+                .fontWeight(.bold)
+                .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
+                .foregroundColor(.navy)
+                .padding()
             
             Button(action: {
                 print("Sign out Button tapped")
@@ -40,7 +47,13 @@ struct ProfileView: View {
                     .padding()
                     .background(Color.cerulean)
                     .cornerRadius(16)
-            }
+            }.padding()
+        }.onAppear {
+            viewModel.loadProfileData()
         }
     }
+}
+
+#Preview {
+    ProfileView()
 }

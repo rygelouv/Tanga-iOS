@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@MainActor
+
 class SearchViewModel: ObservableObject {
     var summaryRepository = SummaryRepository()
     var selectedCategories = [CategoryId]()
@@ -23,7 +23,9 @@ class SearchViewModel: ObservableObject {
             let result = await summaryRepository.getAllSummaries()
             switch result {
             case .success(let summaries):
-                self.summaries = summaries
+                DispatchQueue.main.async {
+                    self.summaries = summaries
+                }
             case .failure:
                 self.summaries = nil
             }
@@ -57,7 +59,9 @@ class SearchViewModel: ObservableObject {
                     continue
                 }
             }
-            self.summaries = filteredSummaries.sorted { ($0.title?.lowercased() ?? "") < ($1.title?.lowercased() ?? "") }
+            DispatchQueue.main.async {
+                self.summaries = filteredSummaries.sorted { ($0.title?.lowercased() ?? "") < ($1.title?.lowercased() ?? "") }
+            }
         }
     }
 }

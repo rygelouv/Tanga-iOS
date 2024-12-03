@@ -8,11 +8,11 @@
 import Foundation
 
 struct FirestoreDatabase {
-
+    
     struct Users {
         // Collection Reference
         static let COLLECTION_NAME = "users"
-
+        
         // Fields
         struct Fields {
             static let UID = "uid"
