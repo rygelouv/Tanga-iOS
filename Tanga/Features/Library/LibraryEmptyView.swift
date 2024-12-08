@@ -23,7 +23,7 @@ struct LibraryEmptyView: View {
                Spacer()
                EmptyLibraryImage()
                Spacer()
-               TangaButton(onButtonTap: {}, leftIcon: "search", text: "Explore Summaries")
+               TangaNavButton(destination: SearchView(), leftIcon: "search", text: "Explore Summaries").padding()
                Spacer()
            }
        }.padding()
