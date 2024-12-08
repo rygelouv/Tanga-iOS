@@ -34,7 +34,7 @@ struct CategorySummariesView: View {
                             ).padding(.horizontal, 8)
                         }
                         SummaryGrid(summaries: summaries)
-                        TangaButton(onButtonTap: {}, leftIcon: "search", text: "Explore Summaries").padding()
+                        TangaNavButton(destination: SearchView(), leftIcon: "search", text: "Explore Summaries").padding()
                     }.padding(.horizontal, 2)
                 }
                 .navigationTitle(category?.categoryName ?? "")

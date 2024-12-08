@@ -7,6 +7,56 @@
 
 import SwiftUI
 
+enum ButtonSize {
+    case big
+    case small
+}
+
+struct TangaNavButton<Destination: View>: View {
+    var destination: Destination
+    var leftIcon: String? = nil // leftIcon is optional
+    var text: String
+    var size: ButtonSize = .small // Default to "small" size
+    
+    var body: some View {
+        NavigationLink(destination: destination) {
+            ZStack {
+                HStack {
+                    // Show the left icon only if provided
+                    if let icon = leftIcon {
+                        Image(icon).resizable()
+                            .renderingMode(.template)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 28, height: 28)
+                            .foregroundColor(.white)
+                            .padding(.leading, 10)
+                    }
+                    Spacer()
+                }.padding(.leading, 30)
+                
+                Text(text)
+                    .font(Font.custom("Montserrat", size: textSize, relativeTo: .headline))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
+            .frame(maxWidth: .infinity, minHeight: 66)
+        }
+        .buttonStyle(TangaNavButtonStyle())
+    }
+    
+    struct TangaNavButtonStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .background(Color.yaleBlue)
+                .cornerRadius(16)
+        }
+    }
+    
+    private var textSize: CGFloat {
+        size == .big ? 18 : 15
+    }
+}
+
 struct SearchButton: View {
     var body: some View {
         NavigationLink(destination: SearchView()) {
@@ -40,11 +90,6 @@ struct TangaButton: View {
     var leftIcon: String? = nil // leftIcon is optional
     var text: String
     var size: ButtonSize = .small // Default to "small" size
-    
-    enum ButtonSize {
-        case big
-        case small
-    }
     
     var body: some View {
         Button(action: {
