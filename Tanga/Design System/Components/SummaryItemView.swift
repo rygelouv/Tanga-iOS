@@ -25,26 +25,28 @@ struct SummaryItemView: View {
             case .small: 14
             case .large: 16
         }
-        VStack(alignment: .leading) {
-            SummaryImageView(url: summary?.coverImageUrl ?? "")
-                .padding(.leading, 2)
-                .padding(.top, 8)
-                .padding(.bottom, 8)
-                .padding(.trailing, 3)
-            Text(summary?.title ?? "")
-                .fontWeight(.semibold)
-                .font(Font.custom("Montserrat", size: CGFloat(textSize), relativeTo: .title2))
-                .foregroundColor(.navy)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            Text(summary?.author ?? "")
-                .font(Font.custom("Montserrat", size: 12, relativeTo: .body))
-                .fontWeight(.regular)
-                .foregroundStyle(Color.auroMetalSaurus)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            SummaryIndicators(duration: summary?.playingLength)
-        }.frame(width: CGFloat(width))
+        NavigationLink(destination: SummaryDetailsView(summaryId: "some id")) {
+            VStack(alignment: .leading) {
+                SummaryImageView(url: summary?.coverImageUrl ?? "")
+                    .padding(.leading, 2)
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
+                    .padding(.trailing, 3)
+                Text(summary?.title ?? "")
+                    .fontWeight(.semibold)
+                    .font(Font.custom("Montserrat", size: CGFloat(textSize), relativeTo: .title2))
+                    .foregroundColor(.navy)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                Text(summary?.author ?? "")
+                    .font(Font.custom("Montserrat", size: 12, relativeTo: .body))
+                    .fontWeight(.regular)
+                    .foregroundStyle(Color.auroMetalSaurus)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                SummaryIndicators(duration: summary?.playingLength)
+            }.frame(width: CGFloat(width))
+        }
     }
     
     struct SummaryIndicators: View {

@@ -22,7 +22,7 @@ extension Color {
 
     // Gray Tones
     static let cultured = Color(hex: "F6F3F6")
-    static let gray = Color(hex: "43474E")
+    static let tangaGray = Color(hex: "43474E")
     static let auroMetalSaurus = Color(hex: "74777F")
     static let silverFoil = Color(hex: "AFAFAF")
     static let crayola = Color(hex: "9DB3B8")
