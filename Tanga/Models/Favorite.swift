@@ -22,3 +22,31 @@ struct Favorite: Identifiable, Codable {
     var summaryId: SummaryId?
     var userId: UserId?
 }
+
+extension Favorite {
+   func toSummary() -> Summary {
+       Summary(
+           id: summaryId,
+           title: title,
+           author: author,
+           synopsis: nil,
+           coverImageUrl: coverUrl,
+           playingLength: playingLength,
+           purchaseBookUrl: nil,
+           categories: nil
+       )
+   }
+}
+
+extension Summary {
+   func toFavorite(userId: UserId) -> Favorite {
+       Favorite(
+           title: title,
+           author: author,
+           coverUrl: coverImageUrl,
+           playingLength: playingLength,
+           summaryId: id,
+           userId: userId
+       )
+   }
+}

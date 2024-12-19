@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 
-// Define types for SummaryId and CategoryId
+// Define types for SummaryId
 typealias SummaryId = String
 
 // Class representing a Summary
