@@ -26,28 +26,28 @@ class SummaryRepository {
      * Unused for now until we see if there is a real performance problem with UI side search filetering
      */
     /*func searchSummaries(query: String, selectedCategories: [CategoryId]) async -> Result<[Summary], Error> {
-        let query = db.summaryCollection
-            .whereField(FirestoreDatabase.Summaries.Fields.IS_VISIBLE, isEqualTo: true)
-            .whereField(FirestoreDatabase.Summaries.Fields.TITLE, arrayContains: query)
-            .whereField(FirestoreDatabase.Summaries.Fields.AUTHOR, arrayContains: query)
-            .whereField( FirestoreDatabase.Summaries.Fields.CATEGORIES, arrayContainsAny: selectedCategories)
-        
-        do {
-            let snapshot = try await query.getDocuments()
-            let summaries: [Summary] = try snapshot.documents.compactMap { document in
-                try document.data(as: Summary.self)
-            }
-            return .success(summaries)
-        } catch {
-            return .failure(error)
-        }
-    }*/
+     let query = db.summaryCollection
+     .whereField(FirestoreDatabase.Summaries.Fields.IS_VISIBLE, isEqualTo: true)
+     .whereField(FirestoreDatabase.Summaries.Fields.TITLE, arrayContains: query)
+     .whereField(FirestoreDatabase.Summaries.Fields.AUTHOR, arrayContains: query)
+     .whereField( FirestoreDatabase.Summaries.Fields.CATEGORIES, arrayContainsAny: selectedCategories)
+     
+     do {
+     let snapshot = try await query.getDocuments()
+     let summaries: [Summary] = try snapshot.documents.compactMap { document in
+     try document.data(as: Summary.self)
+     }
+     return .success(summaries)
+     } catch {
+     return .failure(error)
+     }
+     }*/
     
     func getSummariesForCategory(categoryId: CategoryId) async -> Result<[Summary], Error> {
         let query = db.summaryCollection
             .whereField(FirestoreDatabase.Summaries.Fields.IS_VISIBLE, isEqualTo: true)
             .whereField( FirestoreDatabase.Summaries.Fields.CATEGORIES, arrayContains: categoryId)
-
+        
         do {
             let snapshot = try await query.getDocuments()
             let summaries: [Summary] = try snapshot.documents.compactMap { document in
@@ -111,5 +111,45 @@ class SummaryRepository {
             // Handle Firestore or decoding errors
             return .failure(error)
         }
-     }
+    }
+    
+    func getRecommendationsForSummary(summary: Summary) async -> Result<[Summary], Error> {
+        var recommendations: [Summary] = []
+        
+        for category in summary.categories! {
+            let categoryResult = await getSummariesForCategory(categoryId: category)
+            switch categoryResult {
+            case .success(let summaries):
+                recommendations.append(contentsOf: summaries)
+            case .failure(let error):
+                return .failure(error)
+            }
+        }
+        
+        // Remove summary
+        recommendations = recommendations.filter { $0.id != summary.id }
+        // Remove duplicates
+        recommendations = recommendations.enumerated().filter { index, summary in
+            !recommendations[..<index].contains { $0.id == summary.id }
+        }.map { $0.element }
+        // Shuffle
+        recommendations = recommendations.shuffled()
+        // Take first 5
+        recommendations = Array(recommendations.prefix(5))
+        return .success(recommendations)
+    }
+}
+
+extension Array where Element: Hashable {
+    func removingDuplicates() -> [Element] {
+        var addedDict = [Element: Bool]()
+
+        return filter {
+            addedDict.updateValue(true, forKey: $0) == nil
+        }
+    }
+
+    mutating func removeDuplicates() {
+        self = self.removingDuplicates()
+    }
 }

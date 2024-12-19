@@ -25,7 +25,7 @@ struct SummaryItemView: View {
             case .small: 14
             case .large: 16
         }
-        NavigationLink(destination: SummaryDetailsView(summaryId: "some id")) {
+        NavigationLink(destination: SummaryDetailsView(summaryId: summary?.id ?? "")) {
             VStack(alignment: .leading) {
                 SummaryImageView(url: summary?.coverImageUrl ?? "")
                     .padding(.leading, 2)
