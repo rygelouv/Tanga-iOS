@@ -22,6 +22,7 @@ class HomeViewModel: ObservableObject {
     func loadHomeData() {
         Task {
             do {
+                try await self.fetchSections()
                 let weeklySummary = await summaryReposiory.getWeeklySummary()
                 switch weeklySummary {
                 case .success(let summary):
@@ -29,7 +30,6 @@ class HomeViewModel: ObservableObject {
                     let weeklySummary = WeeklySummaryModel(category: category, summary: summary)
                     DispatchQueue.main.async {
                         self.uiState.weeklySummary = weeklySummary
-                        print("Successfully loaded weekly summary \(weeklySummary)")
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
@@ -37,7 +37,7 @@ class HomeViewModel: ObservableObject {
                     }
                 }
                 
-                try await self.fetchSections()
+                // try await self.fetchSections()
                 DispatchQueue.main.async {
                     self.uiState.isLoading = false
                 }

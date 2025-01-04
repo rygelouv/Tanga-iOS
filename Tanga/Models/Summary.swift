@@ -21,4 +21,5 @@ struct Summary: Identifiable, Codable {
     var playingLength: String?
     var purchaseBookUrl: String?
     var categories: [CategoryId]?
+    var keyLearnings: [String]?
 }

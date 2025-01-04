@@ -111,9 +111,9 @@ struct SummaryDetailsView: View {
                 
                 // Action buttons
                 HStack(spacing: 30) {
-                    ActionButton(icon: "o_read", title: "Read", isDisabled: false)
-                    ActionButton(icon: "o_listen", title: "Listen", isDisabled: false)
-                    ActionButton(icon: "o_mindmap", title: "Visualize", isDisabled: true)
+                    ForEach(ActionType.allCases, id: \.self) { action in
+                        ActionButton(actionType: action, summaryId: summary.id ?? "")
+                    }
                 }
                 .padding()
             }
@@ -123,42 +123,6 @@ struct SummaryDetailsView: View {
                 )
             .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
             .frame(maxWidth: .infinity)
-        }
-    }
-
-    struct ActionButton: View {
-        let icon: String
-        let title: String
-        let isDisabled: Bool
-        
-        var body: some View {
-            VStack(spacing: 0){
-                Image(icon)
-                    .renderingMode(.template)
-                    .font(.system(size: 24))
-                    .foregroundColor(textColor)
-                    .frame(width: 50, height: 50)
-                    .padding(.horizontal, 18)
-                    .padding(.top, 4)
-                    
-                
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(textColor)
-                    .padding(.bottom, 12)
-                
-            }
-            .background(backgroundColor.opacity(0.1))
-                .cornerRadius(12)
-        }
-        
-        private var textColor: Color {
-            isDisabled ? Color.tangaGray.opacity(0.38) : Color.yaleBlue
-        }
-        
-        private var backgroundColor: Color {
-            isDisabled ? Color.tangaGray : Color.yaleBlue
         }
     }
     

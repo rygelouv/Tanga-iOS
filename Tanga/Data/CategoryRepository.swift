@@ -19,6 +19,7 @@ class CategoryRepository {
     
     // Function to fetch all categories from Firestore
     func getCategories() async -> Result<[Category], Error> {
+        
         do {
             let snapshot = try await db.categoryCollection.getDocuments()
             
