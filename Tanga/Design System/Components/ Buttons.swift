@@ -162,6 +162,44 @@ struct TangaPremiumButton: View {
     }
 }
 
+struct AudioFloatingActionButton: View {
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: {
+                    // Your FAB action here
+                }) {
+                    HStack {
+                        Image("o_listen")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                            .font(.system(size: 24))
+                            .frame(width: 24, height: 24)
+                        
+                        Text("Play")
+                            .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.leading, 4)
+                    }
+                    .padding(.leading, 18)
+                    .padding(.trailing, 18)
+                    .frame(minHeight: 52)
+                    .background(Color.orange)
+                    .cornerRadius(40)
+                    .shadow(radius: 4, x: 0, y: 2)
+                }
+                .padding(.trailing, 16)
+                .padding(.bottom, 16)
+            }
+        }
+    }
+}
+
 #Preview {
     VStack(spacing: 20) {
         // Big button with icon
@@ -181,6 +219,8 @@ struct TangaPremiumButton: View {
         
         // Premium button
         TangaPremiumButton(onButtonTap: { print("Premium button tapped")})
+        
+        AudioFloatingActionButton()
     }
     .padding()
     .background(Color(.systemGroupedBackground))

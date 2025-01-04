@@ -104,10 +104,12 @@ class SummaryRepository {
                 // Call getSummaryById to fetch the full Summary by its ID
                 return await getSummary(id: summaryId)
             } else {
+                print("error retrieving weekly summary")
                 // Return a custom error if no weekly summary is found
                 return .failure(NSError(domain: "SummariesRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "No weekly summary found"]))
             }
         } catch {
+            print("Error getting weekly summary: \(error)")
             // Handle Firestore or decoding errors
             return .failure(error)
         }

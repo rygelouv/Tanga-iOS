@@ -39,6 +39,7 @@ struct FirestoreDatabase {
             static let COVER_IMAGE_URL = "coverImageUrl"
             static let PLAYING_LENGTH = "playingLength"
             static let PURCHASE_BOOK_URL = "purchaseBookUrl"
+            static let KEY_LEARINGS = "keyLearnings"
         }
     }
 
