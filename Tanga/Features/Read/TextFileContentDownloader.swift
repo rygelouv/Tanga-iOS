@@ -17,7 +17,7 @@ extension Storage {
 class TextFileContentDownloader {
     private let storage: Storage
 
-    init(storage: Storage) {
+    init(storage: Storage = Storage.storage()) {
         self.storage = storage
     }
     

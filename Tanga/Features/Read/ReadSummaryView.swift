@@ -20,6 +20,9 @@ struct ReadSummaryView: View {
         favoriteRepository: FavoriteRepository(),
         summaryRepository: SummaryRepository()
     )
+    @StateObject var readSummaryViewModel: ReadSummaryViewModel = ReadSummaryViewModel(
+        fileDownloader: TextFileContentDownloader()
+    )
 
     // The progress value (0.0 to 1.0) representing how far the user has scrolled.
     @State private var progress: CGFloat = 0.0
@@ -34,38 +37,46 @@ struct ReadSummaryView: View {
             NavigationStack {
                
                 ZStack {
-                    VStack(spacing: 0) {
-                        // Custom progress view to display scroll progress visually.
-                        CustomProgressView(progress: progress)
-                            .frame(height: 2)
-                            .padding(.top, 10)
+                    if (readSummaryViewModel.loading) {
+                        ProgressView().tint(.white)
+                    }
+                    
+                    if let content = readSummaryViewModel.content {
+                        VStack(spacing: 0) {
+                            // Custom progress view to display scroll progress visually.
+                            CustomProgressView(progress: progress)
+                                .frame(height: 2)
+                                .padding(.top, 10)
 
-                        // ScrollViewReader allows programmatic control of the scroll position.
-                        ScrollViewReader { proxy in
-                            ScrollView {
-                                // If you replace this with Text(SUMMARY_TEXT) it will start tracking scroll
-                                Markdown(SUMMARY_TEXT)
-                                    .markdownTextStyle(\.text) {
-                                        ForegroundColor(.white)
-                                        FontSize(16)
-                                     }
-                                    .padding()
-                                    .background(
-                                        GeometryReader { geo in
-                                            Color.clear
-                                                .preference(
-                                                    key: ScrollViewOffsetPreferenceKey.self, // Key for storing offset.
-                                                    value: geo.frame(in: .named("scrollView")).minY // Tracks vertical offset of the text.
-                                                )
-                                                .onAppear {
-                                                    totalContentHeight = geo.size.height
-                                                }
-                                        }
-                                    )
-                            }
-                            .coordinateSpace(name: "scrollView") // Names the coordinate space for GeometryReader.
-                            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
-                                updateProgress(value: value) // Updates progress based on scroll offset.
+                            // ScrollViewReader allows programmatic control of the scroll position.
+                            ScrollViewReader { proxy in
+                                ScrollView {
+                                    // If you replace this with Text(SUMMARY_TEXT) it will start tracking scroll
+                                    Markdown(content)
+                                        .markdownTextStyle(\.text) {
+                                            ForegroundColor(.white)
+                                            FontSize(16)
+                                         }
+                                        .padding()
+                                        .background(
+                                            GeometryReader { geo in
+                                                Color.clear
+                                                    .preference(
+                                                        // Key for storing offset.
+                                                        key: ScrollViewOffsetPreferenceKey.self,
+                                                        // Tracks vertical offset of the text.
+                                                        value: geo.frame(in: .named("scrollView")).minY
+                                                    )
+                                                    .onAppear {
+                                                        totalContentHeight = geo.size.height
+                                                    }
+                                            }
+                                        )
+                                }
+                                .coordinateSpace(name: "scrollView") // Names the coordinate space for GeometryReader.
+                                .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
+                                    updateProgress(value: value) // Updates progress based on scroll offset.
+                                }
                             }
                         }
                     }
@@ -105,6 +116,7 @@ struct ReadSummaryView: View {
             }
             .onAppear {
                 favoriteViewModel.getFavorite(summaryId: summaryId)
+                readSummaryViewModel.fetchContent(summaryId: summaryId)
             }
         }
     }
