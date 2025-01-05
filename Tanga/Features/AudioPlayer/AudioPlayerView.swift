@@ -19,30 +19,53 @@ struct AudioPlayerView: View {
     
     var body: some View {
         
-        VStack {
-            // Header Section
-            AudioPlayerHeader(imageUrl: audioPlayerViewModel.imageUrl, title: audioPlayerViewModel.title)
-            
-            Spacer()
-            
-            // Slider and Time Labels Section
-            AudioPlayerSliderAndTimeLabels(
-                currentTime: $audioPlayerViewModel.currentTime,
-                duration: audioPlayerViewModel.duration,
-                formattedTime: audioPlayerViewModel.formattedTime
-            ) {
-                audioPlayerViewModel.seek(to: $0)
+        ScrollView {
+            ZStack {
+                VStack {
+                    Spacer(minLength: 100)
+                    
+                    Divider().frame( width: 30, height: 4).overlay(.gray.opacity(0.1)).padding(.vertical, 30)
+                    
+                    Spacer()
+                    
+                    // Header Section
+                    AudioPlayerHeader(title: summary.title ?? "", author: summary.author ?? "")
+                    
+                    Spacer(minLength: 50)
+                    
+                    // Slider and Time Labels Section
+                    AudioPlayerSliderAndTimeLabels(
+                        currentTime: $audioPlayerViewModel.currentTime,
+                        duration: audioPlayerViewModel.duration,
+                        formattedTime: audioPlayerViewModel.formattedTime
+                    ) {
+                        audioPlayerViewModel.seek(to: $0)
+                    }
+                    
+                    Spacer(minLength: 20)
+                    
+                    // Play/Pause and Controls Section
+                    AudioPlayerControls(
+                        isPlaying: audioPlayerViewModel.isPlaying,
+                        onPlayPauseToggle: audioPlayerViewModel.togglePlayPause,
+                        onSkipBackward: audioPlayerViewModel.skipBackward,
+                        onSkipForward: audioPlayerViewModel.skipForward
+                    )
+                    
+                    Spacer(minLength: 200)
+                }.background(Color.white)
+                    .clipShape(
+                        RoundedCornerShape(corners: [.topLeft, .topRight], radius: 40)
+                    )
+                    .padding(.top, 140)
+                    .frame(maxHeight: .infinity)
+                
+                // Image at the top
+                VStack {
+                    SummaryImageView(url: summary.coverImageUrl ?? "").frame(width: 160).padding(.top, 20)
+                    Spacer()
+                }.frame(maxHeight: .infinity)
             }
-            
-            // Play/Pause and Controls Section
-            AudioPlayerControls(
-                isPlaying: audioPlayerViewModel.isPlaying,
-                onPlayPauseToggle: audioPlayerViewModel.togglePlayPause,
-                onSkipBackward: audioPlayerViewModel.skipBackward,
-                onSkipForward: audioPlayerViewModel.skipForward
-            )
-            
-            Spacer()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -56,11 +79,12 @@ struct AudioPlayerView: View {
                         .renderingMode(.template)
                         .font(.system(size: 24))
                         .frame(width: 26, height: 26)
-                        .foregroundColor(.black)
+                        .foregroundColor(.gray)
                 }
             }
         }
-        .padding()
+        .toolbarBackground(Color.cultured, for: .navigationBar)
+        .background(Color.cultured)
         .onAppear {
             audioPlayerViewModel.hideMiniPlayerView()
             audioPlayerViewModel.loadAudio(summary: summary)
@@ -72,24 +96,23 @@ struct AudioPlayerView: View {
     
     // MARK: Summary information
     struct AudioPlayerHeader: View {
-        let imageUrl: String
         let title: String
+        let author: String
         
         var body: some View {
             VStack {
-                // Image at the top
-                AsyncImage(url: URL(string: imageUrl)) { image in
-                    image.resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(height: 200)
                 
                 // Title
                 Text(title)
-                    .font(.title)
-                    .padding()
+                    .fontWeight(.bold)
+                    .font(Font.custom("Montserrat", size: 22, relativeTo: .title))
+                    .foregroundColor(.navy)
+                    .padding(.bottom, 8)
+                
+                Text(author)
+                    .fontWeight(.bold)
+                    .font(Font.custom("Montserrat", size: 16, relativeTo: .title2))
+                    .foregroundStyle(Color.auroMetalSaurus)
             }
         }
     }
@@ -109,16 +132,22 @@ struct AudioPlayerView: View {
                         onSeek(currentTime)
                     }
                 })
-                .padding()
+                .padding(.bottom, 4)
                 
                 // Time Labels
                 HStack {
                     Text(formattedTime(currentTime))
+                        .font(Font.custom("Montserrat", size: 12, relativeTo: .body))
+                        .fontWeight(.regular)
+                        .foregroundStyle(Color.auroMetalSaurus)
                     Spacer()
                     Text(formattedTime(duration))
+                        .font(Font.custom("Montserrat", size: 12, relativeTo: .body))
+                        .fontWeight(.regular)
+                        .foregroundStyle(Color.auroMetalSaurus)
                 }
-                .padding(.horizontal)
-            }
+                .padding(.horizontal, 8)
+            }.padding()
         }
     }
 
@@ -134,21 +163,32 @@ struct AudioPlayerView: View {
                 // Skip Backward
                 Button(action: onSkipBackward) {
                     Image(systemName: "gobackward.10")
-                        .font(.largeTitle)
+                        .font(.title)
+                        .foregroundColor(.yaleBlue)
                         .padding()
                 }
                 
                 // Play/Pause
                 Button(action: onPlayPauseToggle) {
-                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                        .font(.largeTitle)
+                    Image(isPlaying ? "pause" : "play")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(.white)
+                        .font(.system(size: 18))
+                        .frame(width: 18, height: 18)
                         .padding()
                 }
+                .padding(.leading, 38)
+                .padding(.trailing, 38)
+                .frame(minHeight: 76)
+                .background(Color.yaleBlue)
+                .clipShape(Circle())
                 
                 // Skip Forward
                 Button(action: onSkipForward) {
                     Image(systemName: "goforward.10")
-                        .font(.largeTitle)
+                        .font(.title)
+                        .foregroundColor(.yaleBlue)
                         .padding()
                 }
             }

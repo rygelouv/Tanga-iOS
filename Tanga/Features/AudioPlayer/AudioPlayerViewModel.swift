@@ -8,6 +8,7 @@
 import SwiftUI
 import AVFoundation
 import FirebaseStorage
+import MediaPlayer
 
 @MainActor
 class AudioPlayerViewModel: ObservableObject {
@@ -16,6 +17,7 @@ class AudioPlayerViewModel: ObservableObject {
     @Published var isPlaying = false
     @Published var imageUrl: String = ""
     @Published var title: String = ""
+    @Published var author: String = ""
     @Published var showMiniPlayer = false // To control the mini player's visibility
     
     private var player: AVPlayer?
@@ -26,6 +28,16 @@ class AudioPlayerViewModel: ObservableObject {
     
     init(urlDownloadGenerator: DownloadUrlGenerator) {
         self.urlDownloadGenerator = urlDownloadGenerator
+    }
+    
+    private func configureAudioSession() {
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, mode: .spokenAudio)
+            try session.setActive(true)
+        } catch {
+            print("Failed to configure audio session: \(error)")
+        }
     }
     
     /// Handles loading audio based on the summary and current playback state
@@ -44,6 +56,7 @@ class AudioPlayerViewModel: ObservableObject {
         // Update UI-related properties
         DispatchQueue.main.async {
             self.title = summary.title ?? "Unknown Title"
+            self.author = summary.author ?? "Unknown Author"
             self.imageUrl = summary.coverImageUrl ?? ""
             self.currentTime = 0.0
             self.duration = 0.0
@@ -73,6 +86,7 @@ class AudioPlayerViewModel: ObservableObject {
                 let duration = try await playerItem.asset.load(.duration)
                 DispatchQueue.main.async {
                     self.duration = duration.seconds
+                    self.configureAudioSession()
                 }
             } catch {
                 print("Error loading audio duration")
@@ -83,8 +97,58 @@ class AudioPlayerViewModel: ObservableObject {
         timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .main) { [weak self] time in
             DispatchQueue.main.async {
                 self?.currentTime = time.seconds
+                self?.updateNowPlayingInfo()
             }
         }
+        
+        configureNowPlayingInfo(for: url)
+    }
+    
+    private func configureNowPlayingInfo(for url: URL) {
+        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+        var nowPlayingInfo: [String: Any] = [
+            MPMediaItemPropertyTitle: title,
+            MPMediaItemPropertyArtist: author,
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: currentTime,
+            MPMediaItemPropertyPlaybackDuration: duration,
+            MPNowPlayingInfoPropertyPlaybackRate: isPlaying ? 1.0 : 0.0
+        ]
+        
+        // Load artwork asynchronously from the provided URL
+        loadArtworkImage(from: imageUrl) { image in
+            if let image = image {
+                nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { _ in
+                    return image
+                }
+                nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+            } else {
+                nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
+            }
+        }
+    }
+    
+    private func updateNowPlayingInfo() {
+        guard var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo else { return }
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+    
+    private func loadArtworkImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        // Fetch image data asynchronously
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data, error == nil {
+                let image = UIImage(data: data)
+                completion(image)
+            } else {
+                completion(nil)
+            }
+        }.resume()
     }
     
     /// Shows the mini player
@@ -105,6 +169,8 @@ class AudioPlayerViewModel: ObservableObject {
         isPlaying = false
         player?.pause()
         player = nil
+        hideMiniPlayerView()
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
     }
     
     /// Toggles playback between play and pause
@@ -116,6 +182,7 @@ class AudioPlayerViewModel: ObservableObject {
         } else {
             player.play()
             isPlaying = true
+            updateNowPlayingInfo()
         }
     }
     
