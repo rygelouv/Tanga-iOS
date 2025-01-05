@@ -112,7 +112,7 @@ struct SummaryDetailsView: View {
                 // Action buttons
                 HStack(spacing: 30) {
                     ForEach(ActionType.allCases, id: \.self) { action in
-                        ActionButton(actionType: action, summaryId: summary.id ?? "")
+                        ActionButton(actionType: action, summary: summary)
                     }
                 }
                 .padding()
