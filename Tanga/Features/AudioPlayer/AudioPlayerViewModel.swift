@@ -125,6 +125,8 @@ class AudioPlayerViewModel: ObservableObject {
                 nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
             }
         }
+        
+        setupRemoteCommands()
     }
     
     private func updateNowPlayingInfo() {
@@ -149,6 +151,41 @@ class AudioPlayerViewModel: ObservableObject {
                 completion(nil)
             }
         }.resume()
+    }
+    
+    private func setupRemoteCommands() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.addTarget { [weak self] _ in
+            self?.togglePlayPause()
+            return .success
+        }
+        
+        commandCenter.pauseCommand.addTarget { [weak self] _ in
+            self?.togglePlayPause()
+            return .success
+        }
+        
+        commandCenter.skipForwardCommand.addTarget { [weak self] _ in
+            self?.skipForward()
+            return .success
+        }
+        
+        commandCenter.skipBackwardCommand.addTarget { [weak self] _ in
+            self?.skipBackward()
+            return .success
+        }
+        
+        // Change Playback Position Command (Slider)
+        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
+            guard let self = self, let positionEvent = event as? MPChangePlaybackPositionCommandEvent else {
+                return .commandFailed
+            }
+            
+            self.seek(to: positionEvent.positionTime)
+            return .success
+        }
+        commandCenter.changePlaybackPositionCommand.isEnabled = true
     }
     
     /// Shows the mini player
@@ -188,7 +225,10 @@ class AudioPlayerViewModel: ObservableObject {
     
     /// Seeks to a specific time
     func seek(to time: Double) {
-        player?.seek(to: CMTime(seconds: time, preferredTimescale: 1))
+        guard let player = player else { return }
+        player.seek(to: CMTime(seconds: time, preferredTimescale: 1))
+        currentTime = time
+        updateNowPlayingInfo() // Update the system's Now Playing Info with the new position
     }
     
     /// Skips forward by 10 seconds
