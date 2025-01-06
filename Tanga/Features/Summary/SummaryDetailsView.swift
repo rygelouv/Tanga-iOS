@@ -23,9 +23,11 @@ struct SummaryDetailsView: View {
                         SummaryHeader(summary: summary)
                         Spacer()
                         VStack(alignment: .leading, spacing: 16) {
+                            SummaryLearningsView(keyLearnings: summary.keyLearnings ?? [])
+                            
                             Text("Introduction")
                                 .fontWeight(.bold)
-                                .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
+                                .font(Font.custom("Montserrat", size: 16, relativeTo: .title))
                                 .foregroundColor(Color.navy)
                                 .padding(.top, 8)
                             if let synopsis = summary.synopsis {
@@ -134,7 +136,7 @@ struct SummaryDetailsView: View {
                 HStack {
                     Text("Recommended summaries")
                         .fontWeight(.bold)
-                        .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
+                        .font(Font.custom("Montserrat", size: 16, relativeTo: .title))
                         .foregroundColor(.navy)
                     Spacer()
                 }

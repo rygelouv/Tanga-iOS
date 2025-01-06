@@ -13,7 +13,7 @@
     "•Psychology •Life Philosophy •Self-help •Lifestyle •Stoicism" : {
 
     },
-    "15 Minutes summaries of life-changing books" : {
+    "Are you sure you want to logout?" : {
 
     },
     "Book title, author name" : {
@@ -29,6 +29,9 @@
 
     },
     "Choose your format" : {
+
+    },
+    "Confirm Logout" : {
 
     },
     "Dive into the transformative wisdom of best-selling books that have changed lives around the world" : {
@@ -55,6 +58,9 @@
     "Introduction" : {
 
     },
+    "Key Ideas" : {
+
+    },
     "Let's go!" : {
 
     },
@@ -62,6 +68,12 @@
 
     },
     "Life-changing books" : {
+
+    },
+    "Logout" : {
+
+    },
+    "No" : {
 
     },
     "No results found for \"%@\"" : {
@@ -103,6 +115,9 @@
     "Sorry, Tanga Graphics is currently unavailable. Try again later" : {
 
     },
+    "The simplest, most focused way to experience life-changing book summaries." : {
+
+    },
     "Try refining your search query or explore other categories." : {
 
     },
@@ -113,6 +128,9 @@
 
     },
     "Whether you prefer reading or listening, enjoy summaries in the format that suits your lifestyle." : {
+
+    },
+    "Yes" : {
 
     },
     "Your Free Weekly Summary" : {
