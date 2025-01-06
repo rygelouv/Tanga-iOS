@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ActionButton: View {
     let actionType: ActionType
-    let summaryId: SummaryId
+    let summary: Summary
 
     var body: some View {
-        NavigationLink(destination: ReadSummaryView(summaryId: summaryId)) {
+        NavigationLink(destination: actionView()) {
             VStack(spacing: 0){
                 Image(actionType.icon)
                     .renderingMode(.template)
@@ -22,7 +22,6 @@ struct ActionButton: View {
                     .padding(.horizontal, 18)
                     .padding(.top, 4)
                     
-                
                 Text(actionType.title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -41,6 +40,18 @@ struct ActionButton: View {
     
     private var backgroundColor: Color {
         actionType.isDisabled ? Color.tangaGray : Color.yaleBlue
+    }
+    
+    @ViewBuilder
+    private func actionView() -> some View {
+        switch actionType {
+        case .read:
+            ReadSummaryView(summary: summary)
+        case .listen:
+            AudioPlayerView(summary: summary)
+        case .graphic:
+            GraphicsView(summary: summary)
+        }
     }
 }
 
@@ -82,5 +93,5 @@ enum ActionType: CaseIterable {
 }
 
 #Preview {
-    ActionButton(actionType: ActionType.read, summaryId: SummaryId("1234"))
+    ActionButton(actionType: ActionType.read, summary: dummySummaries[0])
 }

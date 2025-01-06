@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 	<key>GIDClientID</key>
 	<string>806931145399-fonahtooioauo747s9k5sorq5dd0bnb9.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseCore
+import FirebaseStorage
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -22,6 +23,11 @@ struct TangaApp: App {
     
     @StateObject var authManager: AuthManager
     
+    @StateObject private var audioPlayerViewModel = AudioPlayerViewModel(
+        urlDownloadGenerator: DownloadUrlGenerator(storage: Storage.storage()),
+        audioController: AudioController()
+    )
+    
     init() {
         FirebaseApp.configure()
         
@@ -32,7 +38,7 @@ struct TangaApp: App {
     var body: some Scene {
         
         WindowGroup {
-            MainView().environmentObject(authManager)
+            MainView().environmentObject(authManager).environmentObject(audioPlayerViewModel)
         }
     }
 }

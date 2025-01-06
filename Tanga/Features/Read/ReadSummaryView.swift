@@ -14,7 +14,7 @@ import SwiftUI
 struct ReadSummaryView: View {
     // MARK: - Properties
 
-    let summaryId: SummaryId
+    let summary: Summary
 
     @StateObject var favoriteViewModel: FavoriteViewModel = FavoriteViewModel(
         favoriteRepository: FavoriteRepository(),
@@ -115,6 +115,7 @@ struct ReadSummaryView: View {
                 .background(Color.navy)
             }
             .onAppear {
+                guard let summaryId = summary.id else { return }
                 favoriteViewModel.getFavorite(summaryId: summaryId)
                 readSummaryViewModel.fetchContent(summaryId: summaryId)
             }
@@ -176,5 +177,5 @@ struct ScrollViewOffsetPreferenceKey: PreferenceKey {
 
 
 #Preview {
-    ReadSummaryView(summaryId: .init("1"))
+    ReadSummaryView(summary: dummySummaries[0])
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseStorage
 
 enum NavigationDestinations: String, CaseIterable, Hashable {
     case Landing
@@ -21,24 +22,38 @@ enum NavigationDestinations: String, CaseIterable, Hashable {
 struct MainView: View {
     @State private var path = NavigationPath()
     @AppStorage("onboarding_completed") var isOnboardingCompleted: Bool = false
+    
     @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var audioPlayerViewModel: AudioPlayerViewModel
     
     var body: some View {
-        NavigationStack(path: $path) {
-            if isOnboardingCompleted {
-                if authManager.authState != .signedOut {
-                    let _ = print("show content view")
-                    ContentView(navigationPath: $path).navigationDestination(for: NavigationDestinations.self) { destination in
-                        NavigationDestinationView(navigationPath: $path, destination: destination)
+        ZStack {
+            NavigationStack(path: $path) {
+                if isOnboardingCompleted {
+                    if authManager.authState != .signedOut {
+                        ContentView(navigationPath: $path).navigationDestination(for: NavigationDestinations.self) { destination in
+                            NavigationDestinationView(navigationPath: $path, destination: destination)
+                        }
+                    } else {
+                        AuthView()
                     }
                 } else {
-                    let _ = print("show auth view")
-                    AuthView()
+                    LandingView(path: $path).navigationDestination(for: NavigationDestinations.self) { destination in
+                        NavigationDestinationView(navigationPath: $path, destination: destination)
+                    }
                 }
-            } else {
-                LandingView(path: $path).navigationDestination(for: NavigationDestinations.self) { destination in
-                    NavigationDestinationView(navigationPath: $path, destination: destination)
+            }
+            
+            // Mini Player Overlay
+            if audioPlayerViewModel.showMiniPlayer {
+                VStack {
+                    Spacer()
+                    MiniPlayerView()
+                        .environmentObject(audioPlayerViewModel)
+                        .transition(.move(edge: .bottom))
+                        .animation(.easeInOut, value: audioPlayerViewModel.showMiniPlayer)
                 }
+                .padding(.bottom, 50) // Avoid overlapping with bottom tabs or safe area
             }
         }
     }
