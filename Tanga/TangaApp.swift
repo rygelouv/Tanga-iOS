@@ -24,7 +24,8 @@ struct TangaApp: App {
     @StateObject var authManager: AuthManager
     
     @StateObject private var audioPlayerViewModel = AudioPlayerViewModel(
-        urlDownloadGenerator: DownloadUrlGenerator(storage: Storage.storage())
+        urlDownloadGenerator: DownloadUrlGenerator(storage: Storage.storage()),
+        audioController: AudioController()
     )
     
     init() {
