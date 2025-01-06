@@ -33,6 +33,10 @@ struct AudioPlayerView: View {
                     
                     Spacer(minLength: 50)
                     
+                    if audioPlayerViewModel.duration <= 0 {
+                        ProgressView()
+                    }
+                    
                     // Slider and Time Labels Section
                     AudioPlayerSliderAndTimeLabels(
                         currentTime: $audioPlayerViewModel.currentTime,
