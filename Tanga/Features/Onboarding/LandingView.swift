@@ -12,7 +12,7 @@ struct LandingView: View {
     
     var body: some View {
         ZStack {
-            Image("reading_background_image")
+            Image("landing_image")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .edgesIgnoringSafeArea(.all)
@@ -29,7 +29,7 @@ struct LandingView: View {
             VStack(spacing: 35) {
                 Spacer()
                 
-                Text("15 Minutes summaries of life-changing books")
+                Text("The simplest, most focused way to experience life-changing book summaries.")
                     .multilineTextAlignment(.center)
                     .font(Font.custom("Montserrat", size: 24, relativeTo: .title2))
                     .fontWeight(.regular)

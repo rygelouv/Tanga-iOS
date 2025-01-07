@@ -44,14 +44,4 @@ class ProfileViewModel: ObservableObject {
             }
         }
     }
-    
-    /*func onSignOut() {
-        Task {
-            do {
-                try await authManager.signOut()
-            } catch {
-                print("Error signing out: \(error)")
-            }
-        }
-    }*/
 }

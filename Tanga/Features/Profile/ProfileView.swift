@@ -72,15 +72,19 @@ struct RoundedCornerVStack: View {
             .padding(.top, 15)
             .padding(.bottom, 15)
             
-            ProfileContentAction(
-                imageName: "settings",
-                text: "Account Settings",
-                color: .blue,
-                onClick: { print("Profile tapped") }
-            )
-            .padding(.horizontal, 30)
-            .padding(.top, 15)
-            .padding(.bottom, 20)
+            NavigationLink(destination: SettingsView()) {
+                VStack {
+                    ProfileContentAction(
+                        imageName: "settings",
+                        text: "Account Settings",
+                        color: .blue,
+                        onClick: { print("Profile tapped") }
+                    )
+                    .padding(.horizontal, 30)
+                    .padding(.top, 15)
+                    .padding(.bottom, 20)
+                }
+            }.buttonStyle(PlainButtonStyle())
         }
         .background(Color.white)
                .clipShape(
@@ -96,9 +100,7 @@ struct RoundedCornerVStack: View {
         var onClick: () -> Void
 
         var body: some View {
-            Button(action: {
-                onClick()
-            }) {
+            NavigationLink(destination: SettingsView()) {
                 HStack(spacing: 16) {
                     Image(imageName)
                         .renderingMode(.template)
