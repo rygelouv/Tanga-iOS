@@ -9,9 +9,24 @@ import SwiftUI
 import FirebaseAuth
 
 struct ProfileView: View {
+    @State private var path = NavigationPath()
     @EnvironmentObject var authManager: AuthManager
-    @StateObject var viewModel = ProfileViewModel()
+    
 
+    var body: some View {
+        NavigationStack(path: $path) {
+            ProfileContentView(navigationPath: $path)
+                .navigationDestination(for: ProfileNavigationDestinations.self) { destination in
+                    ProfileNavigationDestinationView(navigationPath: $path, destination: destination)
+                }
+        }
+    }
+}
+
+struct ProfileContentView: View {
+    @Binding var navigationPath: NavigationPath
+    @StateObject var viewModel = ProfileViewModel()
+    
     var body: some View {
         VStack {
             Spacer()
@@ -29,7 +44,7 @@ struct ProfileView: View {
             
            
             if viewModel.showUpgrateButton {
-                TangaPremiumButton(onButtonTap: { print("Premium button tapped")})
+                TangaPremiumButton(onButtonTap: { navigationPath.append(ProfileNavigationDestinations.Subscriptions) })
                     .padding(.horizontal, 40)
             } else {
                 TangaButton(
@@ -41,7 +56,12 @@ struct ProfileView: View {
             }
            
             Spacer()
-            RoundedCornerVStack()
+            RoundedCornerVStack(
+                onSettingsTap: {
+                    navigationPath.append(ProfileNavigationDestinations.Settings)
+                    print("navigation called")
+                }
+            )
         }.onAppear {
             viewModel.loadProfileData()
         }
@@ -50,6 +70,8 @@ struct ProfileView: View {
 
 struct RoundedCornerVStack: View {
     @Environment(\.openURL) var openLink
+    var onSettingsTap: () -> Void
+    
     var body: some View {
         VStack(spacing: 0) {
             ProfileContentAction(
@@ -72,19 +94,18 @@ struct RoundedCornerVStack: View {
             .padding(.top, 15)
             .padding(.bottom, 15)
             
-            NavigationLink(destination: SettingsView()) {
-                VStack {
-                    ProfileContentAction(
-                        imageName: "settings",
-                        text: "Account Settings",
-                        color: .blue,
-                        onClick: { print("Profile tapped") }
-                    )
-                    .padding(.horizontal, 30)
-                    .padding(.top, 15)
-                    .padding(.bottom, 20)
+            ProfileContentAction(
+                imageName: "settings",
+                text: "Account Settings",
+                color: .blue,
+                onClick: {
+                    print("setting tapped")
+                    onSettingsTap()
                 }
-            }.buttonStyle(PlainButtonStyle())
+            )
+            .padding(.horizontal, 30)
+            .padding(.top, 15)
+            .padding(.bottom, 20)
         }
         .background(Color.white)
                .clipShape(
@@ -100,7 +121,7 @@ struct RoundedCornerVStack: View {
         var onClick: () -> Void
 
         var body: some View {
-            NavigationLink(destination: SettingsView()) {
+            Button(action: onClick) {
                 HStack(spacing: 16) {
                     Image(imageName)
                         .renderingMode(.template)
@@ -123,8 +144,7 @@ struct RoundedCornerVStack: View {
                         .foregroundColor(.gray)
                 }
                 .contentShape(Rectangle()) // Ensures the entire row is clickable
-            }
-            .buttonStyle(PlainButtonStyle()) // Removes the default button styling
+            }.buttonStyle(PlainButtonStyle())
         }
     }
 }
@@ -148,5 +168,5 @@ struct RoundedCornerShape: Shape {
 }
 
 #Preview {
-    RoundedCornerVStack()
+    RoundedCornerVStack(){}
 }

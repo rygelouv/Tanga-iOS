@@ -150,9 +150,9 @@ struct TangaPremiumButton: View {
                    .padding(.trailing, 20)
                    .padding(.leading, 16)
            }
-           .frame(minHeight: 66)
-           .padding(.vertical, 4)
         }
+        .frame(minHeight: 66)
+        .padding(.vertical, 4)
         .background(LinearGradient(
             gradient: Gradient(colors: [.navy, .yaleBlue, .cerulean]),
             startPoint: .leading,
