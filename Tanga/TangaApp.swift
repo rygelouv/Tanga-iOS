@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseStorage
+import RevenueCat
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -28,17 +29,23 @@ struct TangaApp: App {
         audioController: AudioController()
     )
     
+    private var revenueCatController: RevenueCatController = RevenueCatController()
+    
     init() {
         FirebaseApp.configure()
         
         let authManager = AuthManager()
         _authManager = StateObject(wrappedValue: authManager)
+        
+        revenueCatController.initialize()
     }
     
     var body: some Scene {
         
         WindowGroup {
-            MainView().environmentObject(authManager).environmentObject(audioPlayerViewModel)
+            MainView()
+                .environmentObject(authManager)
+                .environmentObject(audioPlayerViewModel)
         }
     }
 }

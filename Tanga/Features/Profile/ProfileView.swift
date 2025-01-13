@@ -25,7 +25,7 @@ struct ProfileView: View {
 
 struct ProfileContentView: View {
     @Binding var navigationPath: NavigationPath
-    @StateObject var viewModel = ProfileViewModel()
+    @StateObject var viewModel = ProfileViewModel(revenueCatController: RevenueCatController())
     
     var body: some View {
         VStack {
@@ -42,17 +42,12 @@ struct ProfileContentView: View {
                 .foregroundColor(.navy)
                 .padding()
             
-           
-            if viewModel.showUpgrateButton {
-                TangaPremiumButton(onButtonTap: { navigationPath.append(ProfileNavigationDestinations.Subscriptions) })
-                    .padding(.horizontal, 40)
+            if let profileStatus = viewModel.profileStatus {
+                MainCtaArea(profileStatus: profileStatus) {
+                        navigationPath.append(ProfileNavigationDestinations.Subscriptions)
+                }
             } else {
-                TangaButton(
-                    onButtonTap: { print("Big button tapped") },
-                    text: "Create an Account",
-                    size: .big
-                ).padding(40)
-                
+                ProgressView()
             }
            
             Spacer()
@@ -66,6 +61,53 @@ struct ProfileContentView: View {
             viewModel.loadProfileData()
         }
     }
+    
+    struct MainCtaArea: View {
+        let profileStatus: UserProfileStatus
+        let onNavigateToSubscriptions: () -> Void
+        
+        var body: some View {
+            HStack {
+                switch profileStatus {
+                case .anonymous:
+                    TangaButton(
+                        onButtonTap: { print("Big button tapped") },
+                        text: "Create an Account",
+                        size: .big
+                    ).padding(40)
+                case .loggedIn:
+                    TangaPremiumButton(onButtonTap: { onNavigateToSubscriptions() })
+                        .padding(.horizontal, 40)
+                case .premium:
+                    PremiumAccountTag()
+                }
+            }
+        }
+    }
+    
+    struct PremiumAccountTag: View {
+        var body: some View {
+            HStack {
+                Image("crown")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.orange)
+                    .padding(.leading, 8)
+                
+                Text("Premium Account")
+                    .frame(minHeight: 36)
+                    .font(Font.custom("Montserrat", size: 14, relativeTo: .headline))
+                    .fontWeight(.bold)
+                    .foregroundColor(.orange)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+            }
+            .padding(.horizontal, 10)
+            .background(Color.orangeTransparent)
+            .cornerRadius(100)
+       }
+   }
 }
 
 struct RoundedCornerVStack: View {
