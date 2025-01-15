@@ -20,6 +20,8 @@
 		980DBAC02CB18F7C00141DA3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABF2CB18F7C00141DA3 /* GoogleSignInSwift */; };
 		98A0563F2CC4049B00D45063 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 98A0563E2CC4049300D45063 /* README.md */; };
 		98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BC8B2D29174B00E3AB39 /* MarkdownUI */; };
+		98A8BF052D311B2200E3AB39 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BF042D311B2200E3AB39 /* RevenueCat */; };
+		98A8BF072D311B2200E3AB39 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BF062D311B2200E3AB39 /* RevenueCatUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,7 @@
 			files = (
 				980DBAAF2CB0250600141DA3 /* FirebasePerformance in Frameworks */,
 				980DBAAD2CB0250600141DA3 /* FirebaseMessaging in Frameworks */,
+				98A8BF072D311B2200E3AB39 /* RevenueCatUI in Frameworks */,
 				980DBAB32CB0250600141DA3 /* FirebaseStorage in Frameworks */,
 				98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */,
 				980DBAA32CB0250600141DA3 /* FirebaseAnalytics in Frameworks */,
@@ -91,6 +94,7 @@
 				980DBABE2CB18F7C00141DA3 /* GoogleSignIn in Frameworks */,
 				980DBAA72CB0250600141DA3 /* FirebaseCore in Frameworks */,
 				980DBAAB2CB0250600141DA3 /* FirebaseFirestore in Frameworks */,
+				98A8BF052D311B2200E3AB39 /* RevenueCat in Frameworks */,
 				980DBAA52CB0250600141DA3 /* FirebaseAuth in Frameworks */,
 				980DBAB12CB0250600141DA3 /* FirebaseRemoteConfig in Frameworks */,
 				980DBAC02CB18F7C00141DA3 /* GoogleSignInSwift in Frameworks */,
@@ -175,6 +179,8 @@
 				980DBABD2CB18F7C00141DA3 /* GoogleSignIn */,
 				980DBABF2CB18F7C00141DA3 /* GoogleSignInSwift */,
 				98A8BC8B2D29174B00E3AB39 /* MarkdownUI */,
+				98A8BF042D311B2200E3AB39 /* RevenueCat */,
+				98A8BF062D311B2200E3AB39 /* RevenueCatUI */,
 			);
 			productName = Tanga;
 			productReference = 9840A6FC2CA05A5700194500 /* Tanga.app */;
@@ -262,6 +268,7 @@
 				98BACBB02CB01D0200D67296 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				980DBABC2CB18F7C00141DA3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				98DD8C2C2D2847160034CE26 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9840A6FD2CA05A5700194500 /* Products */;
@@ -674,6 +681,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.14.5;
+			};
+		};
 		98BACBB02CB01D0200D67296 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -752,6 +767,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 98DD8C2C2D2847160034CE26 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		98A8BF042D311B2200E3AB39 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		98A8BF062D311B2200E3AB39 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

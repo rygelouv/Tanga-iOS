@@ -25,29 +25,20 @@ enum AuthState {
 class AuthManager: ObservableObject {
     @AppStorage(sessionIdKey) var sessionId: String = ""
     
-    let userRepository: UserRepository = UserRepository()
+    private let userRepository: UserRepository = UserRepository()
     
     @Published var user: FirebaseUser?
     @Published var authState: AuthState = .signedOut
     
     private var authStateHandle: AuthStateDidChangeListenerHandle!
     
+    private var revenueCatController: RevenueCatController
+    
     init() {
-        // trySignOut() // TODO to be removed later
+        revenueCatController = RevenueCatController()
         authStateHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             print("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
             self?.updateState(user: user)
-        }
-    }
-    
-    func trySignOut() {
-        Task {
-            do {
-                try await signOut()
-            }
-            catch {
-                print("Error: \(error)")
-            }
         }
     }
     
@@ -72,7 +63,10 @@ class AuthManager: ObservableObject {
                 let result = await userRepository.createUser(user: firebaseUser.toUser())
                 switch result {
                 case .success(let tangaUser):
-                    sessionId = tangaUser.id ?? UUID().uuidString
+                    guard let userId = tangaUser.id else { return }
+                    sessionId = userId
+                    // Identify user in RevenueCat
+                    await revenueCatController.login(sessionId: sessionId)
                 case .failure(let error):
                     print("Error creating or updating user: \(error)")
                 }
@@ -134,7 +128,7 @@ class AuthManager: ObservableObject {
     private func updateDisplayName(for user: FirebaseUser) async {
         let currentDisplayName = Auth.auth().currentUser?.displayName
         if currentDisplayName?.isEmpty == true {
-            let displayName = user.providerData.first?.displayName
+            let displayName = user.providerData.first?.displayName ?? "Anonymous"
             let changeRequest = user.createProfileChangeRequest()
             changeRequest.displayName = displayName
             do {
@@ -162,6 +156,7 @@ class AuthManager: ObservableObject {
             do {
                 firebaseProvidersSignOut()
                 try Auth.auth().signOut()
+                await revenueCatController.logout()
                 print("Signed out")
             }
             catch {

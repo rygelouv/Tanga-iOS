@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @Binding var navigationPath: NavigationPath
     @StateObject var viewModel = HomeViewModel()
-    @StateObject var profileViewModel = ProfileViewModel()
+    @StateObject var profileViewModel = ProfileViewModel(revenueCatController: RevenueCatController())
     
     var body: some View {
         VStack {

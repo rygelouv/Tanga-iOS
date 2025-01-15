@@ -9,9 +9,24 @@ import SwiftUI
 import FirebaseAuth
 
 struct ProfileView: View {
+    @State private var path = NavigationPath()
     @EnvironmentObject var authManager: AuthManager
-    @StateObject var viewModel = ProfileViewModel()
+    
 
+    var body: some View {
+        NavigationStack(path: $path) {
+            ProfileContentView(navigationPath: $path)
+                .navigationDestination(for: ProfileNavigationDestinations.self) { destination in
+                    ProfileNavigationDestinationView(navigationPath: $path, destination: destination)
+                }
+        }
+    }
+}
+
+struct ProfileContentView: View {
+    @Binding var navigationPath: NavigationPath
+    @StateObject var viewModel = ProfileViewModel(revenueCatController: RevenueCatController())
+    
     var body: some View {
         VStack {
             Spacer()
@@ -27,29 +42,78 @@ struct ProfileView: View {
                 .foregroundColor(.navy)
                 .padding()
             
-           
-            if viewModel.showUpgrateButton {
-                TangaPremiumButton(onButtonTap: { print("Premium button tapped")})
-                    .padding(.horizontal, 40)
+            if let profileStatus = viewModel.profileStatus {
+                MainCtaArea(profileStatus: profileStatus) {
+                        navigationPath.append(ProfileNavigationDestinations.Subscriptions)
+                }
             } else {
-                TangaButton(
-                    onButtonTap: { print("Big button tapped") },
-                    text: "Create an Account",
-                    size: .big
-                ).padding(40)
-                
+                ProgressView()
             }
            
             Spacer()
-            RoundedCornerVStack()
+            RoundedCornerVStack(
+                onSettingsTap: {
+                    navigationPath.append(ProfileNavigationDestinations.Settings)
+                    print("navigation called")
+                }
+            )
         }.onAppear {
             viewModel.loadProfileData()
         }
     }
+    
+    struct MainCtaArea: View {
+        let profileStatus: UserProfileStatus
+        let onNavigateToSubscriptions: () -> Void
+        
+        var body: some View {
+            HStack {
+                switch profileStatus {
+                case .anonymous:
+                    TangaButton(
+                        onButtonTap: { print("Big button tapped") },
+                        text: "Create an Account",
+                        size: .big
+                    ).padding(40)
+                case .loggedIn:
+                    TangaPremiumButton(onButtonTap: { onNavigateToSubscriptions() })
+                        .padding(.horizontal, 40)
+                case .premium:
+                    PremiumAccountTag()
+                }
+            }
+        }
+    }
+    
+    struct PremiumAccountTag: View {
+        var body: some View {
+            HStack {
+                Image("crown")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.orange)
+                    .padding(.leading, 8)
+                
+                Text("Premium Account")
+                    .frame(minHeight: 36)
+                    .font(Font.custom("Montserrat", size: 14, relativeTo: .headline))
+                    .fontWeight(.bold)
+                    .foregroundColor(.orange)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+            }
+            .padding(.horizontal, 10)
+            .background(Color.orangeTransparent)
+            .cornerRadius(100)
+       }
+   }
 }
 
 struct RoundedCornerVStack: View {
     @Environment(\.openURL) var openLink
+    var onSettingsTap: () -> Void
+    
     var body: some View {
         VStack(spacing: 0) {
             ProfileContentAction(
@@ -72,19 +136,18 @@ struct RoundedCornerVStack: View {
             .padding(.top, 15)
             .padding(.bottom, 15)
             
-            NavigationLink(destination: SettingsView()) {
-                VStack {
-                    ProfileContentAction(
-                        imageName: "settings",
-                        text: "Account Settings",
-                        color: .blue,
-                        onClick: { print("Profile tapped") }
-                    )
-                    .padding(.horizontal, 30)
-                    .padding(.top, 15)
-                    .padding(.bottom, 20)
+            ProfileContentAction(
+                imageName: "settings",
+                text: "Account Settings",
+                color: .blue,
+                onClick: {
+                    print("setting tapped")
+                    onSettingsTap()
                 }
-            }.buttonStyle(PlainButtonStyle())
+            )
+            .padding(.horizontal, 30)
+            .padding(.top, 15)
+            .padding(.bottom, 20)
         }
         .background(Color.white)
                .clipShape(
@@ -100,7 +163,7 @@ struct RoundedCornerVStack: View {
         var onClick: () -> Void
 
         var body: some View {
-            NavigationLink(destination: SettingsView()) {
+            Button(action: onClick) {
                 HStack(spacing: 16) {
                     Image(imageName)
                         .renderingMode(.template)
@@ -123,8 +186,7 @@ struct RoundedCornerVStack: View {
                         .foregroundColor(.gray)
                 }
                 .contentShape(Rectangle()) // Ensures the entire row is clickable
-            }
-            .buttonStyle(PlainButtonStyle()) // Removes the default button styling
+            }.buttonStyle(PlainButtonStyle())
         }
     }
 }
@@ -148,5 +210,5 @@ struct RoundedCornerShape: Shape {
 }
 
 #Preview {
-    RoundedCornerVStack()
+    RoundedCornerVStack(){}
 }

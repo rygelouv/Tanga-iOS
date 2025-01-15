@@ -34,7 +34,6 @@ class AudioController {
         }
     }
     
-    // REMOVE this function
     func loadAudio(summary: Summary, url: URL) async throws {
         currentSummary = summary
         
@@ -109,6 +108,7 @@ class AudioController {
         }.resume()
     }
     
+    /// This is actually what triggers the display of the audio in the control center
     private func setupRemoteCommands() {
         let commandCenter = MPRemoteCommandCenter.shared()
 
