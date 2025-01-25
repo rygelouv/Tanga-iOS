@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		980A09692D450A0F00DE2CBA /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 980A09682D450A0F00DE2CBA /* Secrets.xcconfig */; };
 		980DBAA32CB0250600141DA3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBAA22CB0250600141DA3 /* FirebaseAnalytics */; };
 		980DBAA52CB0250600141DA3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBAA42CB0250600141DA3 /* FirebaseAuth */; };
 		980DBAA72CB0250600141DA3 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBAA62CB0250600141DA3 /* FirebaseCore */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		980A09682D450A0F00DE2CBA /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		9840A6FC2CA05A5700194500 /* Tanga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tanga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A70D2CA05A5800194500 /* TangaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A7172CA05A5800194500 /* TangaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 		9840A6F32CA05A5700194500 = {
 			isa = PBXGroup;
 			children = (
+				980A09682D450A0F00DE2CBA /* Secrets.xcconfig */,
 				98A0563E2CC4049300D45063 /* README.md */,
 				9840A6FE2CA05A5700194500 /* Tanga */,
 				9840A7102CA05A5800194500 /* TangaTests */,
@@ -287,6 +290,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				980A09692D450A0F00DE2CBA /* Secrets.xcconfig in Resources */,
 				98A0563F2CC4049B00D45063 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,6 +467,7 @@
 		};
 		9840A7222CA05A5800194500 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 980A09682D450A0F00DE2CBA /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -505,6 +510,7 @@
 		};
 		9840A7232CA05A5800194500 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 980A09682D450A0F00DE2CBA /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

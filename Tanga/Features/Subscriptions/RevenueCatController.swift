@@ -11,8 +11,9 @@ class RevenueCatController {
     
     // MARK: Initiliazation
     func initialize() {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "REVENUECAT_API_KEY") as? String else {return}
         Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: "API_KEY_FROM_SECRETS")
+        Purchases.configure(withAPIKey: apiKey)
     }
     
     // MARK: Login and Logout
