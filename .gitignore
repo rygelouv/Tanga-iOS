@@ -103,4 +103,7 @@ GoogleService-Info.plist
 ./Tanga/GoogleService-Info.plist
 Tanga/GoogleService-Info.plist
 
-# End of https://www.toptal.com/developers/gitignore/api/swift,xcode
+### Secrets ###
+./Tanga/Secrets.xcconfig
+./Tanga/Secrets/Secrets.xcconfig
+Secrets.xcconfig
