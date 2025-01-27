@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 28/09/2024.
 //
 
+import AuthenticationServices
 import SwiftUI
 
 struct AuthView: View {
@@ -26,6 +27,18 @@ struct AuthView: View {
                SignInExplanation()
                
                Spacer()
+               
+               SignInWithAppleButton(
+                   onRequest: { request in
+                       AppleSignInManager.shared.requestAppleAuthorization(request)
+                   },
+                   onCompletion: { result in
+                       handleAppleID(result)
+                   }
+               ).signInWithAppleButtonStyle(.black)
+                   
+                   .frame(width: .infinity, height: 60, alignment: .center)
+                   .padding(10)
                
                GoogleSignInButton(signInWithGoogle: signInWithGoogle)
                
@@ -162,6 +175,34 @@ struct AuthView: View {
             catch {
                 print("GoogleSignInError: failed to sign in with Google, \(error))")
             }
+        }
+    }
+    
+    func handleAppleID(_ result: Result<ASAuthorization, Error>) {
+        if case let .success(auth) = result {
+            guard let appleIDCredentials = auth.credential as? ASAuthorizationAppleIDCredential else {
+                print("AppleAuthorization failed: AppleID credential not available")
+                return
+            }
+
+            Task {
+                do {
+                    let result = try await authManager.appleAuth(
+                        appleIDCredentials,
+                        nonce: AppleSignInManager.nonce
+                    )
+                    if let result = result {
+                        return
+                    }
+                } catch {
+                    print("AppleAuthorization failed: \(error)")
+                    // Here you can show error message to user.
+                }
+            }
+        }
+        else if case let .failure(error) = result {
+            print("AppleAuthorization failed: \(error)")
+            // Here you can show error message to user.
         }
     }
 }

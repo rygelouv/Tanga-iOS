@@ -40,6 +40,11 @@ class AuthManager: ObservableObject {
             print("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
             self?.updateState(user: user)
         }
+        
+        // Verify AppleID and Google credentials
+        Task {
+            await verifySignInProvider()
+        }
     }
     
     func updateState(user: FirebaseUser?) {
@@ -151,6 +156,37 @@ class AuthManager: ObservableObject {
         }
     }
     
+    func appleAuth(
+        _ appleIdCredentials: ASAuthorizationAppleIDCredential,
+        nonce: String?
+    ) async throws -> AuthDataResult? {
+        guard let nonce = nonce else {
+            fatalError("Invalid state: a login callback was received, but no login was sent.")
+        }
+    
+        guard let appleIdToken = appleIdCredentials.identityToken else {
+            print("Unable to fetch identity token")
+            return nil
+        }
+        
+        guard let ideTokenString = String(data: appleIdToken, encoding: .utf8) else {
+            print("Unable to serialize identity token as string from data \(appleIdToken.debugDescription)")
+            return nil
+        }
+        
+        // Initialize a Firebase credential, including the user's full name.
+        let credentials = OAuthProvider.appleCredential(
+            withIDToken: ideTokenString, rawNonce: nonce, fullName: appleIdCredentials.fullName
+        )
+        
+        do {
+            return try await authenticateUser(credentials: credentials)
+        } catch {
+            print("FirebaseAuthError: appleAuth: \(error)")
+            throw error
+        }
+    }
+    
     func signOut() async throws {
         if Auth.auth().currentUser != nil {
             do {
@@ -171,6 +207,69 @@ class AuthManager: ObservableObject {
         
         if providers?.contains("google.com") == true {
             GoogleSignInManager.shared.signOutFromGoogle()
+        }
+    }
+    
+    // MARK: - Verify authentication
+
+    /// Verify sign in providers, whether or not they have been revoked.
+    private func verifySignInProvider() async {
+        guard let providerData = Auth.auth().currentUser?.providerData else { return }
+        var isAppleCredentialRevoked = false
+        var isGoogleCredentialRevoked = false
+
+        if providerData.contains(where: { $0.providerID == "apple.com" }) {
+            isAppleCredentialRevoked = await !verifySignInWithAppleID()
+        }
+
+        if providerData.contains(where: { $0.providerID == "google.com" }) {
+            isGoogleCredentialRevoked = await !verifyGoogleSignIn()
+        }
+
+        if isAppleCredentialRevoked && isGoogleCredentialRevoked {
+            /// Sign out iff user not signed out, or signed in anonymously.
+            if authState != .signedIn {
+                do {
+                    try await self.signOut()
+                }
+                catch {
+                    print("FirebaseAuthError: verifySignInProvider() failed. \(error)")
+                }
+            }
+        }
+    }
+
+    /// Verify AppleID provider.
+    /// - Returns: Boolean indicates whether user is authorized, or authorization has been revoked
+    private func verifySignInWithAppleID() async -> Bool {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+
+        guard let providerData = Auth.auth().currentUser?.providerData,
+              let appleProviderData = providerData.first(where: { $0.providerID == "apple.com" }) else {
+            return false
+        }
+
+        do {
+            let credentialState = try await appleIDProvider.credentialState(forUserID: appleProviderData.uid)
+            return credentialState != .revoked && credentialState != .notFound
+        }
+        catch {
+            return false
+        }
+    }
+
+    /// Verify Google provider.
+    /// - Returns: Boolean indicates whether user is authorized, or authorization has been revoked
+    private func verifyGoogleSignIn() async -> Bool {
+        guard let providerData = Auth.auth().currentUser?.providerData,
+              providerData.contains(where: { $0.providerID == "google.com" }) else { return false }
+
+        do {
+            try await GIDSignIn.sharedInstance.restorePreviousSignIn()
+            return true
+        }
+        catch {
+            return false // The Google sign in credential is either revoked or was not found.
         }
     }
 }
