@@ -107,3 +107,5 @@ Tanga/GoogleService-Info.plist
 ./Tanga/Secrets.xcconfig
 ./Tanga/Secrets/Secrets.xcconfig
 Secrets.xcconfig
+
+*.DS_Store
