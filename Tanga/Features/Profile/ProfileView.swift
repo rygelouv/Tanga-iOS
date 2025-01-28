@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 06/10/2024.
 //
 
+import OSLog
 import SwiftUI
 import FirebaseAuth
 
@@ -54,7 +55,7 @@ struct ProfileContentView: View {
             RoundedCornerVStack(
                 onSettingsTap: {
                     navigationPath.append(ProfileNavigationDestinations.Settings)
-                    print("navigation called")
+                    Logger.profile.info("navigation called")
                 }
             )
         }.onAppear {
@@ -71,7 +72,7 @@ struct ProfileContentView: View {
                 switch profileStatus {
                 case .anonymous:
                     TangaButton(
-                        onButtonTap: { print("Big button tapped") },
+                        onButtonTap: { Logger.profile.info("Big button tapped") },
                         text: "Create an Account",
                         size: .big
                     ).padding(40)
@@ -130,7 +131,7 @@ struct RoundedCornerVStack: View {
                 imageName: "insurance",
                 text: "Privacy and Terms",
                 color: .green,
-                onClick: { print("Profile tapped") }
+                onClick: { Logger.profile.info("Profile tapped") }
             )
             .padding(.horizontal, 30)
             .padding(.top, 15)
@@ -141,7 +142,7 @@ struct RoundedCornerVStack: View {
                 text: "Account Settings",
                 color: .blue,
                 onClick: {
-                    print("setting tapped")
+                    Logger.profile.info("setting tapped")
                     onSettingsTap()
                 }
             )

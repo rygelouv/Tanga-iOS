@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 22/09/2024.
 //
 
+import OSLog
 import SwiftUI
 
 struct LandingView: View {
@@ -39,7 +40,7 @@ struct LandingView: View {
                 // Color.clear.frame(height: 5)
                 
                 Button(action: {
-                    print("Button tapped")
+                    Logger.onboarding.info("Button tapped")
                     path.append(NavigationDestinations.Onboarding)
                 }) {
                     Text("Get Started")

@@ -26,8 +26,8 @@ struct LibraryView: View {
             } else {
                 LibraryEmptyView().frame(maxHeight: .infinity)
             }
-        }.onAppear {
-            viewModel.loadFavorites()
+        }.task {
+            await viewModel.loadFavorites()
         }
     }
     

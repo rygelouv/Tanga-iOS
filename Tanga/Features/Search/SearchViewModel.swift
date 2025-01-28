@@ -5,8 +5,8 @@
 //  Created by Rygel Louv on 18/10/2024.
 //
 
+import OSLog
 import SwiftUI
-
 
 class SearchViewModel: ObservableObject {
     var summaryRepository = SummaryRepository()
@@ -18,50 +18,55 @@ class SearchViewModel: ObservableObject {
         self.summaries = summaries
     }
     
-    func loadAllSummaries() {
-        Task {
-            let result = await summaryRepository.getAllSummaries()
-            switch result {
-            case .success(let summaries):
-                DispatchQueue.main.async {
-                    self.summaries = summaries
-                }
-            case .failure:
-                self.summaries = nil
-            }
-        }
+    @MainActor
+    func loadAllSummaries() async {
+        let result = await summaryRepository.getAllSummaries()
+        self.summaries = try? result.get()
     }
     
-    func toggleCategorySelection(category: CategoryId) {
+    func toggleCategorySelection(category: CategoryId) async {
         if selectedCategories.contains(category) {
             selectedCategories.removeAll(where: { $0 == category })
         } else {
             selectedCategories.append(category)
         }
-        getSummariesForCategories()
+        await getSummariesForCategories()
     }
-    
-    func getSummariesForCategories() {
+   
+    @MainActor
+    func getSummariesForCategories() async {
         guard !selectedCategories.isEmpty else {
-            loadAllSummaries()
+            await loadAllSummaries()
             return
         }
         
-        Task {
-            var filteredSummaries: [Summary] = []
+        let filteredSummaries = await fetchSummariesConcurrently()
+        self.summaries = filteredSummaries.sorted { ($0.title?.lowercased() ?? "") < ($1.title?.lowercased() ?? "") }
+    }
+    
+    private func fetchSummariesConcurrently() async -> [Summary] {
+        await withTaskGroup(of: [Summary].self) { group in
+            var allSummaries = [Summary]()
+            allSummaries.reserveCapacity(selectedCategories.count)
+            
             for categoryId in selectedCategories {
-                let result = await summaryRepository.getSummariesForCategory(categoryId: categoryId)
-                switch result {
-                case .success(let summaries):
-                    filteredSummaries.append(contentsOf: summaries)
-                case .failure:
-                    print("Error fetching summaries for category \(categoryId)")
-                    continue
+                group.addTask {
+                    let result = await self.summaryRepository.getSummariesForCategory(categoryId: categoryId)
+                    switch result {
+                    case .success(let summaries):
+                        return summaries
+                    case .failure:
+                        Logger.search.error("Error fetching summaries for category \(categoryId)")
+                        return []
+                    }
                 }
             }
-            DispatchQueue.main.async {
-                self.summaries = filteredSummaries.sorted { ($0.title?.lowercased() ?? "") < ($1.title?.lowercased() ?? "") }
+            
+            
+            for await summaries in group {
+                allSummaries.append(contentsOf: summaries)
             }
+            return allSummaries
         }
     }
 }

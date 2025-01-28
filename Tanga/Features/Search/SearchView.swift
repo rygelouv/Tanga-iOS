@@ -18,7 +18,7 @@ struct SearchView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     CategoriesSectionView() { categoryId in
-                        viewModel.toggleCategorySelection(category: categoryId)
+                        Task { await viewModel.toggleCategorySelection(category: categoryId) }
                     }
                     
                     let filteredSummaries = summaries?.filter { summary in
@@ -38,8 +38,8 @@ struct SearchView: View {
                 placement: SearchFieldPlacement.navigationBarDrawer(displayMode: .always),
                 prompt: "Book title, author name"
             )
-            .onAppear {
-                viewModel.loadAllSummaries()
+            .task {
+                await viewModel.loadAllSummaries()
             }
         }.background(Color.cultured)
     }

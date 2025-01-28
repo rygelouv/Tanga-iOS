@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 28/09/2024.
 //
 
+import OSLog
 import SwiftUI
 
 struct AuthView: View {
@@ -46,7 +47,7 @@ struct AuthView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    print("Button tapped")
+                    Logger.authentication.info("Button tapped")
                     skipAuth()
                 }) {
                     Text("Skip")
@@ -97,7 +98,7 @@ struct AuthView: View {
         
         var body: some View {
             Button(action: {
-                print("Google Signin button tapped")
+                Logger.authentication.info("Google Signin button tapped")
                 signInWithGoogle()
             }) {
                 ZStack {
@@ -145,7 +146,7 @@ struct AuthView: View {
                 let _ = try await authManager.signInAnonymously()
             }
             catch {
-                print("Error signing in anonymously: \(error)")
+                Logger.authentication.error("Error signing in anonymously: \(error)")
             }
         }
     }
@@ -156,11 +157,11 @@ struct AuthView: View {
                 guard let user = try await GoogleSignInManager.shared.signInWithGoogle() else { return }
                 let result = try await authManager.googleAuth(user: user)
                 if let result = result {
-                    print("Google sign in successful: \(result.user.uid)")
+                    Logger.authentication.info("Google sign in successful: \(result.user.uid)")
                 }
             }
             catch {
-                print("GoogleSignInError: failed to sign in with Google, \(error))")
+                Logger.authentication.error("GoogleSignInError: failed to sign in with Google, \(error))")
             }
         }
     }

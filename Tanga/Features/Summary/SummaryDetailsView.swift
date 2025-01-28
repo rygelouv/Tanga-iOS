@@ -67,8 +67,8 @@ struct SummaryDetailsView: View {
                     }
                 }
             }.toolbarBackground(Color.white, for: .navigationBar)
-        }.onAppear {
-            viewModel.loadDetails(summaryId: summaryId)
+        }.task {
+            await viewModel.loadDetails(summaryId: summaryId)
             favoriteViewModel.getFavorite(summaryId: summaryId)
         }
     }

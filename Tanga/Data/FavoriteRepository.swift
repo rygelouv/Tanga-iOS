@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 07/12/2024.
 //
 
+import OSLog
 import Foundation
 import FirebaseFirestore
 
@@ -50,7 +51,7 @@ class FavoriteRepository {
             // If a favorite is missing one of its fields then error should be thrown. This is why we are force-casting from Any? to Any
             try document.setData(from: favorite)
             let favoriteId = FavoriteId(document.documentID)
-            print("Favorite in Repo ID ==> \(favoriteId)")
+            Logger.data.info("Favorite in Repo ID ==> \(favoriteId)")
             return .success(favoriteId)
         } catch {
             return .failure(error)

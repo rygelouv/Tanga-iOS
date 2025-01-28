@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 07/12/2024.
 //
 
+import OSLog
 import SwiftUI
 
 class LibraryViewModel: ObservableObject {
@@ -19,17 +20,14 @@ class LibraryViewModel: ObservableObject {
         self.favoriteRepository = favoriteRepository
     }
     
-    func loadFavorites() {
-        Task {
-            let result = await favoriteRepository.getFavorites(userId: sessionId)
-            switch result {
-                case .success(let favorites):
-                DispatchQueue.main.async {
-                    self.favorites = favorites
-                }
-            case .failure(let error):
-                print("Error loading favorites: \(error)")
-            }
+    @MainActor
+    func loadFavorites() async {
+        let result = await favoriteRepository.getFavorites(userId: sessionId)
+        switch result {
+        case .success(let favorites):
+            self.favorites = favorites
+        case .failure(let error):
+            Logger.library.error("Error loading favorites: \(error)")
         }
     }
 }
