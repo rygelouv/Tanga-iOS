@@ -23,7 +23,8 @@ class AppleSignInManager: NSObject {
     private var continuation : CheckedContinuation<ASAuthorizationAppleIDCredential, Error>?
     
     func requestAppleAuthorization() async throws -> ASAuthorizationAppleIDCredential {
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self else { return }
             self.continuation = continuation
             
             let appleIdProvider = ASAuthorizationAppleIDProvider()
