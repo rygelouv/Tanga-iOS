@@ -187,22 +187,22 @@ struct AuthView: View {
 
             Task {
                 do {
-                    let result = try await authManager.appleAuth(
+                    guard let result = try await authManager.appleAuth(
                         appleIDCredentials,
                         nonce: AppleSignInManager.nonce
-                    )
-                    if let result = result {
+                    ) else {
                         return
                     }
+                    
                 } catch {
-                    print("AppleAuthorization failed: \(error)")
-                    // Here you can show error message to user.
+                    debugPrint("AppleAuthorization failed: \(error.localizedDescription)")
+                    // Show error
                 }
             }
         }
         else if case let .failure(error) = result {
             print("AppleAuthorization failed: \(error)")
-            // Here you can show error message to user.
+            // show error message to user.
         }
     }
 }

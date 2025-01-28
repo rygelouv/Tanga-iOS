@@ -20,6 +20,10 @@ enum AuthState {
     case signedIn // Not authenticated in the app.
 }
 
+enum SigninProvider: String {
+  case apple = "apple.com"
+  case google = "google.com"
+}
 
 @MainActor
 class AuthManager: ObservableObject {
@@ -245,7 +249,7 @@ class AuthManager: ObservableObject {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
 
         guard let providerData = Auth.auth().currentUser?.providerData,
-              let appleProviderData = providerData.first(where: { $0.providerID == "apple.com" }) else {
+              let appleProviderData = providerData.first(where: { $0.providerID == SigninProvider.apple.rawValue }) else {
             return false
         }
 
@@ -262,7 +266,7 @@ class AuthManager: ObservableObject {
     /// - Returns: Boolean indicates whether user is authorized, or authorization has been revoked
     private func verifyGoogleSignIn() async -> Bool {
         guard let providerData = Auth.auth().currentUser?.providerData,
-              providerData.contains(where: { $0.providerID == "google.com" }) else { return false }
+              providerData.contains(where: { $0.providerID == SigninProvider.google.rawValue }) else { return false }
 
         do {
             try await GIDSignIn.sharedInstance.restorePreviousSignIn()
