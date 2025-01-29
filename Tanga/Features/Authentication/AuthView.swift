@@ -6,6 +6,7 @@
 //
 
 import OSLog
+import AuthenticationServices
 import SwiftUI
 
 struct AuthView: View {
