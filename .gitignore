@@ -101,6 +101,7 @@ iOSInjectionProject/
 ### Google ###
 GoogleService-Info.plist
 ./Tanga/GoogleService-Info.plist
+./Tanga/Tanga/GoogleService-Info.plist
 Tanga/GoogleService-Info.plist
 */GoogleService-Info.plist
 
