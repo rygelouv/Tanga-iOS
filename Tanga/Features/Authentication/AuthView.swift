@@ -5,9 +5,8 @@
 //  Created by Rygel Louv on 28/09/2024.
 //
 
-import OSLog
-import AuthenticationServices
 import SwiftUI
+import OSLog
 
 struct AuthView: View {
     @EnvironmentObject var authManager: AuthManager
