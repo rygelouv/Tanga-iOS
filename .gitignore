@@ -102,6 +102,7 @@ iOSInjectionProject/
 GoogleService-Info.plist
 ./Tanga/GoogleService-Info.plist
 Tanga/GoogleService-Info.plist
+*/GoogleService-Info.plist
 
 ### Secrets ###
 ./Tanga/Secrets.xcconfig

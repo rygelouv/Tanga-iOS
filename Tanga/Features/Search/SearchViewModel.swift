@@ -62,7 +62,6 @@ class SearchViewModel: ObservableObject {
                 }
             }
             
-            
             for await summaries in group {
                 allSummaries.append(contentsOf: summaries)
             }
