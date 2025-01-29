@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 04/10/2024.
 //
 
+import OSLog
 import Foundation
 import AuthenticationServices
 import FirebaseAuth
@@ -41,7 +42,7 @@ class AuthManager: ObservableObject {
     init() {
         revenueCatController = RevenueCatController()
         authStateHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
-            print("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
+            Logger.authentication.info("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
             self?.updateState(user: user)
         }
         
@@ -77,7 +78,7 @@ class AuthManager: ObservableObject {
                     // Identify user in RevenueCat
                     await revenueCatController.login(sessionId: sessionId)
                 case .failure(let error):
-                    print("Error creating or updating user: \(error)")
+                    Logger.authentication.error("Error creating or updating user: \(error)")
                 }
             }
         }
@@ -90,11 +91,11 @@ class AuthManager: ObservableObject {
     func signInAnonymously() async throws -> AuthDataResult {
         do {
             let result = try await Auth.auth().signInAnonymously()
-            print("Signed in anonymously: \(result.user.uid)")
+            Logger.authentication.info("Signed in anonymously: \(result.user.uid)")
             return result
         }
         catch {
-            print("Error signing in anonymously: \(error)")
+            Logger.authentication.error("Error signing in anonymously: \(error)")
             throw error
         }
     }
@@ -110,11 +111,11 @@ class AuthManager: ObservableObject {
     private func authSignIn(credentials: AuthCredential) async throws -> AuthDataResult {
         do {
             let result = try await Auth.auth().signIn(with: credentials)
-            print("Signed in: \(result.user.uid)")
+            Logger.authentication.info("Signed in: \(result.user.uid)")
             updateState(user: result.user)
             return result
         } catch {
-            print("Error signing in: \(error)")
+            Logger.authentication.error("Error signing in: \(error)")
             throw error
         }
     }
@@ -129,7 +130,7 @@ class AuthManager: ObservableObject {
             updateState(user: result.user)
             return result
         } catch {
-            print("Error linking: \(error)")
+            Logger.authentication.error("Error linking: \(error)")
             throw error
         }
     }
@@ -143,7 +144,7 @@ class AuthManager: ObservableObject {
             do {
                 try await changeRequest.commitChanges()
             } catch {
-                print("Error updating display name: \(error)")
+                Logger.authentication.error("Error updating display name: \(error)")
             }
         }
     }
@@ -155,7 +156,7 @@ class AuthManager: ObservableObject {
         do {
             return try await authenticateUser(credentials: credentials)
         } catch {
-            print("Error authenticating user: \(error)")
+            Logger.authentication.error("Error authenticating user: \(error)")
             throw error
         }
     }
@@ -197,10 +198,10 @@ class AuthManager: ObservableObject {
                 firebaseProvidersSignOut()
                 try Auth.auth().signOut()
                 await revenueCatController.logout()
-                print("Signed out")
+                Logger.authentication.info("Signed out")
             }
             catch {
-                print("Error signing out: \(error)")
+                Logger.authentication.error("Error signing out: \(error)")
                 throw error
             }
         }

@@ -4,6 +4,8 @@
 //
 //  Created by Rygel Louv on 12/01/2025.
 //
+
+import OSLog
 import Foundation
 import RevenueCat
 
@@ -22,7 +24,7 @@ class RevenueCatController {
         do {
             _ = try await Purchases.shared.logIn(sessionId)
         } catch {
-            print("Unable to login to RevenueCat: \(error)")
+            Logger.subscriptions.error("Unable to login to RevenueCat: \(error)")
         }
     }
     
@@ -30,7 +32,7 @@ class RevenueCatController {
         do {
             _ = try await Purchases.shared.logOut()
         } catch {
-            print("Unable to logout from RevenueCat: \(error)")
+            Logger.subscriptions.error("Unable to logout from RevenueCat: \(error)")
         }
     }
     
@@ -42,7 +44,7 @@ class RevenueCatController {
             let packages = offerings.current?.availablePackages ?? []
             return packages.map { $0.toSubscriptionPackage() }
         } catch {
-            print("Unable to get subscriptions: \(error)")
+            Logger.subscriptions.error("Unable to get subscriptions: \(error)")
             return []
         }
     }
@@ -56,10 +58,10 @@ class RevenueCatController {
             }
             guard let package else { fatalError("Unable to find package") }
             let purchase = try await Purchases.shared.purchase(package: package)
-            print("Purchase complete: \(purchase)")
+            Logger.subscriptions.info("Purchase complete: \(purchase.customerInfo)")
             return SubscriberInfo(hasActiveSubscription: purchase.customerInfo.activeSubscriptions.count > 0, packageId: purchase.customerInfo.activeSubscriptions.first)
         } catch {
-            print("Unable to purchase subscription: \(error)")
+            Logger.subscriptions.error("Unable to purchase subscription: \(error)")
             throw error
         }
     }

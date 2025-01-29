@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 06/01/2025.
 //
 
+import OSLog
 import SwiftUI
 
 struct SettingsView: View {
@@ -36,7 +37,7 @@ struct SettingsView: View {
                 try await authManager.signOut()
                 dismiss()
             } catch {
-                print("Error signing out: \(error)")
+                Logger.settings.error("Error signing out: \(error)")
             }
         }
     }

@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 06/01/2025.
 //
 
+import OSLog
 import Foundation
 import AVFoundation
 import MediaPlayer
@@ -30,7 +31,7 @@ class AudioController {
             try session.setCategory(.playback, mode: .spokenAudio)
             try session.setActive(true)
         } catch {
-            print("Failed to configure audio session: \(error)")
+            Logger.audioPlayer.error("Failed to configure audio session: \(error)")
         }
     }
     
@@ -48,10 +49,11 @@ class AudioController {
             do {
                 let duration = try await playerItem.asset.load(.duration)
                 DispatchQueue.main.async { [weak self] in
-                    self?.onPlaybackUpdate?(0.0, duration.seconds, false)
+                    guard let self else { return }
+                    onPlaybackUpdate?(0.0, duration.seconds, false)
                 }
             } catch {
-                print("Error loading audio duration: \(error)")
+                Logger.audioPlayer.error("Error loading audio duration: \(error)")
             }
         }
         

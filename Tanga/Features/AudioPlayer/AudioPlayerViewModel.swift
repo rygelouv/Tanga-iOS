@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 04/01/2025.
 //
 
+import OSLog
 import SwiftUI
 import AVFoundation
 import FirebaseStorage
@@ -69,7 +70,7 @@ class AudioPlayerViewModel: ObservableObject {
                 do {
                     try await audioController.loadAudio(summary: summary, url: url)
                 } catch {
-                    print("Error loading audio: \(error)")
+                    Logger.audioPlayer.error("Error loading audio: \(error)")
                 }
             }
         }

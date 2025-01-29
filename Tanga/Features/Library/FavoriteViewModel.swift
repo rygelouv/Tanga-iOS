@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 09/12/2024.
 //
 
+import OSLog
 import SwiftUI
 import Foundation
 
@@ -80,7 +81,7 @@ class FavoriteViewModel: ObservableObject {
     /// If the summary is already a favorite, it is removed. Otherwise, it is added to the favorites.
     func toggleFavorite() {
         guard let favorite = favorite ?? summary?.toFavorite(userId: sessionId) else { return }
-        print("favorite ===> \(favorite)")
+        Logger.library.info("favorite: \(favorite.title ?? "")")
         
         if isFavorite {
             deleteFavorite(favorite: favorite)
@@ -105,7 +106,7 @@ class FavoriteViewModel: ObservableObject {
                     self.favorite?.id = favoriteId
                 }
             case .failure:
-                print("Error saving favorite")
+                Logger.library.error("Error saving favorite")
             }
         }
     }
@@ -120,7 +121,7 @@ class FavoriteViewModel: ObservableObject {
                     self.isFavorite = false
                 }
             case .failure:
-                print("Error deleting favorite")
+                Logger.library.error("Error deleting favorite")
             }
         }
     }

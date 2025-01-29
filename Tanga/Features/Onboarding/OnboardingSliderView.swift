@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 27/09/2024.
 //
 
+import OSLog
 import SwiftUI
 
 struct OnboardingPage: Identifiable {
@@ -102,7 +103,7 @@ struct OnboardingSliderView: View {
                     currentPage = min(currentPage + 1, pages.count - 1)
                 },
                 onFinish: {
-                    print("Finished onboarding")
+                    Logger.onboarding.info("Finished onboarding")
                     path = NavigationPath()
                     isOnboardingCompleted = true
                 }

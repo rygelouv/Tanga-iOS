@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 04/01/2025.
 //
 
+import OSLog
 import Foundation
 import FirebaseStorage
 
@@ -22,10 +23,10 @@ class DownloadUrlGenerator {
         return try await withCheckedThrowingContinuation { continuation in
             audioFileRef.downloadURL() { url, error in
                 if let error {
-                    print("Error downloading file: \(error)")
+                    Logger.audioPlayer.error("Error downloading file: \(error)")
                     continuation.resume(throwing: error)
                 } else {
-                    print("URL generated successfully: \(url?.absoluteString ?? "")")
+                    Logger.audioPlayer.info("URL generated successfully: \(url?.absoluteString ?? "")")
                     continuation.resume(returning: url)
                 }
             }

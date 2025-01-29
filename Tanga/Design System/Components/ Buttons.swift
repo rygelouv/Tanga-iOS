@@ -5,6 +5,7 @@
 //  Created by Rygel Louv on 09/10/2024.
 //
 
+import OSLog
 import SwiftUI
 
 enum ButtonSize {
@@ -204,21 +205,21 @@ struct AudioFloatingActionButton: View {
     VStack(spacing: 20) {
         // Big button with icon
         TangaButton(
-            onButtonTap: { print("Big button tapped") },
+            onButtonTap: { Logger.designSystem.log("Big button tapped") },
             text: "Contact Us",
             size: .big
         )
         
         // Small button without icon
         TangaButton(
-            onButtonTap: { print("Small button tapped") },
+            onButtonTap: { Logger.designSystem.log("Small button tapped") },
             leftIcon: "search",
             text: "Explore Summaries",
             size: .small
         )
         
         // Premium button
-        TangaPremiumButton(onButtonTap: { print("Premium button tapped")})
+        TangaPremiumButton(onButtonTap: { Logger.designSystem.log("Premium button tapped")})
         
         AudioFloatingActionButton()
     }
