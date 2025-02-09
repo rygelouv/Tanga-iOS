@@ -21,5 +21,6 @@ extension Logger {
   static let onboarding = Logger(subsystem: identifier, category: "Onboarding")
   static let search = Logger(subsystem: identifier, category: "Search")
   static let settings = Logger(subsystem: identifier, category: "Settings")
+  static let notifications = Logger(subsystem: identifier, category: "Notifications")
 
 }

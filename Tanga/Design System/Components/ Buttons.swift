@@ -18,6 +18,7 @@ struct TangaNavButton<Destination: View>: View {
     var leftIcon: String? = nil // leftIcon is optional
     var text: String
     var size: ButtonSize = .small // Default to "small" size
+    var variation: ButtonVariation = .primary
     
     var body: some View {
         NavigationLink(destination: destination) {
@@ -29,7 +30,7 @@ struct TangaNavButton<Destination: View>: View {
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 28, height: 28)
-                            .foregroundColor(.white)
+                            .foregroundColor(variation.data.foregroundColor)
                             .padding(.leading, 10)
                     }
                     Spacer()
@@ -38,17 +39,19 @@ struct TangaNavButton<Destination: View>: View {
                 Text(text)
                     .font(Font.custom("Montserrat", size: textSize, relativeTo: .headline))
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(variation.data.foregroundColor)
             }
             .frame(maxWidth: .infinity, minHeight: 66)
         }
-        .buttonStyle(TangaNavButtonStyle())
+        .buttonStyle(TangaNavButtonStyle(variation: variation))
     }
     
     struct TangaNavButtonStyle: ButtonStyle {
+        var variation: ButtonVariation
+        
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .background(Color.yaleBlue)
+                .background(variation.data.backgroundColor)
                 .cornerRadius(16)
         }
     }
@@ -86,11 +89,45 @@ struct SearchButton: View {
     }
 }
 
+struct ButtonVariationData {
+    var backgroundColor: Color
+    var foregroundColor: Color
+}
+
+enum ButtonVariation {
+    case primary
+    case secondary
+    case tertiary
+    
+    // Side note: this pattern sucks in swift. Having to add an extra "data" property is confusing
+    // I wish we could just pass ButtonVariableData to case ButtonVariation directly
+    var data: ButtonVariationData {
+        switch self {
+        case .primary:
+            return ButtonVariationData(
+                backgroundColor: .yaleBlue,
+                foregroundColor: .white
+            )
+        case .secondary:
+            return ButtonVariationData(
+                backgroundColor: .cerulean,
+                foregroundColor: .white
+            )
+        case .tertiary:
+            return ButtonVariationData(
+                backgroundColor: .white,
+                foregroundColor: .yaleBlue
+            )
+        }
+    }
+}
+
 struct TangaButton: View {
     var onButtonTap: () -> Void
     var leftIcon: String? = nil // leftIcon is optional
     var text: String
     var size: ButtonSize = .small // Default to "small" size
+    var variation: ButtonVariation = .primary
     
     var body: some View {
         Button(action: {
@@ -104,7 +141,7 @@ struct TangaButton: View {
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 28, height: 28)
-                            .foregroundColor(.white)
+                            .foregroundColor(variation.data.foregroundColor)
                             .padding(.leading, 10)
                     }
                     Spacer()
@@ -113,11 +150,11 @@ struct TangaButton: View {
                 Text(text)
                     .font(Font.custom("Montserrat", size: textSize, relativeTo: .headline))
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(variation.data.foregroundColor)
             }
             .frame(maxWidth: .infinity, minHeight: 66)
         }
-        .background(Color.yaleBlue)
+        .background(variation.data.backgroundColor)
         .cornerRadius(16)
     }
     
@@ -197,6 +234,28 @@ struct AudioFloatingActionButton: View {
                 .padding(.trailing, 16)
                 .padding(.bottom, 16)
             }
+        }
+    }
+}
+
+struct CloseButtonView: View {
+    let dismiss: () -> Void
+    var variation: ButtonVariation = .primary
+
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                dismiss()
+            }) {
+                Image(systemName: "xmark")
+                    .font(.title2)
+                    .foregroundColor(variation.data.foregroundColor)
+                    .frame(width: 38, height: 38)
+            }
+            .background(variation.data.foregroundColor.opacity(0.2)) // We use foregroud color on background here
+            .clipShape(Circle())
+            .frame(width: 48, height: 48)
         }
     }
 }

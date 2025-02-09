@@ -39,8 +39,16 @@ struct LandingView: View {
                     .padding(.bottom, 20)
                 // Color.clear.frame(height: 5)
                 
-                Button(action: {
-                    Logger.onboarding.info("Button tapped")
+                TangaButton(
+                    onButtonTap: {
+                        path.append(NavigationDestinations.Onboarding)
+                    },
+                    text: "Get Started",
+                    size: .small,
+                    variation: .secondary
+                )
+                
+                /*Button(action: {
                     path.append(NavigationDestinations.Onboarding)
                 }) {
                     Text("Get Started")
@@ -54,7 +62,7 @@ struct LandingView: View {
                         .padding()
                         .background(Color.cerulean)
                         .cornerRadius(16)
-                }
+                }*/
             }.padding(50)
         }
     }

@@ -26,7 +26,7 @@ struct SubscriptionsView: View {
         ScrollView {
             VStack {
                 
-                CloseButtonView(dismiss: { dismiss() })
+                CloseButtonView(dismiss: { dismiss() }).padding(.horizontal, 12)
                 
                 Image("pricing")
                     .resizable()
@@ -82,28 +82,6 @@ struct SubscriptionsView: View {
             if newValue {
                 dismiss()
             }
-        }
-    }
-    
-    struct CloseButtonView: View {
-        let dismiss: () -> Void
-
-        var body: some View {
-            HStack {
-                Spacer()
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .foregroundColor(Color.white)
-                        .frame(width: 38, height: 38)
-                }
-                .background(Color.white.opacity(0.2))
-                .clipShape(Circle())
-                .frame(width: 48, height: 48)
-            }
-            .padding(.horizontal, 12)
         }
     }
     
