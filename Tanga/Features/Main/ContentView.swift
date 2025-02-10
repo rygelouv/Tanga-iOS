@@ -11,6 +11,9 @@ struct ContentView: View {
     @Binding var navigationPath: NavigationPath
     @State private var selection = 1
     
+    @EnvironmentObject var notificationPermissionManager: NotificationPermissionManager
+    @State private var showNotificationSheet = false
+    
     var body: some View {
         ZStack {
             VStack {
@@ -45,6 +48,13 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .preferredColorScheme(.light)
+        }.task {
+            if await notificationPermissionManager.shouldShowNotificationView() {
+                showNotificationSheet = true
+            }
+        }
+        .sheet(isPresented: $showNotificationSheet) {
+            NotificationView().interactiveDismissDisabled()
         }
     }
     

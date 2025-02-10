@@ -72,7 +72,7 @@ struct ProfileContentView: View {
                 switch profileStatus {
                 case .anonymous:
                     TangaButton(
-                        onButtonTap: { Logger.profile.info("Big button tapped") },
+                        onButtonTap: { },
                         text: "Create an Account",
                         size: .big
                     ).padding(40)

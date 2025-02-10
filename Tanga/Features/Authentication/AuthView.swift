@@ -188,7 +188,7 @@ struct AuthView: View {
 
             Task {
                 do {
-                    guard let result = try await authManager.appleAuth(
+                    guard let _ = try await authManager.appleAuth(
                         appleIDCredentials,
                         nonce: AppleSignInManager.nonce
                     ) else {

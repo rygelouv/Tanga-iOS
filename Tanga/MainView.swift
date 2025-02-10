@@ -15,9 +15,8 @@ enum NavigationDestinations: String, CaseIterable, Hashable {
     
     case Auth
     
-    case Search
+    case Notifications
 }
-
 
 struct MainView: View {
     @State private var path = NavigationPath()
@@ -70,8 +69,8 @@ struct MainView: View {
                 OnboardingSliderView(path: $navigationPath)
             case .Auth:
                 AuthView()
-            case .Search:
-                SearchView()
+            case .Notifications:
+                NotificationView()
             }
         }
     }
