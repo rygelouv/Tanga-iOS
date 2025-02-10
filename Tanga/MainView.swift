@@ -29,15 +29,11 @@ struct MainView: View {
         ZStack {
             NavigationStack(path: $path) {
                 if isOnboardingCompleted {
-                    let _ = print("onboarding is completed")
-                    let _ = print("auth state is: \(authManager.authState)")
                     if authManager.authState != .signedOut {
-                        let _ = print("use is signed in")
                         ContentView(navigationPath: $path).navigationDestination(for: NavigationDestinations.self) { destination in
                             NavigationDestinationView(navigationPath: $path, destination: destination)
                         }
                     } else {
-                        let _ = print("use is signed OUT ===> show auth view")
                         AuthView()
                     }
                 } else {
