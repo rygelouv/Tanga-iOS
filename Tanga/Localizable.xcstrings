@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "(%@)" : {
+
+    },
     "%@ min" : {
 
     },
@@ -13,7 +16,13 @@
     "•Psychology •Life Philosophy •Self-help •Lifestyle •Stoicism" : {
 
     },
+    "An error occurred while attempting to delete your account. Please try again later." : {
+
+    },
     "Are you sure you want to logout?" : {
+
+    },
+    "Are you sure you want to say goodbye to your Tanga account? This action is permanent and cannot be undone. Here's what you'll miss out on:\n\n    - All your saved book summaries\n\n    - Any premium content or features you purchased \n\nIf you're sure you want to go, click \"Delete Account\" below. If you have any questions or need a hand, our support team is here to help!" : {
 
     },
     "Best Value" : {
@@ -25,6 +34,9 @@
     "Business & Career" : {
 
     },
+    "Cancel" : {
+
+    },
     "Categories" : {
 
     },
@@ -34,7 +46,16 @@
     "Choose your format" : {
 
     },
+    "Confirm Deletion" : {
+
+    },
     "Confirm Logout" : {
+
+    },
+    "Delete Your Tanga Account" : {
+
+    },
+    "Deletion Error" : {
 
     },
     "Dive into the transformative wisdom of best-selling books that have changed lives around the world" : {
@@ -73,19 +94,22 @@
     "Life-changing books" : {
 
     },
-    "Logout" : {
-
-    },
     "No" : {
 
     },
     "No results found for \"%@\"" : {
 
     },
+    "Ok" : {
+
+    },
     "Personal development •Productivity •Self-improvement •Self-developmens" : {
 
     },
     "Play" : {
+
+    },
+    "Please confirm you want to delete your account. This action is permanent and cannot be undone." : {
 
     },
     "Premium Account" : {
@@ -124,6 +148,9 @@
     "Sorry, Tanga Graphics is currently unavailable. Try again later" : {
 
     },
+    "Tanga Version: %@" : {
+
+    },
     "The simplest, most focused way to experience life-changing book summaries." : {
 
     },
@@ -143,6 +170,9 @@
 
     },
     "Yes" : {
+
+    },
+    "Yes Delete" : {
 
     },
     "Your Free Weekly Summary" : {

@@ -13,6 +13,8 @@ enum ProfileNavigationDestinations: String, CaseIterable, Hashable {
     case Settings
     
     case Subscriptions
+    
+    case DeleteAccount
 }
 
 
@@ -25,9 +27,13 @@ struct ProfileNavigationDestinationView: View {
         case .Profile:
             ProfileView()
         case .Settings:
-            SettingsView()
+            SettingsView(path: $navigationPath).navigationDestination(for: ProfileNavigationDestinations.self) { destination in
+                ProfileNavigationDestinationView(navigationPath: $navigationPath, destination: destination)
+            }
         case .Subscriptions:
             SubscriptionsView()
+        case .DeleteAccount:
+            DeleteAccountView(path: $navigationPath)
         }
     }
 }
