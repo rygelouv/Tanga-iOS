@@ -23,6 +23,9 @@
 		98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BC8B2D29174B00E3AB39 /* MarkdownUI */; };
 		98A8BF052D311B2200E3AB39 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BF042D311B2200E3AB39 /* RevenueCat */; };
 		98A8BF072D311B2200E3AB39 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BF062D311B2200E3AB39 /* RevenueCatUI */; };
+		98B8644F2D61DC4400522312 /* mvvm-screenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644B2D61DC4400522312 /* mvvm-screenshot.png */; };
+		98B864502D61DC4400522312 /* screenshots-tanga-min-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */; };
+		98B864512D61DC4400522312 /* tanga_infra_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644D2D61DC4400522312 /* tanga_infra_02.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,9 @@
 		9840A70D2CA05A5800194500 /* TangaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A7172CA05A5800194500 /* TangaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98A0563E2CC4049300D45063 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		98B8644B2D61DC4400522312 /* mvvm-screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mvvm-screenshot.png"; sourceTree = "<group>"; };
+		98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screenshots-tanga-min-1.png"; sourceTree = "<group>"; };
+		98B8644D2D61DC4400522312 /* tanga_infra_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tanga_infra_02.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -137,6 +143,7 @@
 				9840A71A2CA05A5800194500 /* TangaUITests */,
 				980DBAA12CB0250600141DA3 /* Frameworks */,
 				9840A6FD2CA05A5700194500 /* Products */,
+				98B8644E2D61DC4400522312 /* images */,
 			);
 			sourceTree = "<group>";
 		};
@@ -148,6 +155,16 @@
 				9840A7172CA05A5800194500 /* TangaUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		98B8644E2D61DC4400522312 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				98B8644B2D61DC4400522312 /* mvvm-screenshot.png */,
+				98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */,
+				98B8644D2D61DC4400522312 /* tanga_infra_02.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -292,6 +309,9 @@
 			files = (
 				980A09692D450A0F00DE2CBA /* Secrets.xcconfig in Resources */,
 				98A0563F2CC4049B00D45063 /* README.md in Resources */,
+				98B8644F2D61DC4400522312 /* mvvm-screenshot.png in Resources */,
+				98B864502D61DC4400522312 /* screenshots-tanga-min-1.png in Resources */,
+				98B864512D61DC4400522312 /* tanga_infra_02.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
