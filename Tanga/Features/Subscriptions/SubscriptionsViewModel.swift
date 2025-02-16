@@ -12,10 +12,10 @@ class SubscriptionsViewModel: ObservableObject {
     @Published var selectedPackage: SubscriptionPackage?
     @Published var closeSubscriptionScreen: Bool = false
     
-    private var revenueCatController: RevenueCatController
+    private var revenueCatController: RevenueCatServiceProtocol
     
 
-    init(revenueCatController: RevenueCatController) {
+    init(revenueCatController: RevenueCatServiceProtocol) {
         self.revenueCatController = revenueCatController
     }
     

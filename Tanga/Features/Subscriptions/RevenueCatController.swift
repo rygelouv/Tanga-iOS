@@ -9,7 +9,15 @@ import OSLog
 import Foundation
 import RevenueCat
 
-class RevenueCatController {
+protocol RevenueCatServiceProtocol {
+    func login(sessionId: String) async
+    func logout() async
+    func getSubscriptions() async -> [SubscriptionPackage]
+    func purchase(package: SubscriptionPackage) async throws -> SubscriberInfo
+    func observeCustomerInfo(onSubscriberInfoChanged: (SubscriberInfo?) -> Void) async
+}
+
+class RevenueCatController: RevenueCatServiceProtocol {
     
     // MARK: Initiliazation
     func initialize() {

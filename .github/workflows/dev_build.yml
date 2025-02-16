@@ -35,3 +35,4 @@ jobs:
           -scheme Tanga \
           -sdk iphonesimulator \
           -destination 'generic/platform=iOS Simulator'
+

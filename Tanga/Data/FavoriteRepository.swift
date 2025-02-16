@@ -15,7 +15,14 @@ extension Firestore {
     }
 }
 
-class FavoriteRepository {
+protocol FavoriteRepositoryProtocol {
+    func getFavorites(userId: UserId) async -> Result<[Favorite], Error>
+    func getFavoriteForUser(userId: UserId, summaryId: SummaryId) async -> Result<Favorite?, Error>
+    func saveFavorite(userId: UserId, favorite: Favorite) async -> Result<FavoriteId, Error>
+    func deleteFavorite(favoriteId: FavoriteId) async -> Result<Void, Error>
+}
+
+class FavoriteRepository: FavoriteRepositoryProtocol {
     let db = Firestore.firestore()
     
     func getFavorites(userId: UserId) async -> Result<[Favorite], Error> {
