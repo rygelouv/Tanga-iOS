@@ -43,4 +43,5 @@ jobs:
           -scheme Tanga \
           -sdk iphonesimulator \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
+          -only-testing:TangaTests \
           -resultBundlePath TestResults.xcresult
