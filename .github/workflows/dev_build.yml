@@ -26,4 +26,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build
-        run: set -o pipefail && xcodebuild clean build -scheme Tanga -project Tanga.xcodeproj -destination "${{matrix.destination}}" | xcpretty && exit ${PIPESTATUS[0]}
+        run: |
+          xcodebuild clean build \
+          -project Tanga.xcodeproj \
+          -scheme Tanga \
+          -sdk iphonesimulator \
+          -destination 'generic/platform=iOS Simulator'
