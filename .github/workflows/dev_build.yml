@@ -23,7 +23,7 @@ jobs:
           xcode-version: ${{ matrix.xcode }}
 
       - name: Create Secrets.xcconfig
-        run: echo "${{ secrets.SECRETS_XCCONFIG }}" > Secrets.xcconfig
+        run: echo "${{ secrets.SECRETS_XCCONFIG }}" > $GITHUB_WORKSPACE/Secrets.xcconfig
 
       - name: Checkout repository
         uses: actions/checkout@v4
