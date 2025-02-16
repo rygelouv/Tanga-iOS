@@ -9,14 +9,14 @@ import OSLog
 import SwiftUI
 
 class LibraryViewModel: ObservableObject {
-    var favoriteRepository: FavoriteRepository
+    var favoriteRepository: FavoriteRepositoryProtocol
     
     @Published var favorites: [Favorite]?
     
     // Get the user id from app storage
     @AppStorage(sessionIdKey) var sessionId: String = ""
     
-    init(favoriteRepository: FavoriteRepository) {
+    init(favoriteRepository: FavoriteRepositoryProtocol) {
         self.favoriteRepository = favoriteRepository
     }
     

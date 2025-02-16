@@ -17,11 +17,11 @@ extension AppDelegate: MessagingDelegate {
       let deviceToken:[String: String] = ["token": fcmToken ?? ""]
         print("Device token: ", deviceToken)
         
-        Messaging.messaging().subscribe(toTopic: "ios_test_topic") { error in
+        Messaging.messaging().subscribe(toTopic: Topics.weeklySummary) { error in
             if let error = error {
                 print("Error subscribing to topic: \(error)")
             } else {
-                Logger.notifications.info("Successfully subscribed to topic: ios_test_topic")
+                Logger.notifications.info("Successfully subscribed to topic: \(Topics.weeklySummary)")
             }
         }
     }
