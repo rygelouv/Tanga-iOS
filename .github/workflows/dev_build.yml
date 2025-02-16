@@ -29,5 +29,5 @@ jobs:
           -project Tanga.xcodeproj \
           -scheme Tanga \
           -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 14,OS=18.1'
+          -destination 'platform=iOS Simulator,name=iPhone 16,OS=17.2'
 
