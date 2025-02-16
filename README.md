@@ -7,7 +7,7 @@ See Android version here: https://github.com/rygelouv/Tanga
 
 ---
 
-## **We are 90% complete on the MVP** 🎉🎉
+## **We are 90% complete on the MVP** 🚀🚀
 Here is our latest major additions:
 
 * Tanga Account Deletion by @rygelouv in https://github.com/rygelouv/Tanga-iOS/pull/17
