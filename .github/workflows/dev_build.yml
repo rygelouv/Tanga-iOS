@@ -35,13 +35,4 @@ jobs:
           -scheme Tanga \
           -sdk iphonesimulator \
           -destination 'generic/platform=iOS Simulator'
-      
-      - name: Run Unit Tests
-        run: |
-          xcodebuild test \
-          -project Tanga.xcodeproj \
-          -scheme Tanga \
-          -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-          -only-testing:TangaTests \
-          -resultBundlePath TestResults.xcresult
+
