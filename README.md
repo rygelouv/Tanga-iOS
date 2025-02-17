@@ -16,7 +16,7 @@ See Android version here: https://github.com/rygelouv/Tanga
 
 <p align="center">
   <a href="https://sonarcloud.io/summary/new_code?id=rygelouv_Tanga-iOS"><img alt="License" src="https://sonarcloud.io/images/project_badges/sonarcloud-light.svg"/></a>
-  <a href="https://tanga.app/"><img alt="Website button" width="240" src="art/check_website_button.png"/></a>
+  <a href="https://tanga.app/"><img alt="Website button" width="240" src="images/check_website_button.png"/></a>
 </p>
 
 ---
