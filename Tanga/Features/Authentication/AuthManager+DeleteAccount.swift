@@ -59,7 +59,6 @@ extension AuthManager: AccountDeletionManaging {
     // MARK: - Public Methods
         
     func deleteUserAccount() async throws {
-        print("delete user account")
         // Verify user exists and get their last sign-in date
         guard let user = Auth.auth().currentUser,
               let lastSignInDate = user.metadata.lastSignInDate else {
@@ -70,7 +69,7 @@ extension AuthManager: AccountDeletionManaging {
         
         do {
             // Step 1: Reauthenticate if necessary
-            try await reauthenticateIfNeeded(user, lastSignInDate: lastSignInDate, providers: providers)
+            try await refreshAuthenticationIfStale(user, lastSignInDate: lastSignInDate, providers: providers)
             
             // Step 2: Revoke access for all providers
             try await revokeProviderAccess(for: providers)
@@ -89,13 +88,12 @@ extension AuthManager: AccountDeletionManaging {
     }
     
     func reauthenticateIfNeeded(_ user: FirebaseAuth.User) async throws {
-        print("reauthenticateIfNeeded - public")
         guard let lastSignInDate = user.metadata.lastSignInDate else {
             throw AuthError.userNotFound
         }
         
         let providers = user.providerData.map { $0.providerID }
-        try await reauthenticateIfNeeded(user, lastSignInDate: lastSignInDate, providers: providers)
+        try await refreshAuthenticationIfStale(user, lastSignInDate: lastSignInDate, providers: providers)
     }
         
     // MARK: - Private Methods
@@ -105,12 +103,11 @@ extension AuthManager: AccountDeletionManaging {
     ///   - user: The Firebase User to reauthenticate
     ///   - lastSignInDate: User's last sign-in date
     ///   - providers: Array of authentication provider IDs
-    private func reauthenticateIfNeeded(
+    private func refreshAuthenticationIfStale(
         _ user: FirebaseAuth.User,
         lastSignInDate: Date,
         providers: [String]
     ) async throws {
-        print("reauthenticateIfNeeded - private")
         // Skip reauthentication if the last sign-in was recent
         guard !lastSignInDate.isWithinPast(minutes: 1) else { return }
         
@@ -133,7 +130,6 @@ extension AuthManager: AccountDeletionManaging {
     /// Revokes access for all authentication providers
     /// - Parameter providers: Array of provider IDs to revoke
     private func revokeProviderAccess(for providers: [String]) async throws {
-        print("revoking provider access")
         for provider in providers {
             switch provider {
             case SigninProvider.apple.rawValue:

@@ -130,9 +130,9 @@ struct ButtonVariationData {
 }
 
 struct TangaButton: View {
-    var onButtonTap: () -> Void
+    let onButtonTap: () -> Void
     var leftIcon: String? = nil // leftIcon is optional
-    var text: String
+    let text: String
     var size: ButtonSize = .small // Default to "small" size
     var variation: ButtonVariation = .primary
     
@@ -268,11 +268,11 @@ struct CloseButtonView: View {
 }
 
 struct ProfileContentAction: View {
-    var imageName: String
-    var text: String
-    var color: Color
+    let imageName: String
+    let text: String
+    let color: Color
     var paddingValue: CGFloat = 0
-    var onClick: () -> Void
+    let onClick: () -> Void
 
     var body: some View {
         Button(action: onClick) {
