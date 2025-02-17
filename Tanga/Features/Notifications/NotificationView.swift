@@ -119,5 +119,5 @@ struct NotificationView: View {
 }
 
 #Preview {
-    NotificationView()
+    NotificationView().environmentObject(NotificationPermissionManager())
 }

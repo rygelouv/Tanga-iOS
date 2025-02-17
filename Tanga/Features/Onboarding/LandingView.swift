@@ -47,22 +47,6 @@ struct LandingView: View {
                     size: .small,
                     variation: .secondary
                 )
-                
-                /*Button(action: {
-                    path.append(NavigationDestinations.Onboarding)
-                }) {
-                    Text("Get Started")
-                        .frame(
-                            maxWidth: .infinity,
-                            minHeight: 36
-                        )
-                        .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.cerulean)
-                        .cornerRadius(16)
-                }*/
             }.padding(50)
         }
     }

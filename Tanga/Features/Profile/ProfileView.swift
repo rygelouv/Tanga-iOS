@@ -156,40 +156,6 @@ struct RoundedCornerVStack: View {
                )
        .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
     }
-    
-    struct ProfileContentAction: View {
-        var imageName: String
-        var text: String
-        var color: Color
-        var onClick: () -> Void
-
-        var body: some View {
-            Button(action: onClick) {
-                HStack(spacing: 16) {
-                    Image(imageName)
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(color)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 12).fill(color.opacity(0.2)))
-                    
-                    Text(text)
-                        .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
-                        .foregroundColor(.navy)
-                    
-                    Spacer()
-                    
-                    Image("right-chevron")
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                        .foregroundColor(.gray)
-                }
-                .contentShape(Rectangle()) // Ensures the entire row is clickable
-            }.buttonStyle(PlainButtonStyle())
-        }
-    }
 }
 
 struct RoundedCornerShape: Shape {

@@ -39,8 +39,24 @@ class AuthManager: ObservableObject {
     
     private var revenueCatController: RevenueCatController
     
-    init() {
+    internal let appleAccountTerminator: AppleAccountTerminating
+    internal let googleAccountTerminator: GoogleAccountTerminating
+    
+    /// - Parameters:
+    ///   - appleAccountTerminator: Manager for Apple account termination operations
+    ///   - googleAccountTerminator: Manager for Google account termination operations
+    init(
+        appleAccountTerminator: AppleAccountTerminating = AppleAccountTerminator(),
+        googleAccountTerminator: GoogleAccountTerminating = GoogleAccountTerminator()
+    ) {
+        // Account terminators
+        self.appleAccountTerminator = appleAccountTerminator
+        self.googleAccountTerminator = googleAccountTerminator
+        
+        // Subscription controller
         revenueCatController = RevenueCatController()
+        
+        // Observing auth state
         authStateHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             Logger.authentication.info("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
             self?.updateState(user: user)
@@ -210,7 +226,7 @@ class AuthManager: ObservableObject {
     func firebaseProvidersSignOut() {
         let providers = user?.providerData.map { $0.providerID }.joined(separator: ",")
         
-        if providers?.contains("google.com") == true {
+        if providers?.contains(SigninProvider.google.rawValue) == true {
             GoogleSignInManager.shared.signOutFromGoogle()
         }
     }
@@ -223,11 +239,11 @@ class AuthManager: ObservableObject {
         var isAppleCredentialRevoked = false
         var isGoogleCredentialRevoked = false
 
-        if providerData.contains(where: { $0.providerID == "apple.com" }) {
+        if providerData.contains(where: { $0.providerID == SigninProvider.apple.rawValue }) {
             isAppleCredentialRevoked = await !verifySignInWithAppleID()
         }
 
-        if providerData.contains(where: { $0.providerID == "google.com" }) {
+        if providerData.contains(where: { $0.providerID == SigninProvider.google.rawValue }) {
             isGoogleCredentialRevoked = await !verifyGoogleSignIn()
         }
 

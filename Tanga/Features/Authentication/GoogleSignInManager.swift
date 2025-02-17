@@ -17,18 +17,30 @@ class GoogleSignInManager {
     
     @MainActor
     func signInWithGoogle() async throws -> GIDGoogleUser? {
-        // Check if a user has previously signed in. If yes, then restore and return the user’s sign-in.
         if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            return try await GIDSignIn.sharedInstance.restorePreviousSignIn()
+            do {
+                try await GIDSignIn.sharedInstance.restorePreviousSignIn()
+                // 1.
+                return try await GIDSignIn.sharedInstance.currentUser?.refreshTokensIfNeeded()
+            }
+            catch {
+                // 2.
+                return try await googleSignInFlow()
+            }
         } else {
-            // Otherwise, move on to the regular sign-in process.
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return nil }
-            guard let rootViewController = windowScene.windows.first?.rootViewController else { return nil }
-            
-            // Start the sign-in process by calling signIn() from the shared instance of the GIDSignIn class.
-            let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
-            return result.user
+            return try await googleSignInFlow()
         }
+    }
+
+    @MainActor
+    private func googleSignInFlow() async throws -> GIDGoogleUser? {
+        // Otherwise, move on to the regular sign-in process.
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return nil }
+        guard let rootViewController = windowScene.windows.first?.rootViewController else { return nil }
+        
+        // Start the sign-in process by calling signIn() from the shared instance of the GIDSignIn class.
+        let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+        return result.user
     }
     
     func signOutFromGoogle() {

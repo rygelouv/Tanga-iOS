@@ -13,6 +13,41 @@ enum ButtonSize {
     case small
 }
 
+enum ButtonVariation {
+    case primary
+    case secondary
+    case tertiary
+    case danger
+    
+    // Side note: this pattern sucks in swift. Having to add an extra "data" property is confusing
+    // I wish we could just pass ButtonVariableData to case ButtonVariation directly
+    var data: ButtonVariationData {
+        switch self {
+        case .primary:
+            return ButtonVariationData(
+                backgroundColor: .yaleBlue,
+                foregroundColor: .white
+            )
+        case .secondary:
+            return ButtonVariationData(
+                backgroundColor: .cerulean,
+                foregroundColor: .white
+            )
+        case .tertiary:
+            return ButtonVariationData(
+                backgroundColor: .white,
+                foregroundColor: .yaleBlue
+            )
+        case .danger:
+            return ButtonVariationData(
+                backgroundColor: .clear,
+                foregroundColor: .red
+            )
+        }
+    }
+}
+
+
 struct TangaNavButton<Destination: View>: View {
     var destination: Destination
     var leftIcon: String? = nil // leftIcon is optional
@@ -94,38 +129,10 @@ struct ButtonVariationData {
     var foregroundColor: Color
 }
 
-enum ButtonVariation {
-    case primary
-    case secondary
-    case tertiary
-    
-    // Side note: this pattern sucks in swift. Having to add an extra "data" property is confusing
-    // I wish we could just pass ButtonVariableData to case ButtonVariation directly
-    var data: ButtonVariationData {
-        switch self {
-        case .primary:
-            return ButtonVariationData(
-                backgroundColor: .yaleBlue,
-                foregroundColor: .white
-            )
-        case .secondary:
-            return ButtonVariationData(
-                backgroundColor: .cerulean,
-                foregroundColor: .white
-            )
-        case .tertiary:
-            return ButtonVariationData(
-                backgroundColor: .white,
-                foregroundColor: .yaleBlue
-            )
-        }
-    }
-}
-
 struct TangaButton: View {
-    var onButtonTap: () -> Void
+    let onButtonTap: () -> Void
     var leftIcon: String? = nil // leftIcon is optional
-    var text: String
+    let text: String
     var size: ButtonSize = .small // Default to "small" size
     var variation: ButtonVariation = .primary
     
@@ -257,6 +264,42 @@ struct CloseButtonView: View {
             .clipShape(Circle())
             .frame(width: 48, height: 48)
         }
+    }
+}
+
+struct ProfileContentAction: View {
+    let imageName: String
+    let text: String
+    let color: Color
+    var paddingValue: CGFloat = 0
+    let onClick: () -> Void
+
+    var body: some View {
+        Button(action: onClick) {
+            HStack(spacing: 16) {
+                Image(imageName)
+                    .renderingMode(.template)
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(color)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 12).fill(color.opacity(0.2)))
+                
+                Text(text)
+                    .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
+                    .foregroundColor(.navy)
+                
+                Spacer()
+                
+                Image("right-chevron")
+                    .renderingMode(.template)
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.gray)
+            }
+            .contentShape(Rectangle()) // Ensures the entire row is clickable
+            .padding(paddingValue)
+        }.buttonStyle(PlainButtonStyle())
     }
 }
 
