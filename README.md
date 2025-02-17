@@ -72,6 +72,7 @@ We have left out many things since we are focusing on the MVP and getting the ap
 - [ ] Add git hooks that run linting on each commit/push
 
 ## License
+```xml
 MIT License
 
 Copyright (c) 2025 Rygel Louv
@@ -93,4 +94,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
 
