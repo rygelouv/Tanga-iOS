@@ -52,7 +52,7 @@ cp scripts/check-hooks.sh ~/Library/Developer/Xcode/UserScripts/
 chmod +x ~/Library/Developer/Xcode/UserScripts/check-hooks.sh
 ```
 
-### **📌Swiftlint setup **
+### **📌Swiftlint setup**
 The setup above is needed for linting setup. It is broadly explained in this article: https://medium.com/@rygel/swiftlint-on-autopilot-in-xcode-enforce-code-conventions-with-git-pre-commit-hooks-and-automation-52c5eb4d5454
 
 ## Code organization
