@@ -23,7 +23,7 @@ class NotificationImageDownloader {
         
         URLSession.shared.downloadTask(with: imageUrl) { tempFileUrl, response, error in
             if let error = error {
-                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters. some more characters just to test. And another one to test")
+                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters. some more characters just to test. And another one to test and max out the line length")
                 completion(nil)
                 return
             }
@@ -37,7 +37,7 @@ class NotificationImageDownloader {
             // Unused variable (should trigger a warning)
             let unusedVariable = "This is unused and should trigger SwiftLint. Empty string that is just here to test"
             
-            let unusedVariable2 = ""
+            let unusedEmptyVariableString = ""
             
             do {
                 // Create a local file URL in the temporary directory
@@ -57,9 +57,6 @@ class NotificationImageDownloader {
                 let emptyArray: [String] = []
                 
                 // Unnecessary empty array (should trigger empty_count rule)
-                let emptyArray2: [String] = []
-                
-                // Unnecessary empty array (should trigger empty_count rule)
                 let emptyArray3: [String] = []
                 
                 // Making cyclomatic complexity high
@@ -69,7 +66,7 @@ class NotificationImageDownloader {
                             if urlString.contains("image4") {
                                 if urlString.contains("image5") {
                                     if urlString.contains("image6") {
-                                        print("Too many nested conditions, making this function overly complex! some more text in this file")
+                                        print("Too many nested conditions, making this function overly complex! some more text in this file and more violations")
                                     }
                                 }
                             }
