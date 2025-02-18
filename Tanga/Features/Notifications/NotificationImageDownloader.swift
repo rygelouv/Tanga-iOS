@@ -23,7 +23,7 @@ class NotificationImageDownloader {
         
         URLSession.shared.downloadTask(with: imageUrl) { tempFileUrl, response, error in
             if let error = error {
-                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters.")
+                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters. some more characters just to test")
                 completion(nil)
                 return
             }
@@ -54,9 +54,12 @@ class NotificationImageDownloader {
                 // Unnecessary empty array (should trigger empty_count rule)
                 let emptyArray: [String] = []
                 
+                // Unnecessary empty array (should trigger empty_count rule)
+                let emptyArray2: [String] = []
+                
                 // Making cyclomatic complexity high
                 if urlString.contains("image1") {
-                    if urlString.contains("image2") {
+                    if urlString.contains("image2000") {
                         if urlString.contains("image3") {
                             if urlString.contains("image4") {
                                 if urlString.contains("image5") {
