@@ -24,7 +24,7 @@ class NotificationImageDownloader {
         
         URLSession.shared.downloadTask(with: imageUrl) { tempFileUrl, response, error in
             if let error = error {
-                print("Error downloading image: \(error)")
+                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters.")
                 completion(nil)
                 return
             }
@@ -45,6 +45,27 @@ class NotificationImageDownloader {
                 // Move the downloaded file to our local URL
                 try? fileManager.removeItem(at: localImageUrl) // Remove any existing file
                 try fileManager.moveItem(at: tempFileUrl, to: localImageUrl)
+                
+                // Unnecessary empty string (should trigger empty_string rule)
+                                let emptyString = ""
+
+                                // Unnecessary empty array (should trigger empty_count rule)
+                                let emptyArray: [String] = []
+                                
+                                // Making cyclomatic complexity high
+                                if urlString.contains("image1") {
+                                    if urlString.contains("image2") {
+                                        if urlString.contains("image3") {
+                                            if urlString.contains("image4") {
+                                                if urlString.contains("image5") {
+                                                    if urlString.contains("image6") {
+                                                        print("Too many nested conditions, making this function overly complex!")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                 
                 completion(localImageUrl)
             } catch {
