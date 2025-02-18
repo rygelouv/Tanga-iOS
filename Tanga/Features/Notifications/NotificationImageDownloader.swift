@@ -57,6 +57,9 @@ class NotificationImageDownloader {
                 // Unnecessary empty array (should trigger empty_count rule)
                 let emptyArray2: [String] = []
                 
+                // Unnecessary empty array (should trigger empty_count rule)
+                let emptyArray3: [String] = []
+                
                 // Making cyclomatic complexity high
                 if urlString.contains("image1") {
                     if urlString.contains("image2000") {
@@ -64,7 +67,7 @@ class NotificationImageDownloader {
                             if urlString.contains("image4") {
                                 if urlString.contains("image5") {
                                     if urlString.contains("image6") {
-                                        print("Too many nested conditions, making this function overly complex!")
+                                        print("Too many nested conditions, making this function overly complex! some more text in this file")
                                     }
                                 }
                             }
