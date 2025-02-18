@@ -52,7 +52,8 @@ cp scripts/check-hooks.sh ~/Library/Developer/Xcode/UserScripts/
 chmod +x ~/Library/Developer/Xcode/UserScripts/check-hooks.sh
 ```
 
-This is needed for linting setup. It is broadly explained in this article: https://medium.com/@rygel/swiftlint-on-autopilot-in-xcode-enforce-code-conventions-with-git-pre-commit-hooks-and-automation-52c5eb4d5454
+### **📌Swiftlint setup **
+The setup above is needed for linting setup. It is broadly explained in this article: https://medium.com/@rygel/swiftlint-on-autopilot-in-xcode-enforce-code-conventions-with-git-pre-commit-hooks-and-automation-52c5eb4d5454
 
 ## Code organization
 Tanga follows an MVVM architectural pattern in the implementation of most features. We use an observable ViewModel that emits variations of state elements. We also use a repository pattern on the 
