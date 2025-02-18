@@ -174,6 +174,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9840A7212CA05A5800194500 /* Build configuration list for PBXNativeTarget "Tanga" */;
 			buildPhases = (
+				98B86A8B2D64A06400522312 /* Setup Git Hooks */,
 				9840A6F82CA05A5700194500 /* Sources */,
 				9840A6F92CA05A5700194500 /* Frameworks */,
 				9840A6FA2CA05A5700194500 /* Resources */,
@@ -330,6 +331,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		98B86A8B2D64A06400522312 /* Setup Git Hooks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Git Hooks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ~/Library/Developer/Xcode/UserScripts/check-hooks.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9840A6F82CA05A5700194500 /* Sources */ = {
@@ -497,6 +519,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Tanga/Preview Content\"";
 				DEVELOPMENT_TEAM = 437J7YC765;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tanga/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
@@ -540,6 +563,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Tanga/Preview Content\"";
 				DEVELOPMENT_TEAM = 437J7YC765;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tanga/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
