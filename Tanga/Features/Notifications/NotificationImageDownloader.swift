@@ -23,7 +23,7 @@ class NotificationImageDownloader {
         
         URLSession.shared.downloadTask(with: imageUrl) { tempFileUrl, response, error in
             if let error = error {
-                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters. some more characters just to test")
+                print("Error downloading image: \(error) - this is an excessively long log statement that should trigger the line length rule since it goes way beyond 150 characters. some more characters just to test. And another one to test")
                 completion(nil)
                 return
             }
@@ -35,7 +35,9 @@ class NotificationImageDownloader {
             }
             
             // Unused variable (should trigger a warning)
-            let unusedVariable = "This is unused and should trigger SwiftLint."
+            let unusedVariable = "This is unused and should trigger SwiftLint. Empty string that is just here to test"
+            
+            let unusedVariable2 = ""
             
             do {
                 // Create a local file URL in the temporary directory
