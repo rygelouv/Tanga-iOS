@@ -26,6 +26,7 @@
 		98B8644F2D61DC4400522312 /* mvvm-screenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644B2D61DC4400522312 /* mvvm-screenshot.png */; };
 		98B864502D61DC4400522312 /* screenshots-tanga-min-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */; };
 		98B864512D61DC4400522312 /* tanga_infra_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644D2D61DC4400522312 /* tanga_infra_02.png */; };
+		98EA0D6A2D64B94500E0383F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 98EA0D692D64B94500E0383F /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		98B8644B2D61DC4400522312 /* mvvm-screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mvvm-screenshot.png"; sourceTree = "<group>"; };
 		98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screenshots-tanga-min-1.png"; sourceTree = "<group>"; };
 		98B8644D2D61DC4400522312 /* tanga_infra_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tanga_infra_02.png; sourceTree = "<group>"; };
+		98EA0D692D64B94500E0383F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -138,6 +140,7 @@
 			children = (
 				980A09682D450A0F00DE2CBA /* Secrets.xcconfig */,
 				98A0563E2CC4049300D45063 /* README.md */,
+				98EA0D692D64B94500E0383F /* .swiftlint.yml */,
 				9840A6FE2CA05A5700194500 /* Tanga */,
 				9840A7102CA05A5800194500 /* TangaTests */,
 				9840A71A2CA05A5800194500 /* TangaUITests */,
@@ -313,6 +316,7 @@
 				98B8644F2D61DC4400522312 /* mvvm-screenshot.png in Resources */,
 				98B864502D61DC4400522312 /* screenshots-tanga-min-1.png in Resources */,
 				98B864512D61DC4400522312 /* tanga_infra_02.png in Resources */,
+				98EA0D6A2D64B94500E0383F /* .swiftlint.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
