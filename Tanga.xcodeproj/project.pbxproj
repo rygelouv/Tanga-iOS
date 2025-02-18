@@ -177,7 +177,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9840A7212CA05A5800194500 /* Build configuration list for PBXNativeTarget "Tanga" */;
 			buildPhases = (
-				98B86A8B2D64A06400522312 /* Setup Git Hooks */,
+				98B86A8B2D64A06400522312 /* Check Git Hooks */,
 				9840A6F82CA05A5700194500 /* Sources */,
 				9840A6F92CA05A5700194500 /* Frameworks */,
 				9840A6FA2CA05A5700194500 /* Resources */,
@@ -337,7 +337,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		98B86A8B2D64A06400522312 /* Setup Git Hooks */ = {
+		98B86A8B2D64A06400522312 /* Check Git Hooks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -346,7 +346,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Setup Git Hooks";
+			name = "Check Git Hooks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
