@@ -1,0 +1,65 @@
+#!/bin/sh
+
+echo "Running SwiftLint on staged files..."
+
+# Find the correct SwiftLint path dynamically or set default path for Apple Silicon
+SWIFTLINT_PATH=$(command -v swiftlint || echo "/opt/homebrew/bin/swiftlint")
+
+# If SwiftLint is still not found, try another known location
+if [ ! -x "$SWIFTLINT_PATH" ]; then
+    SWIFTLINT_PATH="/usr/local/bin/swiftlint"  # Intel Macs (Homebrew default)
+fi
+
+# If SwiftLint is not found, print an error and exit
+if [ -z "$SWIFTLINT_PATH" ]; then
+    echo "❌ SwiftLint at $SWIFTLINT_PATH not found! Make sure it is installed via Homebrew:"
+    echo ""
+    echo "   brew install swiftlint"
+    echo ""
+    exit 1
+fi
+
+echo "✅ Found SwiftLint at: $SWIFTLINT_PATH"
+
+# Get staged Swift files
+staged_files=$(git diff --cached --name-only --diff-filter=ACM | grep '\.swift$')
+
+# If no Swift files are staged, exit
+if [ -z "$staged_files" ]; then
+    echo "No Swift files staged for commit."
+    exit 0
+fi
+
+# Flag to track if linting failed
+lint_failed=0
+
+# Run SwiftLint only on staged files
+while IFS= read -r file; do
+    if [ -f "$file" ]; then
+        # Automatically fix issues where possible
+        "$SWIFTLINT_PATH" autocorrect "$file"
+        
+        # Re-stage the modified file
+        git add "$file"
+
+        # Run SwiftLint linting on the file and capture the exit status
+        "$SWIFTLINT_PATH" lint "$file" --quiet
+        lint_status=$?
+
+        # If SwiftLint found issues, print them and set failure flag
+        if [ $lint_status -ne 0 ]; then
+            echo "❌ SwiftLint found violations in $file. Fix them before committing."
+            lint_failed=1
+        fi
+    fi
+done <<< "$staged_files"  # Using here-string instead of pipe
+
+# If any file failed linting, block the commit
+if [ $lint_failed -ne 0 ]; then
+    echo "🚨 Commit blocked due to SwiftLint violations!"
+    exit 1
+fi
+
+echo "✅ SwiftLint passed!!!"
+exit 0
+

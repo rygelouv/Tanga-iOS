@@ -39,6 +39,20 @@ The other projects can be found here:
 * Enable Weekly summary
 * Improve Error tracking
 
+## Setup
+
+This project uses **pre-commit Git hooks** to enforce code quality.
+
+### **📌 One-time Setup**
+Before your first build, run:
+
+```sh
+mkdir -p ~/Library/Developer/Xcode/UserScripts/
+cp scripts/check-hooks.sh ~/Library/Developer/Xcode/UserScripts/
+chmod +x ~/Library/Developer/Xcode/UserScripts/check-hooks.sh
+```
+
+
 ## Code organization
 Tanga follows an MVVM architectural pattern in the implementation of most features. We use an observable ViewModel that emits variations of state elements. We also use a repository pattern on the 
 data layer to access firebase firestore resources.
