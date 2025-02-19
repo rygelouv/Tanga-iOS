@@ -1,5 +1,5 @@
-# Tanga iOS App
-See Android version here: https://github.com/rygelouv/Tanga
+#  Tanga iOS App
+🤖 See Android version here: https://github.com/rygelouv/Tanga 
 
 ---
 
