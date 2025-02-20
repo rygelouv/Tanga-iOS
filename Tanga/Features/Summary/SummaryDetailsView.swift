@@ -8,12 +8,35 @@
 import SwiftUI
 
 struct SummaryDetailsView: View {
+    
     let summaryId: SummaryId
-    @StateObject var viewModel: SummaryDetailsViewModel = SummaryDetailsViewModel(summaryRepository: SummaryRepository())
-    @StateObject var favoriteViewModel: FavoriteViewModel = FavoriteViewModel(
-        favoriteRepository: FavoriteRepository(),
-        summaryRepository: SummaryRepository()
-    )
+    @EnvironmentObject var authManager: AuthManager
+    
+    @StateObject private var viewModel: SummaryDetailsViewModel
+    @StateObject private var favoriteViewModel: FavoriteViewModel
+
+    
+    init(summaryId: SummaryId) {
+        self.summaryId = summaryId
+        let sessionManager = SessionManager()
+        
+        _viewModel = StateObject(wrappedValue:
+            SummaryDetailsViewModel(
+                summaryRepository: SummaryRepository()
+            )
+        )
+        
+        _favoriteViewModel = StateObject(wrappedValue:
+            FavoriteViewModel(
+                favoriteRepository: FavoriteRepository(),
+                summaryRepository: SummaryRepository(),
+                protectedActionInteractor: ProtectedActionInteractor(
+                    sessionManager: sessionManager,
+                    revenuecatController: RevenueCatController()
+                )
+            )
+        )
+    }
     
     var body: some View {
         NavigationStack {
@@ -43,7 +66,9 @@ struct SummaryDetailsView: View {
             }.toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        favoriteViewModel.toggleFavorite()
+                        Task {
+                            await favoriteViewModel.toggleFavorite()
+                        }
                     }) {
                         Image(favoriteIcon())
                             .resizable()
@@ -67,9 +92,26 @@ struct SummaryDetailsView: View {
                     }
                 }
             }.toolbarBackground(Color.white, for: .navigationBar)
-        }.task {
+        }
+        .sheet(isPresented: $favoriteViewModel.showAuth) {
+            AuthView()
+                .onDisappear {
+                    favoriteViewModel.dismissAuth()
+                }
+        }
+        .alert("Error", isPresented: Binding(
+            get: { favoriteViewModel.error != nil },
+            set: { if !$0 { favoriteViewModel.error = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            if let error = favoriteViewModel.error {
+                Text(error.localizedDescription)
+            }
+        }
+        .task {
             await viewModel.loadDetails(summaryId: summaryId)
-            favoriteViewModel.getFavorite(summaryId: summaryId)
+            await favoriteViewModel.loadFavoriteStatus(for: summaryId)
         }
     }
     
@@ -79,6 +121,10 @@ struct SummaryDetailsView: View {
     
     struct SummaryHeader: View {
         var summary: Summary
+        private let protectedActionInteractor = ProtectedActionInteractor(
+            sessionManager: SessionManager(),
+            revenuecatController: RevenueCatController()
+        )
         
         var body: some View {
             VStack() {
@@ -114,7 +160,11 @@ struct SummaryDetailsView: View {
                 // Action buttons
                 HStack(spacing: 30) {
                     ForEach(ActionType.allCases, id: \.self) { action in
-                        ActionButton(actionType: action, summary: summary)
+                        ActionButton(
+                            actionType: action,
+                            summary: summary,
+                            protectedActionInteractor: protectedActionInteractor
+                        )
                     }
                 }
                 .padding()

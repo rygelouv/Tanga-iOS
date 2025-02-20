@@ -44,9 +44,15 @@ struct ProfileContentView: View {
                 .padding()
             
             if let profileStatus = viewModel.profileStatus {
-                MainCtaArea(profileStatus: profileStatus) {
+                MainCtaArea(
+                    profileStatus: profileStatus,
+                    onNavigateToSubscriptions: {
                         navigationPath.append(ProfileNavigationDestinations.Subscriptions)
-                }
+                    },
+                    onCreatedAccount: {
+                        viewModel.onCreatedAccount()
+                    }
+                )
             } else {
                 ProgressView()
             }
@@ -61,18 +67,24 @@ struct ProfileContentView: View {
         }.onAppear {
             viewModel.loadProfileData()
         }
+        .sheet(isPresented: $viewModel.showAuth) {
+            AuthView().onDisappear {
+                viewModel.dismissAuth()
+            }
+        }
     }
     
     struct MainCtaArea: View {
         let profileStatus: UserProfileStatus
         let onNavigateToSubscriptions: () -> Void
+        let onCreatedAccount: () -> Void
         
         var body: some View {
             HStack {
                 switch profileStatus {
                 case .anonymous:
                     TangaButton(
-                        onButtonTap: { },
+                        onButtonTap: { onCreatedAccount() },
                         text: "Create an Account",
                         size: .big
                     ).padding(40)

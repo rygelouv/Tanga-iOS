@@ -15,11 +15,11 @@ import SwiftUI
 
 typealias FirebaseUser = FirebaseAuth.User
 
-enum AuthState {
+/*enum AuthState {
     case anonymous // Anonymously authenticated in the app.
     case signedOut // Authenticated in Firebase using one of service providers, and not anonymous.
     case signedIn // Not authenticated in the app.
-}
+}*/
 
 enum SigninProvider: String {
   case apple = "apple.com"
@@ -33,11 +33,11 @@ class AuthManager: ObservableObject {
     private let userRepository: UserRepository = UserRepository()
     
     @Published var user: FirebaseUser?
-    @Published var authState: AuthState = .signedOut
+    @Published var authState: SessionState = .signedOut
     
     private var authStateHandle: AuthStateDidChangeListenerHandle!
     
-    private var revenueCatController: RevenueCatController
+    private let revenueCatController: RevenueCatController
     
     internal let appleAccountTerminator: AppleAccountTerminating
     internal let googleAccountTerminator: GoogleAccountTerminating

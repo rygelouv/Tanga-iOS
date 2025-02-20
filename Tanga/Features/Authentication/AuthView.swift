@@ -11,59 +11,66 @@ import OSLog
 
 struct AuthView: View {
     @EnvironmentObject var authManager: AuthManager
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
            VStack {
-               SkipButton(skipAuth: skipAuth)
+               SkipButton(skipAuth: skipAuth, onDismiss: { dismiss() }, authState: authManager.authState)
                
-               Spacer()
-               
-               BookLoverImage()
-               
-               Spacer()
-               
-               WelcomeText()
-               Color.clear.frame(height: 1)
-               
-               SignInExplanation()
-               
-               Spacer()
-               
-               SignInWithAppleButton(
-                   onRequest: { request in
-                       AppleSignInManager.shared.requestAppleAuthorization(request)
-                   },
-                   onCompletion: { result in
-                       handleAppleID(result)
-                   }
-               ).signInWithAppleButtonStyle(.black)
+               VStack {
+                   Spacer()
                    
-                   .frame(width: .infinity, height: 60, alignment: .center)
-                   .padding(10)
-               
-               GoogleSignInButton(signInWithGoogle: signInWithGoogle)
-               
-               Color.clear.frame(height: 5)
-               
-               TermsAndPrivacyText()
-               
-               Color.clear.frame(height: 5)
+                   BookLoverImage()
+                   
+                   Spacer()
+                   
+                   WelcomeText()
+                   Color.clear.frame(height: 1)
+                   
+                   SignInExplanation()
+                   
+                   Spacer()
+                   
+                   SignInWithAppleButton(
+                       onRequest: { request in
+                           AppleSignInManager.shared.requestAppleAuthorization(request)
+                       },
+                       onCompletion: { result in
+                           handleAppleID(result)
+                       }
+                   ).signInWithAppleButtonStyle(.black)
+                       
+                       .frame(width: .infinity, height: 60, alignment: .center)
+                       .padding(10)
+                   
+                   GoogleSignInButton(signInWithGoogle: signInWithGoogle)
+                   
+                   Color.clear.frame(height: 5)
+                   
+                   TermsAndPrivacyText()
+                   
+                   Color.clear.frame(height: 5)
+               }.padding(.horizontal, 25)
            }
-           .padding(.horizontal, 25)
            .background(.white)
     }
     
     struct SkipButton: View {
         var skipAuth: () -> Void
+        let onDismiss: () -> Void
+        let authState: SessionState
         
         var body: some View {
             HStack {
                 Spacer()
                 Button(action: {
-                    Logger.authentication.info("Button tapped")
-                    skipAuth()
+                    if authState == .anonymous {
+                        onDismiss()
+                    } else {
+                        skipAuth()
+                    }
                 }) {
-                    Text("Skip")
+                    Text(text)
                         .frame(minHeight: 36)
                         .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
                         .fontWeight(.bold)
@@ -73,7 +80,11 @@ struct AuthView: View {
                         .background(Color.orangeTransparent)
                         .cornerRadius(100)
                 }.padding(.horizontal, 10)
-            }
+            }.padding(.top, 20)
+        }
+        
+        private var text: String {
+            authState == .anonymous ? "Close" : "Skip"
         }
     }
 
@@ -97,7 +108,7 @@ struct AuthView: View {
 
     struct SignInExplanation: View {
         var body: some View {
-            Text("Sign in or Sign up with Google to start enjoying Tanga Now")
+            Text("Sign in or Sign up with Google or Apple to start enjoying Tanga Now")
                 .font(Font.custom("Montserrat", size: 16, relativeTo: .body))
                 .fontWeight(.regular)
                 .foregroundStyle(Color.auroMetalSaurus)

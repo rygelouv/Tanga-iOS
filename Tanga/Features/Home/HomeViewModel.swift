@@ -9,6 +9,7 @@ import SwiftUI
 
 @MainActor
 class HomeViewModel: ObservableObject {
+    @AppStorage(weeklySummaryKey) var storedWeeklySummary: String = ""
     @Published var uiState: HomeUiState
     
     private let summaryReposiory = SummaryRepository()
@@ -31,6 +32,10 @@ class HomeViewModel: ObservableObject {
                     DispatchQueue.main.async {
                         self.uiState.weeklySummary = weeklySummary
                     }
+                    
+                    // Save summaryId in app storage
+                    guard let summaryId = summary.id else { return }
+                    self.storedWeeklySummary = summaryId
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self.uiState.error = error

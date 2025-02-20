@@ -13,16 +13,32 @@ import SwiftUI
 /// This must be investigated and fixed later. We can move to using HTML instead of markdown if it makes things easier.
 struct ReadSummaryView: View {
     // MARK: - Properties
-
-    let summary: Summary
-
-    @StateObject var favoriteViewModel: FavoriteViewModel = FavoriteViewModel(
-        favoriteRepository: FavoriteRepository(),
-        summaryRepository: SummaryRepository()
-    )
-    @StateObject var readSummaryViewModel: ReadSummaryViewModel = ReadSummaryViewModel(
-        fileDownloader: TextFileContentDownloader()
-    )
+    @EnvironmentObject var authManager: AuthManager
+    var summary: Summary
+    
+    @StateObject private var favoriteViewModel: FavoriteViewModel
+    @StateObject private var readSummaryViewModel: ReadSummaryViewModel
+    
+    init(summary: Summary) {
+        self.summary = summary
+        let sessionManager = SessionManager()
+        
+        _readSummaryViewModel = StateObject(wrappedValue:
+            ReadSummaryViewModel(
+                fileDownloader: TextFileContentDownloader()
+            )
+        )
+        _favoriteViewModel = StateObject(wrappedValue:
+            FavoriteViewModel(
+                favoriteRepository: FavoriteRepository(),
+                summaryRepository: SummaryRepository(),
+                protectedActionInteractor: ProtectedActionInteractor(
+                    sessionManager: sessionManager,
+                    revenuecatController: RevenueCatController()
+                )
+            )
+        )
+    }
 
     // The progress value (0.0 to 1.0) representing how far the user has scrolled.
     @State private var progress: CGFloat = 0.0
@@ -114,9 +130,9 @@ struct ReadSummaryView: View {
                 .toolbarBackground(Color.navy, for: .navigationBar)
                 .background(Color.navy)
             }
-            .onAppear {
+            .task {
                 guard let summaryId = summary.id else { return }
-                favoriteViewModel.getFavorite(summaryId: summaryId)
+                await favoriteViewModel.loadFavoriteStatus(for: summaryId)
                 readSummaryViewModel.fetchContent(summaryId: summaryId)
             }
         }

@@ -10,119 +10,118 @@ import SwiftUI
 import Foundation
 
 /// A ViewModel that handles the logic for managing favorite summaries.
-///
-/// This class is annotated with `@MainActor` to ensure all state modifications
-/// are performed on the main thread, making it safe for use in UI updates.
 @MainActor
 class FavoriteViewModel: ObservableObject {
-    /// Indicates whether the current summary is marked as a favorite.
-    @Published var isFavorite: Bool = false
+    // MARK: - Published Properties
+    @Published private(set) var isFavorite: Bool = false
+    @Published var showAuth: Bool = false
+    @Published var error: Error?
+    @Published private(set) var isLoading: Bool = false
     
-    /// The current favorite object associated with the summary.
+    // MARK: - Private Properties
     private var favorite: Favorite?
-    
-    /// The summary object being managed.
     private var summary: Summary?
+    private let favoriteRepository: FavoriteRepository
+    private let summaryRepository: SummaryRepository
+    private let protectedActionInteractor: ProtectedActionInteractor
     
-    private var favoriteRepository: FavoriteRepository
-    private var summaryRepository: SummaryRepository
+    @AppStorage(sessionIdKey) private var sessionId: String = ""
     
-    /// The user's session ID, used to identify the current user.
-    @AppStorage(sessionIdKey) var sessionId: String = ""
+    // MARK: - Error Types
+    enum FavoriteError: LocalizedError {
+        case failedToSave
+        case failedToDelete
+        case failedToLoad
+        
+        var errorDescription: String? {
+            switch self {
+            case .failedToSave: return "Failed to save favorite"
+            case .failedToDelete: return "Failed to delete favorite"
+            case .failedToLoad: return "Failed to load favorite status"
+            }
+        }
+    }
     
     // MARK: - Initializer
-
-    /// Initializes the `FavoriteViewModel` with the required repositories.
-    ///
-    /// - Parameters:
-    ///   - favoriteRepository: A repository for managing favorite data.
-    ///   - summaryRepository: A repository for fetching summary data.
-    init(favoriteRepository: FavoriteRepository, summaryRepository: SummaryRepository) {
+    init(
+        favoriteRepository: FavoriteRepository,
+        summaryRepository: SummaryRepository,
+        protectedActionInteractor: ProtectedActionInteractor
+    ) {
         self.favoriteRepository = favoriteRepository
         self.summaryRepository = summaryRepository
+        self.protectedActionInteractor = protectedActionInteractor
     }
     
     // MARK: - Public Methods
-
-    /// Retrieves the favorite status for a given summary ID and updates the `isFavorite` state.
-    ///
-    /// - Parameter summaryId: The ID of the summary to check.
-    func getFavorite(summaryId: SummaryId) {
-        Task {
-            let result = await favoriteRepository.getFavoriteForUser(userId: sessionId, summaryId: summaryId)
-            switch result {
-            case .success(let favorite):
-                self.favorite = favorite
-                let isFavorite = favorite != nil
-                DispatchQueue.main.async {
-                    self.isFavorite = isFavorite
-                }
-            case .failure:
-                self.favorite = nil
-            }
-        }
-        loadSummary(summaryId: summaryId)
-    }
-    
-    func loadSummary(summaryId: SummaryId) {
-        Task {
-            let result = await summaryRepository.getSummary(id: summaryId)
-            switch result {
-            case .success(let summary):
-                self.summary = summary
-            case .failure:
-                self.summary = nil
-            }
-        }
-    }
-    
-    /// Toggles the favorite status for the current summary.
-    ///
-    /// If the summary is already a favorite, it is removed. Otherwise, it is added to the favorites.
-    func toggleFavorite() {
-        guard let favorite = favorite ?? summary?.toFavorite(userId: sessionId) else { return }
-        Logger.library.info("favorite: \(favorite.title ?? "")")
+    func loadFavoriteStatus(for summaryId: SummaryId) async {
+        isLoading = true
+        defer { isLoading = false }
         
-        if isFavorite {
-            deleteFavorite(favorite: favorite)
-        } else {
-            saveFavorite(favorite: favorite)
+        // Load both summary and favorite status concurrently
+        async let summaryResult = summaryRepository.getSummary(id: summaryId)
+        async let favoriteResult = favoriteRepository.getFavoriteForUser(userId: sessionId, summaryId: summaryId)
+        
+        // Await both results
+        do {
+            let (summary, favorite) = try await (summaryResult.get(), favoriteResult.get())
+            self.summary = summary
+            self.favorite = favorite
+            self.isFavorite = favorite != nil
+        } catch {
+            self.error = FavoriteError.failedToLoad
+            Logger.library.error("Failed to load favorite status: \(error.localizedDescription)")
         }
+    }
+    
+    func toggleFavorite() async {
+        guard let favorite = favorite ?? summary?.toFavorite(userId: sessionId) else { return }
+        Logger.library.info("Toggling favorite: \(favorite.title ?? "")")
+        
+        let action = ProtectedAction.auth(.save)
+        let result = await protectedActionInteractor.checkProtectedAction(action)
+        
+        switch result {
+        case .allowed:
+            if isFavorite {
+                await deleteFavorite(favorite: favorite)
+            } else {
+                await saveFavorite(favorite: favorite)
+            }
+        case .authRequired:
+            showAuth = true
+        case .subscriptionRequired:
+            Logger.library.info("Subscription required for saving favorites")
+        }
+    }
+    
+    func dismissAuth() {
+        showAuth = false
     }
     
     // MARK: - Private Methods
-
-    /// Saves the given favorite to the repository and updates the state.
-    ///
-    /// - Parameter favorite: The favorite object to save.
-    private func saveFavorite(favorite: Favorite) {
-        Task {
-            let result = await favoriteRepository.saveFavorite(userId: sessionId, favorite: favorite)
-            switch result {
-            case .success (let favoriteId):
-                DispatchQueue.main.async {
-                    self.isFavorite = true
-                    self.favorite = favorite
-                    self.favorite?.id = favoriteId
-                }
-            case .failure:
-                Logger.library.error("Error saving favorite")
-            }
+    private func saveFavorite(favorite: Favorite) async {
+        do {
+            let favoriteId = try await favoriteRepository.saveFavorite(userId: sessionId, favorite: favorite).get()
+            self.isFavorite = true
+            self.favorite = favorite
+            self.favorite?.id = favoriteId
+        } catch {
+            self.error = FavoriteError.failedToSave
+            Logger.library.error("Error saving favorite: \(error.localizedDescription)")
         }
     }
     
-    private func deleteFavorite(favorite: Favorite) {
-        Task {
-            guard let favoriteId = favorite.id else { return }
-            let result = await favoriteRepository.deleteFavorite(favoriteId: favoriteId)
-            switch result {
-            case .success:
-                DispatchQueue.main.async {
-                    self.isFavorite = false
-                }
-            case .failure:
-                Logger.library.error("Error deleting favorite")
-            }
+    private func deleteFavorite(favorite: Favorite) async {
+        guard let favoriteId = favorite.id else { return }
+        
+        do {
+            try await favoriteRepository.deleteFavorite(favoriteId: favoriteId).get()
+            self.isFavorite = false
+            self.favorite = nil
+        } catch {
+            self.error = FavoriteError.failedToDelete
+            Logger.library.error("Error deleting favorite: \(error.localizedDescription)")
         }
     }
 }
