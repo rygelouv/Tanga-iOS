@@ -79,7 +79,8 @@ extension AuthManager: AccountDeletionManaging {
             
             Logger.authentication.info("Successfully deleted user account")
             
-            // Change auth state to trigger navigation to auth screen
+            // Remove Session Id and change auth state to trigger navigation to auth screen
+            sessionId = ""
             self.authState = .signedOut
         } catch {
             Logger.authentication.error("Failed to delete user account: \(error.localizedDescription)")

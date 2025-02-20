@@ -9,6 +9,10 @@ enum SessionState {
     case anonymous // Anonymously authenticated in the app.
     case signedOut // Authenticated in Firebase using one of service providers, and not anonymous.
     case signedIn // Not authenticated in the app.
+    
+    func isAuthenticated() -> Bool {
+        return self != .signedIn
+    }
 }
 
 let sessionIdKey: String = "sessionId"

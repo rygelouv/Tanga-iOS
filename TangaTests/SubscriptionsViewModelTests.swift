@@ -10,6 +10,7 @@ import Foundation
 @testable import Tanga
 
 class MockRevenueCatService: RevenueCatServiceProtocol {
+    var hasActiveSubscriptionResult: Bool = false
     var mockSubscriptions: [SubscriptionPackage] = []
     var mockPurchaseResult: SubscriberInfo?
     var shouldFailPurchase = false
@@ -28,6 +29,10 @@ class MockRevenueCatService: RevenueCatServiceProtocol {
     }
 
     func observeCustomerInfo(onSubscriberInfoChanged: (SubscriberInfo?) -> Void) async {}
+    
+    func hasActiveSubscription() async -> Bool {
+        return hasActiveSubscriptionResult
+    }
 }
 
 @MainActor

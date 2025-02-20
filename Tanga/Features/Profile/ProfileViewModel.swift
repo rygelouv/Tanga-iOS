@@ -14,6 +14,8 @@ class ProfileViewModel: ObservableObject {
     @Published var firstName: String?
     @Published var photoUrl: String?
     @Published var profileStatus: UserProfileStatus?
+    
+    @Published var showAuth: Bool = false
 
     private var userRepository: UserRepository
     private var revenueCatController: RevenueCatController
@@ -67,6 +69,14 @@ class ProfileViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func onCreatedAccount() {
+        showAuth = true
+    }
+    
+    func dismissAuth() {
+        showAuth = false
     }
 }
 

@@ -10,11 +10,12 @@ import Foundation
 import RevenueCat
 
 protocol RevenueCatServiceProtocol {
-    func login(sessionId: String) async
-    func logout() async
-    func getSubscriptions() async -> [SubscriptionPackage]
+    func login(sessionId: String) async throws
+    func logout() async throws
+    func getSubscriptions() async throws -> [SubscriptionPackage]
     func purchase(package: SubscriptionPackage) async throws -> SubscriberInfo
-    func observeCustomerInfo(onSubscriberInfoChanged: (SubscriberInfo?) -> Void) async
+    func observeCustomerInfo(onSubscriberInfoChanged: (SubscriberInfo?) -> Void) async throws
+    func hasActiveSubscription() async -> Bool
 }
 
 class RevenueCatController: RevenueCatServiceProtocol {
@@ -80,5 +81,9 @@ class RevenueCatController: RevenueCatServiceProtocol {
         for try await customerInfo in Purchases.shared.customerInfoStream {
             onSubscriberInfoChanged(SubscriberInfo(hasActiveSubscription: customerInfo.activeSubscriptions.count > 0, packageId: customerInfo.activeSubscriptions.first))
         }
+    }
+    
+    func hasActiveSubscription() async -> Bool {
+        return (try? await Purchases.shared.customerInfo().activeSubscriptions.isEmpty == false) ?? false
     }
 }

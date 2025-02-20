@@ -12,16 +12,15 @@ class SubscriptionsViewModel: ObservableObject {
     @Published var selectedPackage: SubscriptionPackage?
     @Published var closeSubscriptionScreen: Bool = false
     
-    private var revenueCatController: RevenueCatServiceProtocol
+    private let revenueCatController: RevenueCatServiceProtocol
     
-
     init(revenueCatController: RevenueCatServiceProtocol) {
         self.revenueCatController = revenueCatController
     }
     
     func getSubscriptions() {
         Task {
-            let subscriptionPackages = await revenueCatController.getSubscriptions()
+            let subscriptionPackages = try await revenueCatController.getSubscriptions()
             if !subscriptionPackages.isEmpty {
                 DispatchQueue.main.async {
                     // Montly is comming first, we reverse the array to make yearl appear first
