@@ -171,12 +171,9 @@ struct TangaButton: View {
 }
 
 struct TangaPremiumButton: View {
-    var onButtonTap: () -> Void
     
     var body: some View {
-        Button(action: {
-            onButtonTap()
-        }) {
+        NavigationLink(destination: SubscriptionsView()) {
             HStack {
                // Icon on the left
                Image("crown")
@@ -194,16 +191,16 @@ struct TangaPremiumButton: View {
                    .foregroundColor(.white)
                    .padding(.trailing, 20)
                    .padding(.leading, 16)
-           }
+           }.frame(minHeight: 66)
+                .padding(.vertical, 4)
+                .background(LinearGradient(
+                    gradient: Gradient(colors: [.navy, .yaleBlue, .cerulean]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ))
+                .cornerRadius(40)
         }
-        .frame(minHeight: 66)
-        .padding(.vertical, 4)
-        .background(LinearGradient(
-            gradient: Gradient(colors: [.navy, .yaleBlue, .cerulean]),
-            startPoint: .leading,
-            endPoint: .trailing
-        ))
-        .cornerRadius(40)
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -267,6 +264,42 @@ struct CloseButtonView: View {
     }
 }
 
+struct ProfileContentNavAction<Destination: View>: View {
+    var destination: Destination
+    let imageName: String
+    let text: String
+    let color: Color
+    var paddingValue: CGFloat = 0
+
+    var body: some View {
+        NavigationLink(destination: destination) {
+            HStack(spacing: 16) {
+                Image(imageName)
+                    .renderingMode(.template)
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(color)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 12).fill(color.opacity(0.2)))
+                
+                Text(text)
+                    .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
+                    .foregroundColor(.navy)
+                
+                Spacer()
+                
+                Image("right-chevron")
+                    .renderingMode(.template)
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.gray)
+            }
+            .contentShape(Rectangle()) // Ensures the entire row is clickable
+            .padding(paddingValue)
+        }.buttonStyle(PlainButtonStyle())
+    }
+}
+
 struct ProfileContentAction: View {
     let imageName: String
     let text: String
@@ -321,7 +354,7 @@ struct ProfileContentAction: View {
         )
         
         // Premium button
-        TangaPremiumButton(onButtonTap: { Logger.designSystem.log("Premium button tapped")})
+        TangaPremiumButton()
         
         AudioFloatingActionButton()
     }

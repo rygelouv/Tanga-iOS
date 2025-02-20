@@ -12,7 +12,6 @@ import FirebaseAuth
 struct ProfileView: View {
     @State private var path = NavigationPath()
     @EnvironmentObject var authManager: AuthManager
-    
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -58,12 +57,7 @@ struct ProfileContentView: View {
             }
            
             Spacer()
-            RoundedCornerVStack(
-                onSettingsTap: {
-                    navigationPath.append(ProfileNavigationDestinations.Settings)
-                    Logger.profile.info("navigation called")
-                }
-            )
+            ProfileActionContainer(profileStatus: viewModel.profileStatus ?? .anonymous)
         }.onAppear {
             viewModel.loadProfileData()
         }
@@ -89,7 +83,7 @@ struct ProfileContentView: View {
                         size: .big
                     ).padding(40)
                 case .loggedIn:
-                    TangaPremiumButton(onButtonTap: { onNavigateToSubscriptions() })
+                    TangaPremiumButton()
                         .padding(.horizontal, 40)
                 case .premium:
                     PremiumAccountTag()
@@ -123,9 +117,9 @@ struct ProfileContentView: View {
    }
 }
 
-struct RoundedCornerVStack: View {
+struct ProfileActionContainer: View {
     @Environment(\.openURL) var openLink
-    var onSettingsTap: () -> Void
+    let profileStatus: UserProfileStatus
     
     var body: some View {
         VStack(spacing: 0) {
@@ -139,28 +133,29 @@ struct RoundedCornerVStack: View {
             .padding(.top, 40)
             .padding(.bottom, 15)
             
-            ProfileContentAction(
+           
+            ProfileContentNavAction(
+                destination: PrivacyAndTermsView(),
                 imageName: "insurance",
                 text: "Privacy and Terms",
-                color: .green,
-                onClick: { Logger.profile.info("Profile tapped") }
+                color: .green
             )
             .padding(.horizontal, 30)
             .padding(.top, 15)
             .padding(.bottom, 15)
+
             
-            ProfileContentAction(
-                imageName: "settings",
-                text: "Account Settings",
-                color: .blue,
-                onClick: {
-                    Logger.profile.info("setting tapped")
-                    onSettingsTap()
-                }
-            )
-            .padding(.horizontal, 30)
-            .padding(.top, 15)
-            .padding(.bottom, 20)
+            if profileStatus != .anonymous {
+                ProfileContentNavAction(
+                    destination: SettingsView(),
+                    imageName: "settings",
+                    text: "Account Settings",
+                    color: .blue
+                )
+                .padding(.horizontal, 30)
+                .padding(.top, 15)
+                .padding(.bottom, 20)
+            }
         }
         .background(Color.white)
                .clipShape(
@@ -189,5 +184,5 @@ struct RoundedCornerShape: Shape {
 }
 
 #Preview {
-    RoundedCornerVStack(){}
+    ProfileActionContainer(profileStatus: .loggedIn)
 }

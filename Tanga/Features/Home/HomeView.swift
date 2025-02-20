@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Binding var navigationPath: NavigationPath
+    @Binding var selectionTab: Int
     @StateObject var viewModel = HomeViewModel()
     @StateObject var profileViewModel = ProfileViewModel(revenueCatController: RevenueCatController())
     
@@ -18,7 +19,7 @@ struct HomeView: View {
                 SummaryRowShimmerAnimation()
             } else {
                 Spacer(minLength: 20)
-                HomeHeader(profilePhotoUrl: profileViewModel.photoUrl)
+                HomeHeader(path: $navigationPath, selectionTab: $selectionTab, profilePhotoUrl: profileViewModel.photoUrl)
                 Spacer(minLength: 25)
                 GreetingMessage(userFirsName: profileViewModel.firstName)
                 ScrollView(.vertical, showsIndicators: false) {
@@ -42,15 +43,23 @@ struct HomeView: View {
     }
     
     struct HomeHeader: View {
-        @State var path: NavigationPath = NavigationPath()
+        @Binding var path: NavigationPath
+        @Binding var selectionTab: Int
         var profilePhotoUrl: String?
         
         var body: some View {
             HStack {
                 SearchButton()
                 Spacer()
-                ProfilePictureView(url: profilePhotoUrl ?? "")
-                    .frame(width: 40, height: 40)
+                Button(
+                    action: {
+                        print("profile picture button tap")
+                        selectionTab = 3
+                    }
+                ) {
+                    ProfilePictureView(url: profilePhotoUrl ?? "")
+                        .frame(width: 40, height: 40)
+                }.buttonStyle(PlainButtonStyle())
             }
         }
     }
@@ -77,46 +86,48 @@ struct HomeView: View {
         var weeklySummary: WeeklySummaryModel?
 
         var body: some View {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.navy, .yaleBlue, .cerulean]),
-                            startPoint: .leading,
-                            endPoint: .trailing
+            NavigationLink(destination: SummaryDetailsView(summaryId: weeklySummary?.summary.id ?? "")) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.navy, .yaleBlue, .cerulean]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
-                    )
-                    .shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                        .shadow(color: .gray.opacity(0.5), radius: 5, x: 0, y: 2)
 
-                HStack {
-                    VStack(alignment: .leading) {
-                        TagView(title: weeklySummary?.category.name ?? "")
-                        Text("Your Free Weekly Summary")
-                            .fontWeight(.bold)
-                            .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                        Spacer()
-                        HStack {
-                            Text("Check It Out Now!")
-                                .fontWeight(.regular)
-                                .font(Font.custom("Montserrat", size: 12, relativeTo: .title))
+                    HStack {
+                        VStack(alignment: .leading) {
+                            TagView(title: weeklySummary?.category.name ?? "")
+                            Text("Your Free Weekly Summary")
+                                .fontWeight(.bold)
+                                .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
                                 .foregroundColor(.white)
                                 .multilineTextAlignment(.leading)
-                            Image("right_arrow")
-                                .renderingMode(.template)
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
+                            Spacer()
+                            HStack {
+                                Text("Check It Out Now!")
+                                    .fontWeight(.regular)
+                                    .font(Font.custom("Montserrat", size: 12, relativeTo: .title))
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.leading)
+                                Image("right_arrow")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(.white)
+                            }
                         }
+                        Spacer()
+                        SummaryImageView(url: weeklySummary?.summary.coverImageUrl ?? "")
                     }
-                    Spacer()
-                    SummaryImageView(url: weeklySummary?.summary.coverImageUrl ?? "")
+                    .padding(20)
+                    .multilineTextAlignment(.center)
                 }
-                .padding(20)
-                .multilineTextAlignment(.center)
-            }
-            .frame(height: 170)
+                .frame(height: 170)
+            }.buttonStyle(PlainButtonStyle())
         }
     }
                                
@@ -159,5 +170,5 @@ struct HomeView: View {
 
 #Preview {
     let viewModel = HomeViewModel(uiState: dummyHomeUiState)
-    HomeView(navigationPath: .constant(NavigationPath()), viewModel: viewModel)
+    HomeView(navigationPath: .constant(NavigationPath()), selectionTab: .constant(0), viewModel: viewModel)
 }
