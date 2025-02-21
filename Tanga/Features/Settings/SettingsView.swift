@@ -9,7 +9,6 @@ import OSLog
 import SwiftUI
 
 struct SettingsView: View {
-    @Binding var path: NavigationPath
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var authManager: AuthManager
     
@@ -19,7 +18,7 @@ struct SettingsView: View {
         ZStack {
             VStack {
                 ProfileContentAction(
-                    imageName: "insurance",
+                    imageName: "logout",
                     text: "Logout",
                     color: .red,
                     paddingValue: 12,
@@ -39,10 +38,8 @@ struct SettingsView: View {
                 
                 VersionView()
                 
-                TangaButton(
-                    onButtonTap: {
-                        path.append(ProfileNavigationDestinations.DeleteAccount)
-                    },
+                TangaNavButton(
+                    destination: DeleteAccountView(),
                     text: "Delete Account",
                     variation: ButtonVariation.danger
                 )
@@ -92,5 +89,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(path: .constant(NavigationPath()))
+    SettingsView()
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DeleteAccountView: View {
-    @Binding var path: NavigationPath
+    // @Binding var path: NavigationPath
     @State private var showDeleteAlert = false
     @State private var showDeleteErrorAlert = false
     @EnvironmentObject var authManager: AuthManager
@@ -68,7 +68,8 @@ struct DeleteAccountView: View {
                                     do {
                                         try await authManager.deleteUserAccount()
                                         print("user deleted")
-                                        path = NavigationPath()
+                                        // path = NavigationPath()
+                                        dismiss()
                                     } catch {
                                         showDeleteErrorAlert = true
                                     }
@@ -103,5 +104,5 @@ struct DeleteAccountView: View {
 }
 
 #Preview {
-    DeleteAccountView(path: .constant(NavigationPath())).environmentObject(AuthManager())
+    DeleteAccountView().environmentObject(AuthManager())
 }

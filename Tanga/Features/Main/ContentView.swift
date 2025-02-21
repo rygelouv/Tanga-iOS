@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Binding var navigationPath: NavigationPath
-    @State private var selection = 1
+    @State var selection = 1
     
     @EnvironmentObject var notificationPermissionManager: NotificationPermissionManager
     @State private var showNotificationSheet = false
@@ -18,7 +18,7 @@ struct ContentView: View {
         ZStack {
             VStack {
                 TabView(selection: $selection) {
-                    HomeView(navigationPath: $navigationPath).tabItem {
+                    HomeView(navigationPath: $navigationPath, selectionTab: $selection).tabItem {
                         CustomTabItem(imageName: selection == 1 ? "home_on" : "home_off", topPadding: 20)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

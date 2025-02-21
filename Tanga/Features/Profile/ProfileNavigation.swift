@@ -27,13 +27,13 @@ struct ProfileNavigationDestinationView: View {
         case .Profile:
             ProfileView()
         case .Settings:
-            SettingsView(path: $navigationPath).navigationDestination(for: ProfileNavigationDestinations.self) { destination in
+            SettingsView().navigationDestination(for: ProfileNavigationDestinations.self) { destination in
                 ProfileNavigationDestinationView(navigationPath: $navigationPath, destination: destination)
             }
         case .Subscriptions:
             SubscriptionsView()
         case .DeleteAccount:
-            DeleteAccountView(path: $navigationPath)
+            DeleteAccountView()
         }
     }
 }
