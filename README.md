@@ -21,9 +21,10 @@
 
 ---
 
-## **We are 90% complete on the MVP** 🚀🚀
+## **We are 95% complete on the MVP** 🚀🚀
 Here is our latest major additions:
 
+* Implement Protected Actions by @rygelouv https://github.com/rygelouv/Tanga-iOS/pull/25
 * Tanga Account Deletion by @rygelouv in https://github.com/rygelouv/Tanga-iOS/pull/17
 * Implemented support for Push Notifications by @rygelouv in https://github.com/rygelouv/Tanga-iOS/pull/15
 * Implemented Apple Sign in by @rygelouv in https://github.com/rygelouv/Tanga-iOS/pull/11
@@ -34,9 +35,7 @@ The other projects can be found here:
 - [Tanga Projects](https://github.com/rygelouv?tab=projects)
 
 ### What is remaining for the MVP?
-* Implement Protected Actions (i.e listen to summary audio without a subscription or without an account)
 * Add analytics tracker
-* Enable Weekly summary
 * Improve Error tracking
 
 ## Setup
