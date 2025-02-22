@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Sentry
 
 struct LibraryEmptyView: View {
     var body: some View {

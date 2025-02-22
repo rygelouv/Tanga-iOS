@@ -110,4 +110,9 @@ Tanga/GoogleService-Info.plist
 ./Tanga/Secrets/Secrets.xcconfig
 Secrets.xcconfig
 
+### Scripts ###
+./Tanga/scripts/sentry-upload-dsym.sh
+*/scripts/sentry-upload-dsym.sh
+*/sentry-upload-dsym.sh
+
 *.DS_Store

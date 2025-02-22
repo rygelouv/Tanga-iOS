@@ -12,8 +12,16 @@ import Foundation
 class MockSessionManager: SessionManaging {
     var hasSessionResult: Bool = false
     
-    func hasSession() async -> Bool {
+    func openSession(sessionId: String) async throws {
+        hasSessionResult = true
+    }
+    
+    func hasSession() async throws -> Bool {
         return hasSessionResult
+    }
+    
+    func clearSession() async throws {
+        hasSessionResult = false
     }
 }
 

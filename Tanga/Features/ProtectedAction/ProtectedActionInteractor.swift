@@ -41,11 +41,10 @@ actor ProtectedActionInteractor {
     }
     
     private func handleSaveOrSubscribeAction() async -> ProtectedActionCheckResult {
-        if !(await sessionManager.hasSession()) {
-            return .authRequired
-        }
+        if (try? await sessionManager.hasSession()) != true { return .authRequired }
         return .allowed
     }
+
     
     private func handleListenOrReadAction(_ action: ProtectedAction.SubscriptionRequiredAction) async -> ProtectedActionCheckResult {
         // First check if it's a weekly summary
@@ -54,7 +53,7 @@ actor ProtectedActionInteractor {
         }
         
         // Then check authentication
-        if !(await sessionManager.hasSession()) {
+        if (try? await sessionManager.hasSession()) != true {
             return .authRequired
         }
         

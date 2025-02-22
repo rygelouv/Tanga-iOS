@@ -26,6 +26,8 @@
 		98B8644F2D61DC4400522312 /* mvvm-screenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644B2D61DC4400522312 /* mvvm-screenshot.png */; };
 		98B864502D61DC4400522312 /* screenshots-tanga-min-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */; };
 		98B864512D61DC4400522312 /* tanga_infra_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644D2D61DC4400522312 /* tanga_infra_02.png */; };
+		98E58B072D688AC6002547EC /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 98E58B062D688AC6002547EC /* Sentry */; };
+		98E58B092D688AC6002547EC /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98E58B082D688AC6002547EC /* SentrySwiftUI */; };
 		98EA0D6A2D64B94500E0383F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 98EA0D692D64B94500E0383F /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +101,7 @@
 				98A8BF072D311B2200E3AB39 /* RevenueCatUI in Frameworks */,
 				980DBAB32CB0250600141DA3 /* FirebaseStorage in Frameworks */,
 				98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */,
+				98E58B072D688AC6002547EC /* Sentry in Frameworks */,
 				980DBAA32CB0250600141DA3 /* FirebaseAnalytics in Frameworks */,
 				980DBAA92CB0250600141DA3 /* FirebaseCrashlytics in Frameworks */,
 				980DBABE2CB18F7C00141DA3 /* GoogleSignIn in Frameworks */,
@@ -106,6 +109,7 @@
 				980DBAAB2CB0250600141DA3 /* FirebaseFirestore in Frameworks */,
 				98A8BF052D311B2200E3AB39 /* RevenueCat in Frameworks */,
 				980DBAA52CB0250600141DA3 /* FirebaseAuth in Frameworks */,
+				98E58B092D688AC6002547EC /* SentrySwiftUI in Frameworks */,
 				980DBAB12CB0250600141DA3 /* FirebaseRemoteConfig in Frameworks */,
 				980DBAC02CB18F7C00141DA3 /* GoogleSignInSwift in Frameworks */,
 			);
@@ -181,6 +185,7 @@
 				9840A6F82CA05A5700194500 /* Sources */,
 				9840A6F92CA05A5700194500 /* Frameworks */,
 				9840A6FA2CA05A5700194500 /* Resources */,
+				98E58B0C2D68B9BB002547EC /* Upload Sentry Debug Symbols */,
 			);
 			buildRules = (
 			);
@@ -205,6 +210,8 @@
 				98A8BC8B2D29174B00E3AB39 /* MarkdownUI */,
 				98A8BF042D311B2200E3AB39 /* RevenueCat */,
 				98A8BF062D311B2200E3AB39 /* RevenueCatUI */,
+				98E58B062D688AC6002547EC /* Sentry */,
+				98E58B082D688AC6002547EC /* SentrySwiftUI */,
 			);
 			productName = Tanga;
 			productReference = 9840A6FC2CA05A5700194500 /* Tanga.app */;
@@ -293,6 +300,7 @@
 				980DBABC2CB18F7C00141DA3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				98DD8C2C2D2847160034CE26 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				98E58B052D688AC6002547EC /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9840A6FD2CA05A5700194500 /* Products */;
@@ -354,6 +362,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ -n \"$CI\" ]; then\n    echo \"⚠️ Skipping Git hook check in CI environment.\"\n    exit 0\nfi\n\nsh ~/Library/Developer/Xcode/UserScripts/check-hooks.sh\n";
+		};
+		98E58B0C2D68B9BB002547EC /* Upload Sentry Debug Symbols */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}\n",
+			);
+			name = "Upload Sentry Debug Symbols";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh scripts/sentry-upload-dsym.sh\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -520,10 +547,11 @@
 				CODE_SIGN_ENTITLEMENTS = Tanga/Tanga.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Tanga/Preview Content\"";
 				DEVELOPMENT_TEAM = 437J7YC765;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tanga/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
@@ -568,7 +596,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Tanga/Preview Content\"";
 				DEVELOPMENT_TEAM = 437J7YC765;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tanga/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
@@ -763,6 +791,14 @@
 				minimumVersion = 2.4.1;
 			};
 		};
+		98E58B052D688AC6002547EC /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.45.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -835,6 +871,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCatUI;
+		};
+		98E58B062D688AC6002547EC /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98E58B052D688AC6002547EC /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		98E58B082D688AC6002547EC /* SentrySwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98E58B052D688AC6002547EC /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = SentrySwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
