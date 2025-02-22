@@ -78,13 +78,14 @@ We also use Sentry for extra error tracking and monitoring (not added yet). We u
 
 ### Automation Infrastructure  work
 We have left out many things since we are focusing on the MVP and getting the app out on the store to keep up wiht Android on a product standpoint.
-- [ ] Add Unit tests
-- [ ] Add full iOS build on Github Action workflow
-- [ ] Add SwiftLint and/or other static code analysic tool
-- [ ] Add SonarCloud
-- [ ] Add dependabot
+- [x] Add Unit tests
+- [ ] Run unit tests in CI build
+- [x] Add full iOS build on Github Action workflow
+- [x] Add SwiftLint and/or other static code analysic tool
+- [x] Add SonarCloud
+- [x] Add dependabot
 - [ ] Add Codecov for test coverage tracking - minor
-- [ ] Add git hooks that run linting on each commit/push
+- [x] Add git hooks that run linting on each commit/push
 
 ## License
 ```xml
