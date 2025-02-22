@@ -27,6 +27,9 @@ jobs:
            
       - name: Create Secrets.xcconfig
         run: echo "${{ secrets.SECRETS_XCCONFIG }}" > $GITHUB_WORKSPACE/Secrets.xcconfig
+        
+      - name: Create Sentry upload Debug Symbols script
+          run: echo "${{ secrets.SENTRY_UPLOAD_DEBUG_SYMBOLS_SCRIPT }}" > $GITHUB_WORKSPACE/scripts/sentry-upload-dsym.sh
 
       - name: Build
         run: |
