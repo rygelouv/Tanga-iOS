@@ -46,7 +46,10 @@ struct TangaApp: App {
         audioController: AudioController()
     )
     
-    private var revenueCatController: RevenueCatController = RevenueCatController()
+    private let revenueCatController: RevenueCatController = RevenueCatController()
+    private let sentryTracker = SentryTracker()
+    private let crashlyticsTracker = CrashlyticsTracker()
+    private let osLogger = OSLogger()
     
     init() {
         FirebaseApp.configure()
@@ -58,6 +61,10 @@ struct TangaApp: App {
         _notificationPermissionManager = StateObject(wrappedValue: notificaitonManager)
         
         revenueCatController.initialize()
+        sentryTracker.initialize()
+        
+        TangaLogger.shared.plant(osLogger)
+        TangaLogger.shared.plant(crashlyticsTracker)
     }
     
     var body: some Scene {

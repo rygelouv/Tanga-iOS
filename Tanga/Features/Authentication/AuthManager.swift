@@ -28,7 +28,6 @@ enum SigninProvider: String {
 
 @MainActor
 class AuthManager: ObservableObject {
-    @AppStorage(sessionIdKey) var sessionId: String = ""
     
     private let userRepository: UserRepository = UserRepository()
     
@@ -41,6 +40,8 @@ class AuthManager: ObservableObject {
     
     internal let appleAccountTerminator: AppleAccountTerminating
     internal let googleAccountTerminator: GoogleAccountTerminating
+    
+    internal let sessionManager: SessionManaging
     
     /// - Parameters:
     ///   - appleAccountTerminator: Manager for Apple account termination operations
@@ -56,9 +57,12 @@ class AuthManager: ObservableObject {
         // Subscription controller
         revenueCatController = RevenueCatController()
         
+        // Session manager
+        sessionManager = SessionManager()
+        
         // Observing auth state
         authStateHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
-            Logger.authentication.info("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
+            TangaLogger.shared.info("Auth state changed: \(user != nil ? "Signed in" : "Signed out")")
             self?.updateState(user: user)
         }
         
@@ -90,11 +94,11 @@ class AuthManager: ObservableObject {
                 switch result {
                 case .success(let tangaUser):
                     guard let userId = tangaUser.id else { return }
-                    sessionId = userId
+                    try await sessionManager.openSession(sessionId: userId)
                     // Identify user in RevenueCat
-                    await revenueCatController.login(sessionId: sessionId)
+                    await revenueCatController.login(sessionId: userId)
                 case .failure(let error):
-                    Logger.authentication.error("Error creating or updating user: \(error)")
+                    TangaLogger.shared.error("Error creating or updating user: \(error)")
                 }
             }
         }
@@ -107,11 +111,11 @@ class AuthManager: ObservableObject {
     func signInAnonymously() async throws -> AuthDataResult {
         do {
             let result = try await Auth.auth().signInAnonymously()
-            Logger.authentication.info("Signed in anonymously: \(result.user.uid)")
+            TangaLogger.shared.info("Signed in anonymously: \(result.user.uid)")
             return result
         }
         catch {
-            Logger.authentication.error("Error signing in anonymously: \(error)")
+            TangaLogger.shared.error("Error signing in anonymously: \(error)")
             throw error
         }
     }
@@ -127,11 +131,11 @@ class AuthManager: ObservableObject {
     private func authSignIn(credentials: AuthCredential) async throws -> AuthDataResult {
         do {
             let result = try await Auth.auth().signIn(with: credentials)
-            Logger.authentication.info("Signed in: \(result.user.uid)")
+            TangaLogger.shared.info("Signed in: \(result.user.uid)")
             updateState(user: result.user)
             return result
         } catch {
-            Logger.authentication.error("Error signing in: \(error)")
+            TangaLogger.shared.error("Error signing in: \(error)")
             throw error
         }
     }
@@ -146,7 +150,7 @@ class AuthManager: ObservableObject {
             updateState(user: result.user)
             return result
         } catch {
-            Logger.authentication.error("Error linking: \(error)")
+            TangaLogger.shared.error("Error linking: \(error)")
             throw error
         }
     }
@@ -160,7 +164,7 @@ class AuthManager: ObservableObject {
             do {
                 try await changeRequest.commitChanges()
             } catch {
-                Logger.authentication.error("Error updating display name: \(error)")
+                TangaLogger.shared.error("Error updating display name: \(error)")
             }
         }
     }
@@ -172,7 +176,7 @@ class AuthManager: ObservableObject {
         do {
             return try await authenticateUser(credentials: credentials)
         } catch {
-            Logger.authentication.error("Error authenticating user: \(error)")
+            TangaLogger.shared.error("Error authenticating user: \(error)")
             throw error
         }
     }
@@ -214,10 +218,11 @@ class AuthManager: ObservableObject {
                 firebaseProvidersSignOut()
                 try Auth.auth().signOut()
                 await revenueCatController.logout()
-                Logger.authentication.info("Signed out")
+                try await sessionManager.clearSession()
+                TangaLogger.shared.info("Signed out")
             }
             catch {
-                Logger.authentication.error("Error signing out: \(error)")
+                TangaLogger.shared.error("Error signing out: \(error)")
                 throw error
             }
         }
