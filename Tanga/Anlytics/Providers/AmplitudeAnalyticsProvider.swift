@@ -19,7 +19,6 @@ class AmplitudeAnalyticsProvider: AnalyticsProvider {
             autocapture: [
                 AutocaptureOptions.screenViews,
                 AutocaptureOptions.sessions,
-                AutocaptureOptions.elementInteractions,
                 AutocaptureOptions.appLifecycles
             ]
         )

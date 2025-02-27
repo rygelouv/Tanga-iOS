@@ -8,21 +8,6 @@
 import Foundation
 
 // AnalyticsTracker - Main facade for analytics tracking
-/*protocol AnalyticsTracker {
-    static var shared: AnalyticsTrackerImpl { get set }
-    
-    func track(event: AnalyticsEvent)
-    func trackPage(page: AnalyticsPage)
-    func setUserDetails(userId: String)
-    func clearUserDetails()
-    
-    func setUserSubscription(
-            isSubscribed: Bool,
-            tier: String
-    )
-}*/
-
-// Implementation of AnalyticsTracker
 class AnalyticsTracker {
     
     static var shared: AnalyticsTracker = {

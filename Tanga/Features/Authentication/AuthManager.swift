@@ -95,9 +95,11 @@ class AuthManager: ObservableObject {
                 case .success(let tangaUser):
                     guard let userId = tangaUser.id else { return }
                     try await sessionManager.openSession(sessionId: userId)
-                    AnalyticsTracker.shared.track(event: Events.actionUserSignedIn)
                     // Identify user in RevenueCat
                     await revenueCatController.login(sessionId: userId)
+                    // Analytics trakcing
+                    AnalyticsTracker.shared.track(event: Events.actionUserSignedIn)
+                    AnalyticsTracker.shared.setUserDetails(userId: userId)
                 case .failure(let error):
                     TangaLogger.shared.error("Error creating or updating user: \(error)")
                 }
@@ -221,6 +223,7 @@ class AuthManager: ObservableObject {
                 await revenueCatController.logout()
                 try await sessionManager.clearSession()
                 AnalyticsTracker.shared.track(event: Events.actionUserSignedOut)
+                AnalyticsTracker.shared.clearUserDetails()
                 TangaLogger.shared.info("Signed out")
             }
             catch {

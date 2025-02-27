@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Configuraiton class used to initialize the Analytics System
 class AnalyitcsConfig {
     static let shared = AnalyitcsConfig()
     

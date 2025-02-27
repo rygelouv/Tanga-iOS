@@ -50,6 +50,7 @@ class SubscriptionsViewModel: ObservableObject {
                             currency: subscriptionPackage.price.currency.lowercased()
                         )
                     )
+                    AnalyticsTracker.shared.setUserSubscription(isSubscribed: true, tier: subscriptionPackage.type.rawValue)
                 }
             }
         }
