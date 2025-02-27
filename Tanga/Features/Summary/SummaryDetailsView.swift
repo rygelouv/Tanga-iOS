@@ -15,6 +15,7 @@ struct SummaryDetailsView: View {
     @StateObject private var viewModel: SummaryDetailsViewModel
     @StateObject private var favoriteViewModel: FavoriteViewModel
 
+    @State private var isSharing = false
     
     init(summaryId: SummaryId) {
         self.summaryId = summaryId
@@ -85,6 +86,7 @@ struct SummaryDetailsView: View {
                     Button(action: {
                         guard let summaryId = viewModel.summary?.id else { return }
                         AnalyticsTracker.shared.track(event: Events.tapShareSummary(summaryId: summaryId))
+                        isSharing = true
                     }) {
                         Image(systemName: "square.and.arrow.up")
                             .resizable()
@@ -94,7 +96,17 @@ struct SummaryDetailsView: View {
                             .foregroundColor(Color.silverFoil)
                     }
                 }
-            }.toolbarBackground(Color.white, for: .navigationBar)
+            }
+            .toolbarBackground(Color.white, for: .navigationBar)
+            .sheet(isPresented: $isSharing) {
+                if let summary = viewModel.summary,
+                   let summaryId = summary.id,
+                   let imageUrlString = summary.coverImageUrl,
+                   let imageUrl = URL(string: imageUrlString) {
+                    
+                    ShareSheet(shareSummaryId: summaryId, shareImageURL: imageUrl)
+                }
+            }
         }
         .sheet(isPresented: $favoriteViewModel.showAuth) {
             AuthView()
