@@ -97,6 +97,9 @@ class AuthManager: ObservableObject {
                     try await sessionManager.openSession(sessionId: userId)
                     // Identify user in RevenueCat
                     await revenueCatController.login(sessionId: userId)
+                    // Analytics trakcing
+                    AnalyticsTracker.shared.track(event: Events.actionUserSignedIn)
+                    AnalyticsTracker.shared.setUserDetails(userId: userId)
                 case .failure(let error):
                     TangaLogger.shared.error("Error creating or updating user: \(error)")
                 }
@@ -190,12 +193,12 @@ class AuthManager: ObservableObject {
         }
     
         guard let appleIdToken = appleIdCredentials.identityToken else {
-            print("Unable to fetch identity token")
+            TangaLogger.shared.error("Unable to fetch identity token")
             return nil
         }
         
         guard let ideTokenString = String(data: appleIdToken, encoding: .utf8) else {
-            print("Unable to serialize identity token as string from data \(appleIdToken.debugDescription)")
+            TangaLogger.shared.error("Unable to serialize identity token as string from data \(appleIdToken.debugDescription)")
             return nil
         }
         
@@ -207,7 +210,7 @@ class AuthManager: ObservableObject {
         do {
             return try await authenticateUser(credentials: credentials)
         } catch {
-            print("FirebaseAuthError: appleAuth: \(error)")
+            TangaLogger.shared.error("FirebaseAuthError: appleAuth: \(error)")
             throw error
         }
     }
@@ -219,6 +222,8 @@ class AuthManager: ObservableObject {
                 try Auth.auth().signOut()
                 await revenueCatController.logout()
                 try await sessionManager.clearSession()
+                AnalyticsTracker.shared.track(event: Events.actionUserSignedOut)
+                AnalyticsTracker.shared.clearUserDetails()
                 TangaLogger.shared.info("Signed out")
             }
             catch {

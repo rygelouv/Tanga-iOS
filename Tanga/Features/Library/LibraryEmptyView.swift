@@ -24,7 +24,9 @@ struct LibraryEmptyView: View {
                Spacer()
                EmptyLibraryImage()
                Spacer()
-               TangaNavButton(destination: SearchView(), leftIcon: "search", text: "Explore Summaries").padding()
+               TangaNavButton(destination: SearchView(), leftIcon: "search", text: "Explore Summaries")
+                   .padding()
+                   .trackTap(event: Events.tapExploreSummariesFromEmptyLibrary)
                Spacer()
            }
        }.padding()

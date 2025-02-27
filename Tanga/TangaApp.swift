@@ -15,7 +15,10 @@ import UserNotifications
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.message_id"
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+    ) -> Bool {
 
         if #available(iOS 10.0, *) {
           // For iOS 10 display notification (sent via APNS)
@@ -62,6 +65,7 @@ struct TangaApp: App {
         
         revenueCatController.initialize()
         sentryTracker.initialize()
+        AnalyitcsConfig.shared.initialize()
         
         TangaLogger.shared.plant(osLogger)
         TangaLogger.shared.plant(crashlyticsTracker)

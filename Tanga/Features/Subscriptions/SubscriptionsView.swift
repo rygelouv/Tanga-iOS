@@ -56,7 +56,10 @@ struct SubscriptionsView: View {
                     SubscriptionsView(
                         subscriptions: subscriptions,
                         selectedPackage: viewModel.selectedPackage,
-                        onMakePurchase: viewModel.onMakePurchase(subscriptionPackage:),
+                        onMakePurchase: { package in
+                            viewModel.onMakePurchase(subscriptionPackage: package)
+                            AnalyticsTracker.shared.track(event: subscriptionTapEvent(subscription: package))
+                        },
                         getSubscriptionCadence: viewModel.getSubscriptionCadence(subscriptionPackage:)
                     )
                 }
@@ -83,12 +86,22 @@ struct SubscriptionsView: View {
                 dismiss()
             }
         }
+        .alert("Error", isPresented: Binding(
+            get: { viewModel.error != nil },
+            set: { if !$0 { viewModel.error = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            if let error = viewModel.error {
+                Text(error.localizedDescription)
+            }
+        }
     }
     
     struct SubscriptionsView: View {
         let subscriptions: [SubscriptionPackage]
         let selectedPackage: SubscriptionPackage?
-        let onMakePurchase: (SubscriptionPackage) -> Void
+        let onMakePurchase: (_: SubscriptionPackage) -> Void
         let getSubscriptionCadence: (SubscriptionPackage) -> String
 
         var body: some View {
@@ -113,6 +126,21 @@ struct SubscriptionsView: View {
                 
                 BestValueView()
             }
+        }
+    }
+    
+    func subscriptionTapEvent(subscription: SubscriptionPackage) -> AnalyticsEvent {
+        switch subscription.type {
+            case .monthly:
+            return Events.tapMonthlySubscription(
+                price: Double(subscription.price.amount) ??  Double(0),
+                currency: subscription.price.currency
+            )
+        case .yearly:
+            return Events.tapYearlySubscription(
+                price: Double(subscription.price.amount) ??  Double(0),
+                currency: subscription.price.currency
+            )
         }
     }
     

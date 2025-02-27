@@ -69,6 +69,8 @@ struct SummaryDetailsView: View {
                         Task {
                             await favoriteViewModel.toggleFavorite()
                         }
+                        guard let summaryId = viewModel.summary?.id else { return }
+                        AnalyticsTracker.shared.track(event: favoriteTapEvent(summaryId: summaryId))
                     }) {
                         Image(favoriteIcon())
                             .resizable()
@@ -81,7 +83,8 @@ struct SummaryDetailsView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        // Your share action here
+                        guard let summaryId = viewModel.summary?.id else { return }
+                        AnalyticsTracker.shared.track(event: Events.tapShareSummary(summaryId: summaryId))
                     }) {
                         Image(systemName: "square.and.arrow.up")
                             .resizable()
@@ -117,6 +120,12 @@ struct SummaryDetailsView: View {
     
     private func favoriteIcon() -> String {
         favoriteViewModel.isFavorite ? "favorite" : "bookmark"
+    }
+    
+    private func favoriteTapEvent(summaryId: String) -> AnalyticsEvent {
+        favoriteViewModel.isFavorite
+        ? Events.tapRemoveSavedSummary(summaryId: summaryId)
+        : Events.tapSaveSummary(summaryId: summaryId)
     }
     
     struct SummaryHeader: View {
@@ -164,7 +173,7 @@ struct SummaryDetailsView: View {
                             actionType: action,
                             summary: summary,
                             protectedActionInteractor: protectedActionInteractor
-                        )
+                        ).trackTap(event: actionEvent(actionType: action, summaryId: summary.id ?? ""))
                     }
                 }
                 .padding()
@@ -175,6 +184,17 @@ struct SummaryDetailsView: View {
                 )
             .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
             .frame(maxWidth: .infinity)
+        }
+        
+        func actionEvent(actionType: ActionType, summaryId: String) -> AnalyticsEvent {
+            switch actionType {
+            case .read:
+                Events.tapReadSummary(summaryId: summaryId)
+            case .listen:
+                Events.tapPlayStartAudio(summaryId: summaryId)
+            case .graphic:
+                Events.tapVisualizeGraphicSummary(summaryId: summaryId)
+            }
         }
     }
     

@@ -22,7 +22,10 @@ struct SettingsView: View {
                     text: "Logout",
                     color: .red,
                     paddingValue: 12,
-                    onClick: { showLogoutAlert = true }
+                    onClick: {
+                        showLogoutAlert = true
+                        AnalyticsTracker.shared.track(event: Events.tapProfileLogOut)
+                    }
                 )
                 .background(Color.white)
                 .alert("Confirm Logout", isPresented: $showLogoutAlert) {
@@ -42,7 +45,7 @@ struct SettingsView: View {
                     destination: DeleteAccountView(),
                     text: "Delete Account",
                     variation: ButtonVariation.danger
-                )
+                ).trackTap(event: Events.tapProfileDeleteAccount)
             }
         }.background(Color.cultured)
     }

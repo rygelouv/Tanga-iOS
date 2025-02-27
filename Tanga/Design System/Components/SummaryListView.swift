@@ -21,7 +21,10 @@ struct SummaryRowView: View {
             HStack(spacing: 15) {
                 if let summaries {
                     ForEach(summaries) { summary in
-                        SummaryItemView(summary: summary)
+                        SummaryItemView(summary: summary).onTap {
+                            guard let summaryId = summary.id else { return }
+                            AnalyticsTracker.shared.track(event: Events.tapSummary(summaryId: summaryId))
+                        }
                     }
                 }
             }
@@ -36,7 +39,10 @@ struct SummaryGrid: View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
             if let summaries {
                ForEach(summaries) { summary in
-                    SummaryItemView(summary: summary, size: .large)
+                    SummaryItemView(summary: summary, size: .large).onTap {
+                        guard let summaryId = summary.id else { return }
+                        AnalyticsTracker.shared.track(event: Events.tapSummary(summaryId: summaryId))
+                    }
                 }
             }
         }

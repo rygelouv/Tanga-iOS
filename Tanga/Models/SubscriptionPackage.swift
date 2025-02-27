@@ -36,6 +36,15 @@ extension Price {
 enum SubscriptionType {
     case monthly
     case yearly
+    
+    var rawValue: String {
+        switch self {
+        case .monthly:
+            return "monthly"
+        case .yearly:
+            return "yearly"
+        }
+    }
 }
 
 struct SubscriberInfo {

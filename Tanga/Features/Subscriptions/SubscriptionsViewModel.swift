@@ -11,6 +11,7 @@ class SubscriptionsViewModel: ObservableObject {
     @Published var subscriptions: [SubscriptionPackage]?
     @Published var selectedPackage: SubscriptionPackage?
     @Published var closeSubscriptionScreen: Bool = false
+    @Published var error: Error?
     
     private let revenueCatController: RevenueCatServiceProtocol
     
@@ -27,7 +28,9 @@ class SubscriptionsViewModel: ObservableObject {
                     self.subscriptions = subscriptionPackages.reversed()
                 }
             } else {
-                // TODO show error
+                let error = NSError(domain: "Subscriptions", code: 0, userInfo: [NSLocalizedDescriptionKey: "unable to retrieve subscriptions"])
+                TangaLogger.shared.error("unable to retrieve subscriptions: \(error.localizedDescription)")
+                self.error = error
             }
         }
     }
@@ -40,6 +43,14 @@ class SubscriptionsViewModel: ObservableObject {
                 self.selectedPackage = nil
                 if subscriberInfo.hasActiveSubscription {
                     self.closeSubscriptionScreen = true
+                    AnalyticsTracker.shared.track(
+                        event: Events.actionSubscriptionPurchased(
+                            type: subscriptionPackage.type.rawValue,
+                            price: Double(subscriptionPackage.price.amount) ?? 0,
+                            currency: subscriptionPackage.price.currency.lowercased()
+                        )
+                    )
+                    AnalyticsTracker.shared.setUserSubscription(isSubscribed: true, tier: subscriptionPackage.type.rawValue)
                 }
             }
         }

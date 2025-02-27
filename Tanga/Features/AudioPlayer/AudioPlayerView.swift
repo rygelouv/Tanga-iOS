@@ -131,7 +131,7 @@ struct AudioPlayerView: View {
         var body: some View {
             VStack {
                 // Slider
-                Slider(value: $currentTime, in: 0...duration, onEditingChanged: { editing in
+                Slider(value: $currentTime, in: 0...max(0, duration), onEditingChanged: { editing in
                     if !editing {
                         onSeek(currentTime)
                     }

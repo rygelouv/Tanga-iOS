@@ -77,13 +77,14 @@ extension AuthManager: AccountDeletionManaging {
             // Step 3: Delete the user account
             try await user.delete()
             
-            Logger.authentication.info("Successfully deleted user account")
-            
+            TangaLogger.shared.info("Successfully deleted user account")
+            AnalyticsTracker.shared.track(event: Events.actionAccountDeleted)
+            AnalyticsTracker.shared.clearUserDetails()
             // Remove Session Id and change auth state to trigger navigation to auth screen
             try await sessionManager.clearSession()
             self.authState = .signedOut
         } catch {
-            Logger.authentication.error("Failed to delete user account: \(error.localizedDescription)")
+            TangaLogger.shared.error("Failed to delete user account: \(error.localizedDescription)")
             throw AuthError.deletionFailed(underlying: error)
         }
     }
