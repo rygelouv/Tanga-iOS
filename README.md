@@ -21,7 +21,7 @@
 
 ---
 
-## **We are 95% complete on the MVP** 🚀🚀
+## **We are 99% complete on the MVP** 🚀🚀
 Here is our latest major additions:
 
 * Implement Protected Actions by @rygelouv https://github.com/rygelouv/Tanga-iOS/pull/25
@@ -35,8 +35,8 @@ The other projects can be found here:
 - [Tanga Projects](https://github.com/rygelouv?tab=projects)
 
 ### What is remaining for the MVP?
-* Add analytics tracker
-* Improve Error tracking
+* TestFlight testing
+* App Store submission
 
 ## Setup
 
