@@ -28,6 +28,7 @@
 		98B864512D61DC4400522312 /* tanga_infra_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 98B8644D2D61DC4400522312 /* tanga_infra_02.png */; };
 		98E58B072D688AC6002547EC /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 98E58B062D688AC6002547EC /* Sentry */; };
 		98E58B092D688AC6002547EC /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98E58B082D688AC6002547EC /* SentrySwiftUI */; };
+		98E8DE6C2D6CE9B800703964 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 98E8DE6B2D6CE9B800703964 /* AmplitudeSwift */; };
 		98EA0D6A2D64B94500E0383F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 98EA0D692D64B94500E0383F /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +104,7 @@
 				98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */,
 				98E58B072D688AC6002547EC /* Sentry in Frameworks */,
 				980DBAA32CB0250600141DA3 /* FirebaseAnalytics in Frameworks */,
+				98E8DE6C2D6CE9B800703964 /* AmplitudeSwift in Frameworks */,
 				980DBAA92CB0250600141DA3 /* FirebaseCrashlytics in Frameworks */,
 				980DBABE2CB18F7C00141DA3 /* GoogleSignIn in Frameworks */,
 				980DBAA72CB0250600141DA3 /* FirebaseCore in Frameworks */,
@@ -212,6 +214,7 @@
 				98A8BF062D311B2200E3AB39 /* RevenueCatUI */,
 				98E58B062D688AC6002547EC /* Sentry */,
 				98E58B082D688AC6002547EC /* SentrySwiftUI */,
+				98E8DE6B2D6CE9B800703964 /* AmplitudeSwift */,
 			);
 			productName = Tanga;
 			productReference = 9840A6FC2CA05A5700194500 /* Tanga.app */;
@@ -301,6 +304,7 @@
 				98DD8C2C2D2847160034CE26 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				98A8BF032D311B2200E3AB39 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 				98E58B052D688AC6002547EC /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				98E8DE6A2D6CE9B800703964 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9840A6FD2CA05A5700194500 /* Products */;
@@ -799,6 +803,14 @@
 				minimumVersion = 8.45.0;
 			};
 		};
+		98E8DE6A2D6CE9B800703964 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.11.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -881,6 +893,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 98E58B052D688AC6002547EC /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = SentrySwiftUI;
+		};
+		98E8DE6B2D6CE9B800703964 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98E8DE6A2D6CE9B800703964 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

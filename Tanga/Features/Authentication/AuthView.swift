@@ -122,7 +122,7 @@ struct AuthView: View {
         
         var body: some View {
             Button(action: {
-                Logger.authentication.info("Google Signin button tapped")
+                AnalyticsTracker.shared.track(event: Events.tapGoogleSignIn)
                 signInWithGoogle()
             }) {
                 ZStack {
@@ -161,16 +161,20 @@ struct AuthView: View {
                     UIApplication.shared.open(url)
                     return .handled
                 })
+                .onTapGesture {
+                    AnalyticsTracker.shared.track(event: Events.tapAuthPrivacyAndTerms)
+                }
         }
     }
     
     func skipAuth() {
+        AnalyticsTracker.shared.track(event: Events.tapSkipSignIn)
         Task {
             do {
                 let _ = try await authManager.signInAnonymously()
             }
             catch {
-                Logger.authentication.error("Error signing in anonymously: \(error)")
+                TangaLogger.shared.error("Error signing in anonymously: \(error)")
             }
         }
     }
@@ -181,11 +185,11 @@ struct AuthView: View {
                 guard let user = try await GoogleSignInManager.shared.signInWithGoogle() else { return }
                 let result = try await authManager.googleAuth(user: user)
                 if let result = result {
-                    Logger.authentication.info("Google sign in successful: \(result.user.uid)")
+                    TangaLogger.shared.info("Google sign in successful: \(result.user.uid)")
                 }
             }
             catch {
-                Logger.authentication.error("GoogleSignInError: failed to sign in with Google, \(error))")
+                TangaLogger.shared.error("GoogleSignInError: failed to sign in with Google, \(error))")
             }
         }
     }

@@ -56,7 +56,7 @@ class SearchViewModel: ObservableObject {
                     case .success(let summaries):
                         return summaries
                     case .failure:
-                        Logger.search.error("Error fetching summaries for category \(categoryId)")
+                        TangaLogger.shared.error("Error fetching summaries for category \(categoryId)")
                         return []
                     }
                 }

@@ -41,6 +41,11 @@ struct SearchView: View {
             .task {
                 await viewModel.loadAllSummaries()
             }
+            .onChange(of: searchQuery) { oldValue, newValue in
+                if newValue.count >= 4 {
+                    AnalyticsTracker.shared.track(event: Events.actionSearch(query: newValue))
+                }
+            }
         }.background(Color.cultured)
     }
     
@@ -62,6 +67,7 @@ struct SearchView: View {
                         icon: category.icon
                     ) { categoryId in
                         onCategorySelection(categoryId)
+                        AnalyticsTracker.shared.track(event: Events.tapCategoryItemInSearch(categoryId: categoryId))
                     }
                 }.padding(.horizontal, 10)
             }

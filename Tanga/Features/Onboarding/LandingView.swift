@@ -37,10 +37,10 @@ struct LandingView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(Color.white)
                     .padding(.bottom, 20)
-                // Color.clear.frame(height: 5)
                 
                 TangaButton(
                     onButtonTap: {
+                        AnalyticsTracker.shared.track(event: Events.tapOnboardingGetStarted)
                         path.append(NavigationDestinations.Onboarding)
                     },
                     text: "Get Started",

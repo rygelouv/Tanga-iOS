@@ -70,13 +70,12 @@ class FavoriteViewModel: ObservableObject {
             self.isFavorite = favorite != nil
         } catch {
             self.error = FavoriteError.failedToLoad
-            Logger.library.error("Failed to load favorite status: \(error.localizedDescription)")
+            TangaLogger.shared.error("Failed to load favorite status: \(error.localizedDescription)")
         }
     }
     
     func toggleFavorite() async {
         guard let favorite = favorite ?? summary?.toFavorite(userId: sessionId) else { return }
-        Logger.library.info("Toggling favorite: \(favorite.title ?? "")")
         
         let action = ProtectedAction.auth(.save)
         let result = await protectedActionInteractor.checkProtectedAction(action)
@@ -91,7 +90,7 @@ class FavoriteViewModel: ObservableObject {
         case .authRequired:
             showAuth = true
         case .subscriptionRequired:
-            Logger.library.info("Subscription required for saving favorites")
+            TangaLogger.shared.info("Subscription required for saving favorites")
         }
     }
     
@@ -106,9 +105,10 @@ class FavoriteViewModel: ObservableObject {
             self.isFavorite = true
             self.favorite = favorite
             self.favorite?.id = favoriteId
+            AnalyticsTracker.shared.track(event: Events.actionSummarySaved(summaryId: favoriteId))
         } catch {
             self.error = FavoriteError.failedToSave
-            Logger.library.error("Error saving favorite: \(error.localizedDescription)")
+            TangaLogger.shared.error("Error saving favorite: \(error.localizedDescription)")
         }
     }
     
@@ -119,9 +119,10 @@ class FavoriteViewModel: ObservableObject {
             try await favoriteRepository.deleteFavorite(favoriteId: favoriteId).get()
             self.isFavorite = false
             self.favorite = nil
+            AnalyticsTracker.shared.track(event: Events.actionSummaryRemoved(summaryId: favoriteId))
         } catch {
             self.error = FavoriteError.failedToDelete
-            Logger.library.error("Error deleting favorite: \(error.localizedDescription)")
+            TangaLogger.shared.error("Error deleting favorite: \(error.localizedDescription)")
         }
     }
 }

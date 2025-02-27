@@ -85,6 +85,7 @@ struct ProfileContentView: View {
                 case .loggedIn:
                     TangaPremiumButton()
                         .padding(.horizontal, 40)
+                        .trackTap(event: Events.tapTangaPremiumUpgrade)
                 case .premium:
                     PremiumAccountTag()
                 }
@@ -127,7 +128,10 @@ struct ProfileActionContainer: View {
                 imageName: "email",
                 text: "Contact Us",
                 color: .yellow,
-                onClick: { openLink(URL(string: "https://form.jotform.com/242065602713550")!) }
+                onClick: {
+                    openLink(URL(string: "https://form.jotform.com/242065602713550")!)
+                    AnalyticsTracker.shared.track(event: Events.tapProfileContactUs)
+                }
             )
             .padding(.horizontal, 30)
             .padding(.top, 40)
@@ -143,6 +147,7 @@ struct ProfileActionContainer: View {
             .padding(.horizontal, 30)
             .padding(.top, 15)
             .padding(.bottom, 15)
+            .trackTap(event: Events.tapProfilePrivacyAndTerms)
 
             
             if profileStatus != .anonymous {
@@ -155,6 +160,7 @@ struct ProfileActionContainer: View {
                 .padding(.horizontal, 30)
                 .padding(.top, 15)
                 .padding(.bottom, 20)
+                .trackTap(event: Events.tapProfileSettings)
             }
         }
         .background(Color.white)

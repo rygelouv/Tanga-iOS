@@ -95,6 +95,7 @@ class AuthManager: ObservableObject {
                 case .success(let tangaUser):
                     guard let userId = tangaUser.id else { return }
                     try await sessionManager.openSession(sessionId: userId)
+                    AnalyticsTracker.shared.track(event: Events.actionUserSignedIn)
                     // Identify user in RevenueCat
                     await revenueCatController.login(sessionId: userId)
                 case .failure(let error):
@@ -190,12 +191,12 @@ class AuthManager: ObservableObject {
         }
     
         guard let appleIdToken = appleIdCredentials.identityToken else {
-            print("Unable to fetch identity token")
+            TangaLogger.shared.error("Unable to fetch identity token")
             return nil
         }
         
         guard let ideTokenString = String(data: appleIdToken, encoding: .utf8) else {
-            print("Unable to serialize identity token as string from data \(appleIdToken.debugDescription)")
+            TangaLogger.shared.error("Unable to serialize identity token as string from data \(appleIdToken.debugDescription)")
             return nil
         }
         
@@ -207,7 +208,7 @@ class AuthManager: ObservableObject {
         do {
             return try await authenticateUser(credentials: credentials)
         } catch {
-            print("FirebaseAuthError: appleAuth: \(error)")
+            TangaLogger.shared.error("FirebaseAuthError: appleAuth: \(error)")
             throw error
         }
     }
@@ -219,6 +220,7 @@ class AuthManager: ObservableObject {
                 try Auth.auth().signOut()
                 await revenueCatController.logout()
                 try await sessionManager.clearSession()
+                AnalyticsTracker.shared.track(event: Events.actionUserSignedOut)
                 TangaLogger.shared.info("Signed out")
             }
             catch {

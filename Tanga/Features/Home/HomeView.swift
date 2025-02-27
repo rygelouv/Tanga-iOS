@@ -24,7 +24,11 @@ struct HomeView: View {
                 GreetingMessage(userFirsName: profileViewModel.firstName)
                 ScrollView(.vertical, showsIndicators: false) {
                     Spacer(minLength: 15)
-                    WeeklySummary(weeklySummary: viewModel.uiState.weeklySummary)
+                    let weeklySummary = viewModel.uiState.weeklySummary
+                    WeeklySummary(weeklySummary: weeklySummary).onTap {
+                        guard let summaryId = weeklySummary?.summary.id else { return }
+                        AnalyticsTracker.shared.track(event: Events.tapSummary(summaryId: summaryId))
+                    }
                     Spacer(minLength: 30)
                     if let sections = viewModel.uiState.sections {
                         ForEach(sections) { section in
@@ -49,7 +53,7 @@ struct HomeView: View {
         
         var body: some View {
             HStack {
-                SearchButton()
+                SearchButton().trackTap(event: Events.tapSearch)
                 Spacer()
                 Button(
                     action: {
@@ -58,7 +62,7 @@ struct HomeView: View {
                     }
                 ) {
                     ProfilePictureView(url: profilePhotoUrl ?? "")
-                        .frame(width: 40, height: 40)
+                        .frame(width: 40, height: 40).trackTap(event: Events.tapProfilePicture)
                 }.buttonStyle(PlainButtonStyle())
             }
         }
@@ -142,13 +146,15 @@ struct HomeView: View {
                         .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
                         .foregroundColor(.navy)
                     Spacer()
+                    let categoryId = section?.category.slug ?? ""
                     NavigationLink("See all") {
-                        CategorySummariesView(categoryId: section?.category.slug ?? "")
+                        CategorySummariesView(categoryId: categoryId)
                     }.font(Font.custom("Montserrat", size: 12, relativeTo: .body))
                         .fontWeight(.bold)
                         .foregroundStyle(Color.yaleBlue)
                         .lineLimit(1)
                         .truncationMode(.tail)
+                        .trackTap(event: Events.tapSeeAllBooksInCategory(categoryId: categoryId))
                 }
                 
                 SummaryRowView(summaries: section?.summaries ?? [])

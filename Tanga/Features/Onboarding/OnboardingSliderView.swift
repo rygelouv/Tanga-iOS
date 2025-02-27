@@ -103,7 +103,7 @@ struct OnboardingSliderView: View {
                     currentPage = min(currentPage + 1, pages.count - 1)
                 },
                 onFinish: {
-                    Logger.onboarding.info("Finished onboarding")
+                    AnalyticsTracker.shared.track(event: Events.tapFinishOnboarding)
                     path = NavigationPath()
                     isOnboardingCompleted = true
                 }

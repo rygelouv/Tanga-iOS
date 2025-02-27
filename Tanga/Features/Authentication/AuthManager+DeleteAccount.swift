@@ -77,8 +77,8 @@ extension AuthManager: AccountDeletionManaging {
             // Step 3: Delete the user account
             try await user.delete()
             
-            Logger.authentication.info("Successfully deleted user account")
-            
+            TangaLogger.shared.info("Successfully deleted user account")
+            AnalyticsTracker.shared.track(event: Events.actionAccountDeleted)
             // Remove Session Id and change auth state to trigger navigation to auth screen
             try await sessionManager.clearSession()
             self.authState = .signedOut
