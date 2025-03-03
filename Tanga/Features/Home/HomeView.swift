@@ -57,7 +57,6 @@ struct HomeView: View {
                 Spacer()
                 Button(
                     action: {
-                        print("profile picture button tap")
                         selectionTab = 3
                     }
                 ) {
@@ -104,7 +103,11 @@ struct HomeView: View {
 
                     HStack {
                         VStack(alignment: .leading) {
-                            TagView(title: weeklySummary?.category.name ?? "")
+                            let title = weeklySummary?.category.name ?? ""
+                            let id = weeklySummary?.category.slug ?? ""
+                            let category = PredefinedCategory.fromId(id)
+                            TagView(title: title, icon: category.icon)
+                            
                             Text("Your Free Weekly Summary")
                                 .fontWeight(.bold)
                                 .font(Font.custom("Montserrat", size: 18, relativeTo: .title))
@@ -173,8 +176,9 @@ struct HomeView: View {
     }
 }
 
-
+#if DEBUG
 #Preview {
     let viewModel = HomeViewModel(uiState: dummyHomeUiState)
     HomeView(navigationPath: .constant(NavigationPath()), selectionTab: .constant(0), viewModel: viewModel)
 }
+#endif

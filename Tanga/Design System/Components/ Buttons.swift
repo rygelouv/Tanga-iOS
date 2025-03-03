@@ -344,15 +344,18 @@ struct TangaPremiumButton: View {
 
 /// A floating action button for audio
 struct AudioFloatingActionButton: View {
+    var summary: Summary
+    
+    init(summary: Summary) {
+        self.summary = summary
+    }
     
     var body: some View {
-        VStack {
-            Spacer()
-            HStack {
+        NavigationLink(destination: AudioPlayerView(summary: summary)) {
+            VStack {
                 Spacer()
-                Button(action: {
-                    // Your FAB action here
-                }) {
+                HStack {
+                    Spacer()
                     HStack {
                         Image("o_listen")
                             .resizable()
@@ -374,10 +377,8 @@ struct AudioFloatingActionButton: View {
                     .cornerRadius(40)
                     .shadow(radius: 4, x: 0, y: 2)
                 }
-                .padding(.trailing, 16)
-                .padding(.bottom, 16)
             }
-        }
+        }.buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -426,7 +427,7 @@ struct CloseButtonView: View {
         // Premium button
         TangaPremiumButton()
         
-        AudioFloatingActionButton()
+        AudioFloatingActionButton(summary: dummySummaries[0])
     }
     .padding()
     .background(Color(.systemGroupedBackground))

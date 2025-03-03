@@ -158,9 +158,11 @@ enum ActionType: CaseIterable {
     }
 }
 
+#if DEBUG
 #Preview {
     ActionButton(actionType: ActionType.read, summary: dummySummaries[0], protectedActionInteractor: ProtectedActionInteractor(
         sessionManager: SessionManager(),
         revenuecatController: RevenueCatController()
     ))
 }
+#endif

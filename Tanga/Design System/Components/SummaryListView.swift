@@ -49,10 +49,14 @@ struct SummaryGrid: View {
     }
 }
 
+#if DEBUG
 #Preview {
     SummaryRowView(summaries: dummySummaries)
 }
+#endif
 
+#if DEBUG
 #Preview {
     SummaryGrid(summaries: dummySummaries)
 }
+#endif

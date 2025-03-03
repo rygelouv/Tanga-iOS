@@ -15,12 +15,6 @@ import SwiftUI
 
 typealias FirebaseUser = FirebaseAuth.User
 
-/*enum AuthState {
-    case anonymous // Anonymously authenticated in the app.
-    case signedOut // Authenticated in Firebase using one of service providers, and not anonymous.
-    case signedIn // Not authenticated in the app.
-}*/
-
 enum SigninProvider: String {
   case apple = "apple.com"
   case google = "google.com"
@@ -50,6 +44,7 @@ class AuthManager: ObservableObject {
         appleAccountTerminator: AppleAccountTerminating = AppleAccountTerminator(),
         googleAccountTerminator: GoogleAccountTerminating = GoogleAccountTerminator()
     ) {
+        
         // Account terminators
         self.appleAccountTerminator = appleAccountTerminator
         self.googleAccountTerminator = googleAccountTerminator
@@ -134,7 +129,6 @@ class AuthManager: ObservableObject {
     private func authSignIn(credentials: AuthCredential) async throws -> AuthDataResult {
         do {
             let result = try await Auth.auth().signIn(with: credentials)
-            TangaLogger.shared.info("Signed in: \(result.user.uid)")
             updateState(user: result.user)
             return result
         } catch {
@@ -144,6 +138,7 @@ class AuthManager: ObservableObject {
     }
     
     private func authLink(credentials: AuthCredential) async throws -> AuthDataResult? {
+        TangaLogger.shared.debug(#function)
         do {
             guard let user = Auth.auth().currentUser else {
                 return nil
@@ -154,18 +149,25 @@ class AuthManager: ObservableObject {
             return result
         } catch {
             TangaLogger.shared.error("Error linking: \(error)")
-            throw error
+            let nsError = error as NSError
+            if nsError.code == AuthErrorCode.credentialAlreadyInUse.rawValue {
+                TangaLogger.shared.debug("Credential already in use")
+                return try await authSignIn(credentials: credentials)
+            } else {
+                throw error
+            }
         }
     }
     
     private func updateDisplayName(for user: FirebaseUser) async {
         let currentDisplayName = Auth.auth().currentUser?.displayName
-        if currentDisplayName?.isEmpty == true {
+        if currentDisplayName?.isEmpty != false {
             let displayName = user.providerData.first?.displayName ?? "Anonymous"
             let changeRequest = user.createProfileChangeRequest()
             changeRequest.displayName = displayName
             do {
                 try await changeRequest.commitChanges()
+                TangaLogger.shared.debug("display name updated")
             } catch {
                 TangaLogger.shared.error("Error updating display name: \(error)")
             }
@@ -192,6 +194,7 @@ class AuthManager: ObservableObject {
             fatalError("Invalid state: a login callback was received, but no login was sent.")
         }
     
+        
         guard let appleIdToken = appleIdCredentials.identityToken else {
             TangaLogger.shared.error("Unable to fetch identity token")
             return nil

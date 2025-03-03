@@ -19,82 +19,84 @@ struct AudioPlayerView: View {
     
     var body: some View {
         
-        ScrollView {
-            ZStack {
-                VStack {
-                    Spacer(minLength: 100)
+        ZStack {
+            ScrollView {
+                ZStack {
+                    VStack {
+                        Spacer(minLength: 100)
+                        
+                        Divider().frame( width: 30, height: 4).overlay(.gray.opacity(0.1)).padding(.vertical, 30)
+                        
+                        Spacer()
+                        
+                        // Header Section
+                        AudioPlayerHeader(title: summary.title ?? "", author: summary.author ?? "")
+                        
+                        Spacer(minLength: 50)
+                        
+                        // Slider and Time Labels Section
+                        AudioPlayerSliderAndTimeLabels(
+                            currentTime: $audioPlayerViewModel.currentTime,
+                            duration: audioPlayerViewModel.duration,
+                            formattedTime: audioPlayerViewModel.formattedTime
+                        ) {
+                            audioPlayerViewModel.seek(to: $0)
+                        }
+                        
+                        Spacer(minLength: 20)
+                        
+                        // Play/Pause and Controls Section
+                        AudioPlayerControls(
+                            isPlaying: audioPlayerViewModel.isPlaying,
+                            onPlayPauseToggle: audioPlayerViewModel.togglePlayPause,
+                            onSkipBackward: audioPlayerViewModel.skipBackward,
+                            onSkipForward: audioPlayerViewModel.skipForward
+                        )
+                        
+                        Spacer(minLength: 200)
+                    }.background(Color.white)
+                        .clipShape(
+                            RoundedCornerShape(corners: [.topLeft, .topRight], radius: 40)
+                        )
+                        .padding(.top, 140)
+                        .frame(maxHeight: .infinity)
                     
-                    Divider().frame( width: 30, height: 4).overlay(.gray.opacity(0.1)).padding(.vertical, 30)
-                    
-                    Spacer()
-                    
-                    // Header Section
-                    AudioPlayerHeader(title: summary.title ?? "", author: summary.author ?? "")
-                    
-                    Spacer(minLength: 50)
-                    
-                    if audioPlayerViewModel.duration <= 0 {
-                        ProgressView()
-                    }
-                    
-                    // Slider and Time Labels Section
-                    AudioPlayerSliderAndTimeLabels(
-                        currentTime: $audioPlayerViewModel.currentTime,
-                        duration: audioPlayerViewModel.duration,
-                        formattedTime: audioPlayerViewModel.formattedTime
-                    ) {
-                        audioPlayerViewModel.seek(to: $0)
-                    }
-                    
-                    Spacer(minLength: 20)
-                    
-                    // Play/Pause and Controls Section
-                    AudioPlayerControls(
-                        isPlaying: audioPlayerViewModel.isPlaying,
-                        onPlayPauseToggle: audioPlayerViewModel.togglePlayPause,
-                        onSkipBackward: audioPlayerViewModel.skipBackward,
-                        onSkipForward: audioPlayerViewModel.skipForward
-                    )
-                    
-                    Spacer(minLength: 200)
-                }.background(Color.white)
-                    .clipShape(
-                        RoundedCornerShape(corners: [.topLeft, .topRight], radius: 40)
-                    )
-                    .padding(.top, 140)
-                    .frame(maxHeight: .infinity)
-                
-                // Image at the top
-                VStack {
-                    SummaryImageView(url: summary.coverImageUrl ?? "").frame(width: 160).padding(.top, 20)
-                    Spacer()
-                }.frame(maxHeight: .infinity)
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    audioPlayerViewModel.showMiniPlayerView()
-                    dismiss()
-                }) {
-                    Image("left-arrow")
-                        .resizable()
-                        .renderingMode(.template)
-                        .font(.system(size: 24))
-                        .frame(width: 26, height: 26)
-                        .foregroundColor(.gray)
+                    // Image at the top
+                    VStack {
+                        SummaryImageView(url: summary.coverImageUrl ?? "").frame(width: 160).padding(.top, 20)
+                        Spacer()
+                    }.frame(maxHeight: .infinity)
                 }
             }
-        }
-        .toolbarBackground(Color.cultured, for: .navigationBar)
-        .background(Color.cultured)
-        .onAppear {
-            audioPlayerViewModel.hideMiniPlayerView()
-            audioPlayerViewModel.loadAudio(summary: summary)
-        }
-        .onDisappear {
-            audioPlayerViewModel.showMiniPlayerView()
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        audioPlayerViewModel.showMiniPlayerView()
+                        dismiss()
+                    }) {
+                        Image("left-arrow")
+                            .resizable()
+                            .renderingMode(.template)
+                            .font(.system(size: 24))
+                            .frame(width: 26, height: 26)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .toolbarBackground(Color.cultured, for: .navigationBar)
+            .background(Color.cultured)
+            .onAppear {
+                audioPlayerViewModel.hideMiniPlayerView()
+                audioPlayerViewModel.loadAudio(summary: summary)
+            }
+            .onDisappear {
+                audioPlayerViewModel.showMiniPlayerView()
+            }
+            
+            if audioPlayerViewModel.duration <= 0 {
+                LoadingView()
+            }
         }
     }
     
@@ -200,6 +202,8 @@ struct AudioPlayerView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     AudioPlayerView(summary: dummySummaries[0])
 }
+#endif

@@ -33,7 +33,7 @@ struct ProfileNavigationDestinationView: View {
         case .Subscriptions:
             SubscriptionsView()
         case .DeleteAccount:
-            DeleteAccountView()
+            DeleteAccountView(accountDeleted: .constant(false))
         }
     }
 }

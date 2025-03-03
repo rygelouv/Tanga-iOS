@@ -9,13 +9,13 @@ import SwiftUI
 
 struct TagView: View {
     var title: String
-    
+    var icon: String
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 100).fill(Color.white)
             HStack(spacing: 4) { // Add spacing here if you want a specific gap between icon and text
-                Image("personal_development")
+                Image(icon)
                     .renderingMode(.template)
                     .resizable()
                     .frame(width: 16, height: 16)
@@ -138,7 +138,7 @@ struct FlowLayout<Data, RowContent>: View where Data: RandomAccessCollection, Ro
 
 
 #Preview {
-    TagView(title: "Productivity")
+    TagView(title: "Productivity", icon: "business_career")
 }
 
 #Preview {

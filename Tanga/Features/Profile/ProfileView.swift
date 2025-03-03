@@ -64,6 +64,7 @@ struct ProfileContentView: View {
         .sheet(isPresented: $viewModel.showAuth) {
             AuthView().onDisappear {
                 viewModel.dismissAuth()
+                viewModel.loadProfileData() // Reload data
             }
         }
     }
