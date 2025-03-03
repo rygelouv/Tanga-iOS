@@ -82,7 +82,9 @@ private struct WidthPreferenceKey: PreferenceKey {
     }
 }
 
+#if DEBUG
 #Preview {
     let viewModel = SearchViewModel(summaries: dummySummaries)
     SearchView(viewModel: viewModel)
 }
+#endif

@@ -97,7 +97,7 @@ struct ReadSummaryView: View {
                         }
                     }
                     
-                    AudioFloatingActionButton()
+                    AudioFloatingActionButton(summary: summary).padding(.trailing, 28).padding(.bottom, 28)
                 }
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
@@ -191,7 +191,8 @@ struct ScrollViewOffsetPreferenceKey: PreferenceKey {
     }
 }
 
-
+#if DEBUG
 #Preview {
     ReadSummaryView(summary: dummySummaries[0])
 }
+#endif

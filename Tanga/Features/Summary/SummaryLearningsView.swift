@@ -47,6 +47,8 @@ struct SummaryLearningsView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     SummaryLearningsView(keyLearnings: dummySummaries[0].keyLearnings ?? [])
 }
+#endif

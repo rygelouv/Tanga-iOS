@@ -8,51 +8,71 @@
 import AuthenticationServices
 import SwiftUI
 import OSLog
+import FirebaseAuth
 
 struct AuthView: View {
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.dismiss) private var dismiss
+    @State var showLoading = false
+    @State var error: Error?
     
     var body: some View {
-           VStack {
-               SkipButton(skipAuth: skipAuth, onDismiss: { dismiss() }, authState: authManager.authState)
-               
-               VStack {
-                   Spacer()
-                   
-                   BookLoverImage()
-                   
-                   Spacer()
-                   
-                   WelcomeText()
-                   Color.clear.frame(height: 1)
-                   
-                   SignInExplanation()
-                   
-                   Spacer()
-                   
-                   SignInWithAppleButton(
-                       onRequest: { request in
-                           AppleSignInManager.shared.requestAppleAuthorization(request)
-                       },
-                       onCompletion: { result in
-                           handleAppleID(result)
-                       }
-                   ).signInWithAppleButtonStyle(.black)
-                       
-                       .frame(width: .infinity, height: 60, alignment: .center)
-                       .padding(10)
-                   
-                   GoogleSignInButton(signInWithGoogle: signInWithGoogle)
-                   
-                   Color.clear.frame(height: 5)
-                   
-                   TermsAndPrivacyText()
-                   
-                   Color.clear.frame(height: 5)
-               }.padding(.horizontal, 25)
-           }
-           .background(.white)
+        ZStack {
+            VStack {
+                SkipButton(skipAuth: skipAuth, onDismiss: { dismiss() }, authState: authManager.authState)
+                
+                VStack {
+                    Spacer()
+                    
+                    BookLoverImage()
+                    
+                    Spacer()
+                    
+                    WelcomeText()
+                    Color.clear.frame(height: 1)
+                    
+                    SignInExplanation()
+                    
+                    Spacer()
+                    
+                    SignInWithAppleButton(
+                        onRequest: { request in
+                            AppleSignInManager.shared.requestAppleAuthorization(request)
+                        },
+                        onCompletion: { result in
+                            handleAppleID(result)
+                        }
+                    ).signInWithAppleButtonStyle(.black)
+                        
+                        .frame(width: .infinity, height: 60, alignment: .center)
+                        .padding(10)
+                    
+                    GoogleSignInButton(signInWithGoogle: signInWithGoogle)
+                    
+                    Color.clear.frame(height: 5)
+                    
+                    TermsAndPrivacyText()
+                    
+                    Color.clear.frame(height: 5)
+                }.padding(.horizontal, 25)
+            }
+            .alert("Error", isPresented: Binding(
+                get: { error != nil },
+                set: { if !$0 { error = nil } }
+            )) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                if let error = error {
+                    Text(error.localizedDescription)
+                }
+            }
+            .background(.white)
+            
+            
+            if showLoading {
+                LoadingView()
+            }
+        }
     }
     
     struct SkipButton: View {
@@ -171,58 +191,69 @@ struct AuthView: View {
         AnalyticsTracker.shared.track(event: Events.tapSkipSignIn)
         Task {
             do {
+                self.showLoading = true
                 let _ = try await authManager.signInAnonymously()
             }
             catch {
+                self.showLoading = false
                 TangaLogger.shared.error("Error signing in anonymously: \(error)")
             }
         }
     }
     
     func signInWithGoogle() {
+        TangaLogger.shared.info("Signing in with Google...")
         Task {
             do {
+                self.showLoading = true
                 guard let user = try await GoogleSignInManager.shared.signInWithGoogle() else { return }
                 let result = try await authManager.googleAuth(user: user)
                 if let result = result {
                     TangaLogger.shared.info("Google sign in successful: \(result.user.uid)")
+                    dismiss()
                 }
             }
             catch {
+                self.showLoading = false
+                self.error = error
                 TangaLogger.shared.error("GoogleSignInError: failed to sign in with Google, \(error))")
             }
         }
     }
     
     func handleAppleID(_ result: Result<ASAuthorization, Error>) {
+        self.showLoading = true
         if case let .success(auth) = result {
             guard let appleIDCredentials = auth.credential as? ASAuthorizationAppleIDCredential else {
-                print("AppleAuthorization failed: AppleID credential not available")
+                TangaLogger.shared.error("AppleAuthorization failed: AppleID credential not available")
                 return
             }
 
             Task {
                 do {
-                    guard let _ = try await authManager.appleAuth(
+                    guard let result = try await authManager.appleAuth(
                         appleIDCredentials,
                         nonce: AppleSignInManager.nonce
                     ) else {
                         return
                     }
-                    
+                    TangaLogger.shared.info("Apple sign in successful: \(result.user.uid)")
+                    dismiss()
                 } catch {
-                    debugPrint("AppleAuthorization failed: \(error.localizedDescription)")
-                    // Show error
+                    self.showLoading = false
+                    self.error = error
+                    TangaLogger.shared.error("AppleAuthorization failed: \(error.localizedDescription)")
                 }
             }
         }
         else if case let .failure(error) = result {
-            print("AppleAuthorization failed: \(error)")
-            // show error message to user.
+            self.showLoading = true
+            self.error = error
+            TangaLogger.shared.error("AppleAuthorization failed: \(error)")
         }
     }
 }
 
 #Preview {
-    AuthView()
+    AuthView().environmentObject(AuthManager())
 }

@@ -11,6 +11,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var authManager: AuthManager
+    @State private var accountDeleted: Bool = false
     
     @State private var showLogoutAlert = false
     
@@ -42,10 +43,15 @@ struct SettingsView: View {
                 VersionView()
                 
                 TangaNavButton(
-                    destination: DeleteAccountView(),
+                    destination: DeleteAccountView(accountDeleted: $accountDeleted),
                     text: "Delete Account",
                     variation: ButtonVariation.danger
                 ).trackTap(event: Events.tapProfileDeleteAccount)
+            }
+            .onChange(of: accountDeleted) { oldValue, newValue in
+                if newValue {
+                    dismiss()
+                }
             }
         }.background(Color.cultured)
     }

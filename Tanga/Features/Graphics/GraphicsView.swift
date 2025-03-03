@@ -15,6 +15,8 @@ struct GraphicsView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     GraphicsView(summary: dummySummaries[0])
 }
+#endif
