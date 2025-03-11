@@ -31,6 +31,9 @@ jobs:
       - name: Create Sentry upload Debug Symbols script
         run: echo "${{ secrets.SENTRY_UPLOAD_DEBUG_SYMBOLS_SCRIPT }}" > $GITHUB_WORKSPACE/scripts/sentry-upload-dsym.sh
 
+      - name: Create GoogleService-Info
+        run: echo "${{ secrets.GOOGLE_SERVICES_INFO }}" > $GITHUB_WORKSPACE/Tanga/GoogleService-Info.plist
+
       - name: Build
         run: |
           xcodebuild clean build \

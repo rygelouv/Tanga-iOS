@@ -188,7 +188,7 @@
 				9840A6F92CA05A5700194500 /* Frameworks */,
 				9840A6FA2CA05A5700194500 /* Resources */,
 				98E58B0C2D68B9BB002547EC /* Upload Sentry Debug Symbols */,
-				9813FE102D80419200C1A42B /* ShellScript */,
+				9813FE102D80419200C1A42B /* Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -350,9 +350,9 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9813FE102D80419200C1A42B /* ShellScript */ = {
+		9813FE102D80419200C1A42B /* Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -364,6 +364,7 @@
 				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
 				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
 			);
+			name = Crashlytics;
 			outputFileListPaths = (
 			);
 			outputPaths = (
