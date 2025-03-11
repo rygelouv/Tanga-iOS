@@ -188,6 +188,7 @@
 				9840A6F92CA05A5700194500 /* Frameworks */,
 				9840A6FA2CA05A5700194500 /* Resources */,
 				98E58B0C2D68B9BB002547EC /* Upload Sentry Debug Symbols */,
+				9813FE102D80419200C1A42B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -349,6 +350,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9813FE102D80419200C1A42B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
 		98B86A8B2D64A06400522312 /* Check Git Hooks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
