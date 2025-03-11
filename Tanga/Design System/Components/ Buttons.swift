@@ -407,6 +407,7 @@ struct CloseButtonView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     VStack(spacing: 20) {
         // Big button with icon
@@ -432,6 +433,7 @@ struct CloseButtonView: View {
     .padding()
     .background(Color(.systemGroupedBackground))
 }
+#endif
 
 #Preview {
     SearchButton()
