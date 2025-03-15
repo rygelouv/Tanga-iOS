@@ -19,6 +19,7 @@
 		980DBAB32CB0250600141DA3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBAB22CB0250600141DA3 /* FirebaseStorage */; };
 		980DBABE2CB18F7C00141DA3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABD2CB18F7C00141DA3 /* GoogleSignIn */; };
 		980DBAC02CB18F7C00141DA3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABF2CB18F7C00141DA3 /* GoogleSignInSwift */; };
+		981301302D85A6D700C1A42B /* app-store.svg in Resources */ = {isa = PBXBuildFile; fileRef = 9813012F2D85A6D700C1A42B /* app-store.svg */; };
 		98A0563F2CC4049B00D45063 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 98A0563E2CC4049300D45063 /* README.md */; };
 		98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BC8B2D29174B00E3AB39 /* MarkdownUI */; };
 		98A8BF052D311B2200E3AB39 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BF042D311B2200E3AB39 /* RevenueCat */; };
@@ -51,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		980A09682D450A0F00DE2CBA /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		9813012F2D85A6D700C1A42B /* app-store.svg */ = {isa = PBXFileReference; lastKnownFileType = text; path = "app-store.svg"; sourceTree = "<group>"; };
 		9840A6FC2CA05A5700194500 /* Tanga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tanga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A70D2CA05A5800194500 /* TangaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9840A7172CA05A5800194500 /* TangaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -169,6 +171,7 @@
 		98B8644E2D61DC4400522312 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				9813012F2D85A6D700C1A42B /* app-store.svg */,
 				98B8644B2D61DC4400522312 /* mvvm-screenshot.png */,
 				98B8644C2D61DC4400522312 /* screenshots-tanga-min-1.png */,
 				98B8644D2D61DC4400522312 /* tanga_infra_02.png */,
@@ -324,6 +327,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				981301302D85A6D700C1A42B /* app-store.svg in Resources */,
 				980A09692D450A0F00DE2CBA /* Secrets.xcconfig in Resources */,
 				98A0563F2CC4049B00D45063 /* README.md in Resources */,
 				98B8644F2D61DC4400522312 /* mvvm-screenshot.png in Resources */,

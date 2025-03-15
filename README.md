@@ -16,12 +16,13 @@
 
 <p align="center">
   <a href="https://sonarcloud.io/summary/new_code?id=rygelouv_Tanga-iOS"><img alt="License" src="https://sonarcloud.io/images/project_badges/sonarcloud-light.svg"/></a>
+  <a href="https://apps.apple.com/sn/app/tanga-book-summaries/id6740287424"><img alt="App Store button" width="220" src="images/app-store.svg"/></a>
   <a href="https://tanga.app/"><img alt="Website button" width="240" src="images/check_website_button.png"/></a>
 </p>
 
 ---
 
-## **We are 99% complete on the MVP** 🚀🚀
+## **We are now in production** 🎉🎉
 Here is our latest major additions:
 
 * Implement Protected Actions by @rygelouv https://github.com/rygelouv/Tanga-iOS/pull/25
