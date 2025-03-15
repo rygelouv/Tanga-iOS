@@ -22,7 +22,7 @@
 
 ---
 
-## **We are 99% complete on the MVP** 🚀🚀
+## **We are now in production** 🎉🎉
 Here is our latest major additions:
 
 * Implement Protected Actions by @rygelouv https://github.com/rygelouv/Tanga-iOS/pull/25
