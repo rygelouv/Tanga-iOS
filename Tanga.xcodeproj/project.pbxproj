@@ -20,6 +20,7 @@
 		980DBABE2CB18F7C00141DA3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABD2CB18F7C00141DA3 /* GoogleSignIn */; };
 		980DBAC02CB18F7C00141DA3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 980DBABF2CB18F7C00141DA3 /* GoogleSignInSwift */; };
 		981301302D85A6D700C1A42B /* app-store.svg in Resources */ = {isa = PBXBuildFile; fileRef = 9813012F2D85A6D700C1A42B /* app-store.svg */; };
+		981301332D8C468200C1A42B /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 981301322D8C468200C1A42B /* FirebaseVertexAI-Preview */; };
 		98A0563F2CC4049B00D45063 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 98A0563E2CC4049300D45063 /* README.md */; };
 		98A8BC8C2D29174B00E3AB39 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BC8B2D29174B00E3AB39 /* MarkdownUI */; };
 		98A8BF052D311B2200E3AB39 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 98A8BF042D311B2200E3AB39 /* RevenueCat */; };
@@ -99,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				981301332D8C468200C1A42B /* FirebaseVertexAI-Preview in Frameworks */,
 				980DBAAF2CB0250600141DA3 /* FirebasePerformance in Frameworks */,
 				980DBAAD2CB0250600141DA3 /* FirebaseMessaging in Frameworks */,
 				98A8BF072D311B2200E3AB39 /* RevenueCatUI in Frameworks */,
@@ -219,6 +221,7 @@
 				98E58B062D688AC6002547EC /* Sentry */,
 				98E58B082D688AC6002547EC /* SentrySwiftUI */,
 				98E8DE6B2D6CE9B800703964 /* AmplitudeSwift */,
+				981301322D8C468200C1A42B /* FirebaseVertexAI-Preview */,
 			);
 			productName = Tanga;
 			productReference = 9840A6FC2CA05A5700194500 /* Tanga.app */;
@@ -896,6 +899,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 980DBABC2CB18F7C00141DA3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		981301322D8C468200C1A42B /* FirebaseVertexAI-Preview */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98BACBB02CB01D0200D67296 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseVertexAI-Preview";
 		};
 		98A8BC8B2D29174B00E3AB39 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
