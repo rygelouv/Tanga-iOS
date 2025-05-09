@@ -41,30 +41,65 @@ struct SummaryDetailsView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
-                    if let summary = viewModel.summary {
-                        SummaryHeader(summary: summary)
-                        Spacer()
-                        VStack(alignment: .leading, spacing: 16) {
-                            SummaryLearningsView(keyLearnings: summary.keyLearnings ?? [])
-                            
-                            Text("Introduction")
-                                .fontWeight(.bold)
-                                .font(Font.custom("Montserrat", size: 16, relativeTo: .title))
-                                .foregroundColor(Color.navy)
-                                .padding(.top, 8)
-                            if let synopsis = summary.synopsis {
-                                ExpandableText(text: synopsis)
+            ZStack {
+                ScrollView {
+                    VStack {
+                        if let summary = viewModel.summary {
+                            SummaryHeader(summary: summary)
+                            Spacer()
+                            VStack(alignment: .leading, spacing: 16) {
+                                SummaryLearningsView(keyLearnings: summary.keyLearnings ?? [])
+                                
+                                Text("Introduction")
+                                    .fontWeight(.bold)
+                                    .font(Font.custom("Montserrat", size: 16, relativeTo: .title))
+                                    .foregroundColor(Color.navy)
+                                    .padding(.top, 8)
+                                if let synopsis = summary.synopsis {
+                                    ExpandableText(text: synopsis)
+                                }
+                            }.padding()
+                            Spacer()
+                            if let recommendations = viewModel.recommendations {
+                                RecommendationSection(summaries: recommendations)
                             }
-                        }.padding()
-                        Spacer()
-                        if let recommendations = viewModel.recommendations {
-                            RecommendationSection(summaries: recommendations)
                         }
                     }
                 }
-            }.toolbar {
+                
+                // Floating Action Button
+                VStack {
+                    Spacer()
+                    NavigationLink(destination: AIPromptsView(summaryId: summaryId)) {
+                        HStack {
+                            Image(systemName: "sparkles")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(Circle().fill(.white.opacity(0.2)))
+                            
+                            Text("Ask Tanga AI")
+                                .font(Font.custom("Montserrat", size: 16, relativeTo: .headline))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.trailing, 20)
+                                .padding(.leading, 16)
+                        }
+                        .frame(height: 56)
+                        .padding(.horizontal, 8)
+                        .background(LinearGradient(
+                            gradient: Gradient(colors: [.navy, .yaleBlue, .cerulean]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ))
+                        .cornerRadius(28)
+                        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
+                    }
+                    .padding(.bottom, 16)
+                }
+            }
+            .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         Task {
