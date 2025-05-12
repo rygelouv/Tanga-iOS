@@ -79,4 +79,21 @@ struct FirestoreDatabase {
             static let SLUG = "slug"
         }
     }
+    
+    struct RichInsights {
+        // Collection Reference
+        static let COLLECTION_NAME = "richInsights"
+        
+        // Fields
+        struct Fields {
+            static let SUMMARY_ID = "summaryId"
+            static let INSIGHTS = "insights"
+            static let NUMBER = "number"
+            static let TITLE = "title"
+            static let DESCRIPTION = "description"
+            static let ILLUSTRATION_URL = "illustrationUrl"
+            static let VIDEO_URL = "videoUrl"
+            static let KEY_TAKEAWAYS = "keyTakeaways"
+        }
+    }
 }

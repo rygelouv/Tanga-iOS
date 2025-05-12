@@ -55,6 +55,9 @@
     "Confirm Logout" : {
 
     },
+    "Could not load insights" : {
+
+    },
     "Delete Your Tanga Account" : {
 
     },
@@ -101,6 +104,9 @@
 
     },
     "No" : {
+
+    },
+    "No insights available" : {
 
     },
     "No results found for \"%@\"" : {
@@ -154,10 +160,16 @@
     "Sorry, Tanga Graphics is currently unavailable. Try again later" : {
 
     },
+    "Tanga" : {
+
+    },
     "Tanga Version: %@" : {
 
     },
     "The simplest, most focused way to experience life-changing book summaries." : {
+
+    },
+    "Try Again" : {
 
     },
     "Try refining your search query or explore other categories." : {

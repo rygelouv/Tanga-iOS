@@ -105,7 +105,7 @@ struct ActionButton: View {
         case .listen:
             AudioPlayerView(summary: summary)
         case .graphic:
-            GraphicsView(summary: summary)
+            RichInsightsView(summaryId: summary.id!, bookCoverUrl: summary.coverImageUrl!)
         }
     }
 }
@@ -142,7 +142,7 @@ enum ActionType: CaseIterable {
         case .read, .listen:
             return false
         case .graphic:
-            return true
+            return false
         }
     }
     
@@ -153,7 +153,7 @@ enum ActionType: CaseIterable {
         case .listen:
             return .listen(summaryId: summaryId)
         case .graphic:
-            return nil  // Graphic doesn't map to a SubscriptionRequiredAction
+            return .listen(summaryId: summaryId)  // TODO to be changed
         }
     }
 }

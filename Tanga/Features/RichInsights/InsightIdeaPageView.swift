@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct InsightIdeaPageView: View {
+    let viewModel: IdeaPageInsightUI
+    
     var body: some View {
         ZStack {
             // Background
@@ -9,16 +11,18 @@ struct InsightIdeaPageView: View {
             
             // Content layers
             VStack(spacing: 0) {
+                Spacer(minLength: 40)
                 // Top section with title and description
-                VStack(spacing: 20) {
-                    Text("Focus on Your One Thing")
-                        .font(.system(size: 30, weight: .bold))
+                /*VStack(spacing: 20) {
+                    Text(viewModel.title)
+                        .font(Font.custom("Montserrat", size: 22, relativeTo: .title))
+                        .fontWeight(.semibold)
                         .foregroundColor(.orange)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                     
-                    Text("Concentrate on the single most important task that will have the greatest impact on your success.")
-                        .font(.title3)
+                    Text(viewModel.description)
+                        .font(Font.custom("Montserrat", size: 18, relativeTo: .body))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
@@ -26,19 +30,18 @@ struct InsightIdeaPageView: View {
                 .padding(.top, 60)
                 
                 // Center illustration image
-                Spacer()
+                Spacer()*/
                 
                 // Main concept illustration without background
-                AsyncImage(url: URL(string: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e")) { image in
+                AsyncImage(url: URL(string: viewModel.illustrationUrl)) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(height: 320)
                         .cornerRadius(12)
                         .padding(20)
                 } placeholder: {
                     ProgressView()
-                        .frame(height: 320)
+                        .frame(height: 360)
                 }
                 
                 Spacer()
@@ -69,20 +72,11 @@ struct InsightIdeaPageView: View {
                     Spacer()
                     
                     // Book cover
-                    AsyncImage(url: URL(string: "https://i.postimg.cc/tpgRQNV7/The-One-Thing-02-min.jpg")) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 80, height: 110)
-                            .cornerRadius(8)
-                            .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
-                    } placeholder: {
-                        ProgressView()
-                            .frame(width: 100, height: 130)
-                    }
+                    SummaryImageView(url: viewModel.bookCoverUrl)
+                        .frame(width: 80, height: 110)
                 }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 40)
+                .padding(.bottom, 20)
             }
             .padding()
         }
@@ -90,5 +84,12 @@ struct InsightIdeaPageView: View {
 }
 
 #Preview {
-    InsightIdeaPageView()
+    InsightIdeaPageView(viewModel: RichInsight(
+        id: "book_summary_id",
+        number: 1,
+        title: "Focus on Your One Thing",
+        description: "Concentrate on the single most important task that will have the greatest impact on your success.",
+        illustrationUrl: "https://ik.imagekit.io/tangaimages/onething_img2_tiny.png",
+        videoUrl: "https://ik.imagekit.io/tangaimages/onething_img2_tiny.png"
+    ).toIdeaPageUI(bookCoverUrl: "https://i.postimg.cc/tpgRQNV7/The-One-Thing-02-min.jpg"))
 }
