@@ -82,7 +82,7 @@ struct VideoTeaserPlayerView: View {
     }
 
     private func setupPlayer() {
-        guard let url = URL(string: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4") else { return }
+        guard let url = URL(string: videoUrl) else { return }
         
         let playerItem = AVPlayerItem(url: url)
         let player = AVPlayer(playerItem: playerItem)

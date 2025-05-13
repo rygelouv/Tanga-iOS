@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct SummaryLearningsView: View {
-    let keyLearnings: [String]
-    let videoUrl: String
+    let summary: Summary
     
+    private var keyLearnings: [String] {
+        return summary.keyLearnings ?? []
+    }
     
     var body : some View {
         ZStack {
@@ -24,7 +26,10 @@ struct SummaryLearningsView: View {
                     
                     Spacer()
                     
-                    VideoTeaserButtonView(videoUrl: videoUrl)
+                    if let teaserUrl = summary.teaserVideoUrl {
+                        VideoTeaserButtonView(videoUrl: teaserUrl)
+                    }
+                    VideoTeaserButtonView(videoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4")
                 }
                 
                 ForEach (keyLearnings, id: \.self) { keyLearning in
@@ -89,9 +94,21 @@ struct SummaryLearningsView: View {
 
 #if DEBUG
 #Preview {
-    SummaryLearningsView(
-        keyLearnings: dummySummaries[0].keyLearnings ?? [],
-        videoUrl: "https://example.com/video/teaser.mp4"
+    let previewSummary = dummySummaries[0]
+    // Add teaserVideoUrl for preview
+    var summary = Summary(
+        id: previewSummary.id,
+        title: previewSummary.title,
+        author: previewSummary.author,
+        synopsis: previewSummary.synopsis,
+        coverImageUrl: previewSummary.coverImageUrl,
+        playingLength: previewSummary.playingLength,
+        purchaseBookUrl: previewSummary.purchaseBookUrl,
+        categories: previewSummary.categories,
+        keyLearnings: previewSummary.keyLearnings,
+        teaserVideoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4"
     )
+    
+    return SummaryLearningsView(summary: summary)
 }
 #endif

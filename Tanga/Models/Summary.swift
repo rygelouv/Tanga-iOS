@@ -22,4 +22,5 @@ struct Summary: Identifiable, Codable {
     var purchaseBookUrl: String?
     var categories: [CategoryId]?
     var keyLearnings: [String]?
+    var teaserVideoUrl: String?
 }

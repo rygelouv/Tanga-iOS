@@ -83,7 +83,8 @@ let dummySummaries = [
                 "Build accountable leadership team",
                 "Measure key business metrics",
                 "Solve issues through systematic approach"
-            ]),
+            ],
+            teaserVideoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4"),
     Summary(id: "2", title: "Good to Great", author: "Jim Collins", synopsis: "A book about how companies transition from good to great.", coverImageUrl: "https://example.com/good-to-great.jpg", playingLength: "9h 58m", purchaseBookUrl: "https://example.com/good-to-great", categories: ["categoryId"]),
     Summary(id: "3", title: "Lean In", author: "Sheryl Sandberg", synopsis: "A book about women, work, and the will to lead.", coverImageUrl: "https://example.com/lean-in.jpg", playingLength: "7h 24m", purchaseBookUrl: "https://example.com/lean-in", categories: ["categoryId"]),
     Summary(id: "4", title: "The 4-Hour Workweek", author: "Tim Ferriss", synopsis: "A guide to escaping the 9-to-5 grind.", coverImageUrl: "https://example.com/4-hour-workweek.jpg", playingLength: "13h 12m", purchaseBookUrl: "https://example.com/4-hour-workweek", categories: ["categoryId"]),
