@@ -34,6 +34,9 @@
     "Book title, author name" : {
 
     },
+    "Buffering..." : {
+
+    },
     "Business & Career" : {
 
     },
@@ -101,6 +104,9 @@
 
     },
     "Life-changing books" : {
+
+    },
+    "Loading video..." : {
 
     },
     "No" : {
@@ -181,6 +187,12 @@
     "Upgrade to Premium and get the best of Tanga" : {
 
     },
+    "Video Teaser" : {
+
+    },
+    "Want to learn more about this book? Choose an option below to continue your learning journey." : {
+
+    },
     "Welcome to Tanga" : {
 
     },
@@ -191,6 +203,9 @@
 
     },
     "Yes Delete" : {
+
+    },
+    "You've Reached the End of Insights" : {
 
     },
     "Your Free Weekly Summary" : {

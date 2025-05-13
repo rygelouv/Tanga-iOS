@@ -5,6 +5,16 @@ protocol InsightPage {
     var number: Int { get }
 }
 
+// UI model for the end page - shows options to continue learning
+struct EndPageInsightUI: InsightPage {
+    var number: Int
+    
+    // For preview/testing
+    static var sample: EndPageInsightUI {
+        EndPageInsightUI(number: 999)
+    }
+}
+
 // UI model for the idea page - shows concept with title, description and illustration
 struct IdeaPageInsightUI: InsightPage {
     var number: Int

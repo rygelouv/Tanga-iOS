@@ -48,7 +48,7 @@ struct SummaryDetailsView: View {
                             SummaryHeader(summary: summary)
                             Spacer()
                             VStack(alignment: .leading, spacing: 16) {
-                                SummaryLearningsView(keyLearnings: summary.keyLearnings ?? [])
+                                SummaryLearningsView(keyLearnings: summary.keyLearnings ?? [], videoUrl: "")
                                 
                                 Text("Introduction")
                                     .fontWeight(.bold)

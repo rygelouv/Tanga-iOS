@@ -5,8 +5,14 @@ struct RichInsightsView: View {
     @StateObject private var viewModel: RichInsightsViewModel
     @State private var currentPage = 0
     
-    init(summaryId: String, bookCoverUrl: String) {
+    // Callbacks for end page actions
+    var onPodcastTapped: (() -> Void)?
+    var onAudiobookTapped: (() -> Void)?
+    
+    init(summaryId: String, bookCoverUrl: String, onPodcastTapped: (() -> Void)? = nil, onAudiobookTapped: (() -> Void)? = nil) {
         _viewModel = StateObject(wrappedValue: RichInsightsViewModel(summaryId: summaryId, bookCoverUrl: bookCoverUrl))
+        self.onPodcastTapped = onPodcastTapped
+        self.onAudiobookTapped = onAudiobookTapped
     }
     
     var body: some View {
@@ -96,6 +102,11 @@ struct RichInsightsView: View {
             } else if let videoPage = page as? VideoPageInsightUI {
                 InsightVideoPageView(viewModel: videoPage)
                     .containerRelativeFrame(.vertical)
+            } else if let endPage = page as? EndPageInsightUI {
+                InsightEndPageView(
+                    viewModel: endPage
+                )
+                .containerRelativeFrame(.vertical)
             } else {
                 EmptyView()
             }
@@ -108,7 +119,9 @@ struct RichInsightsView: View {
 #Preview {
     RichInsightsView(
         summaryId: "the-one-thing",
-        bookCoverUrl: "https://i.postimg.cc/tpgRQNV7/The-One-Thing-02-min.jpg"
+        bookCoverUrl: "https://i.postimg.cc/tpgRQNV7/The-One-Thing-02-min.jpg",
+        onPodcastTapped: { print("Podcast tapped") },
+        onAudiobookTapped: { print("Audiobook tapped") }
     )
     .preferredColorScheme(.dark)
 }

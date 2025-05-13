@@ -54,6 +54,7 @@ struct InsightIdeaPageView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 60, height: 60)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
                             .padding(.top, 8)
                         
                         Text("Tanga")

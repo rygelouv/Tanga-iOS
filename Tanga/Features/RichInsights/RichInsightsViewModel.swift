@@ -9,6 +9,7 @@ class RichInsightsViewModel: ObservableObject {
     private let logger = Logger(subsystem: "com.tanga", category: "RichInsightsViewModel")
     private let summaryId: String
     private let bookCoverUrl: String
+
     
     // Published state elements
     @Published private(set) var isLoading = false
@@ -58,6 +59,14 @@ class RichInsightsViewModel: ObservableObject {
             pages.append(videoPage)
         }
         
+        // Add the end page as the last page
+        if !richInsights.isEmpty {
+            // Use the last insight number + 1 for the end page number
+            let endPageNumber = (richInsights.last?.number ?? 0) + 1
+            let endPage = EndPageInsightUI(number: endPageNumber)
+            pages.append(endPage)
+        }
+        
         return pages
     }
     
@@ -70,6 +79,11 @@ class RichInsightsViewModel: ObservableObject {
     func videoPage(at index: Int) -> VideoPageInsightUI? {
         guard index >= 0 && index < pages.count else { return nil }
         return pages[index] as? VideoPageInsightUI
+    }
+    
+    func endPage(at index: Int) -> EndPageInsightUI? {
+        guard index >= 0 && index < pages.count else { return nil }
+        return pages[index] as? EndPageInsightUI
     }
     
     // Generic page getter
