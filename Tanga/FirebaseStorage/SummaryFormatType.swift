@@ -14,6 +14,7 @@ enum SummaryFormatType: String {
     case cover = "cover.jpg"
     case text = "summary.md"
     case audio = "audio.mp3"
+    case podcast = "podcast.mp3"
     case graphic = "graphic.jpg"
     
     /// Returns the associated filename for the format type.

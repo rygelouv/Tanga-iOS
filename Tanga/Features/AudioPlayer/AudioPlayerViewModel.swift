@@ -20,6 +20,7 @@ class AudioPlayerViewModel: ObservableObject {
     @Published var author: String = ""
     @Published var imageUrl: String = ""
     @Published var showMiniPlayer: Bool = false
+    @Published var currentAudioFormat: AudioFormat? = nil
     
     private var urlDownloadGenerator: DownloadUrlGenerator
     
@@ -45,7 +46,13 @@ class AudioPlayerViewModel: ObservableObject {
         }
     }
     
-    func loadAudio(summary: Summary) {
+
+    
+    func loadAudio(summary: Summary, audioFormat: AudioFormat) {
+        Logger.audioPlayer.info("[AudioPlayerViewModel] loadAudio - Received format parameter: \(String(describing: audioFormat))")
+        
+        Logger.audioPlayer.info("[AudioPlayerViewModel] loadAudio - Updated currentAudioFormat to: \(String(describing: self.currentAudioFormat))")
+        
         guard let summaryId = summary.id else { return }
         
         DispatchQueue.main.async {
@@ -54,24 +61,30 @@ class AudioPlayerViewModel: ObservableObject {
             self.imageUrl = summary.coverImageUrl ?? ""
         }
         
-        // Check if the requested summary is already playing
-        if let currentSummaryId = playingSummary?.id, currentSummaryId == summaryId {
-            // Already playing the same summary
+        // Check if the requested summary is already playing and with the same format
+        if let currentSummaryId = playingSummary?.id, currentSummaryId == summaryId,
+           currentAudioFormat == audioFormat {
+            print("same audio file laoded with same format")
+            // Already playing the same summary with the same format
             return
         }
+        
+        // Set the current format
+        self.currentAudioFormat = audioFormat
         
         // Stop the current playback and prepare for the new summary
         audioController.stopPlayback()
         
         // Generate URL and configure the player
         Task {
-            let url = try await urlDownloadGenerator.generate(summaryId: summaryId)
-            if let url = url {
-                do {
+            do {
+                if let url = try await urlDownloadGenerator.generate(summaryId: summaryId, audioFormat: audioFormat) {
                     try await audioController.loadAudio(summary: summary, url: url)
-                } catch {
-                    Logger.audioPlayer.error("Error loading audio: \(error)")
+                } else {
+                    Logger.audioPlayer.error("[AudioPlayerViewModel] Task - Failed to generate URL")
                 }
+            } catch {
+                Logger.audioPlayer.error("[AudioPlayerViewModel] Task - Error loading audio: \(error)")
             }
         }
     }

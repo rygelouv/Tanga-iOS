@@ -40,6 +40,7 @@ struct FirestoreDatabase {
             static let PLAYING_LENGTH = "playingLength"
             static let PURCHASE_BOOK_URL = "purchaseBookUrl"
             static let KEY_LEARINGS = "keyLearnings"
+            static let TEASER_VIDEO_URL = "teaserVideoUrl"
         }
     }
 
@@ -77,6 +78,23 @@ struct FirestoreDatabase {
         // Fields
         struct Fields {
             static let SLUG = "slug"
+        }
+    }
+    
+    struct RichInsights {
+        // Collection Reference
+        static let COLLECTION_NAME = "richInsights"
+        
+        // Fields
+        struct Fields {
+            static let SUMMARY_ID = "summaryId"
+            static let INSIGHTS = "insights"
+            static let NUMBER = "number"
+            static let TITLE = "title"
+            static let DESCRIPTION = "description"
+            static let ILLUSTRATION_URL = "illustrationUrl"
+            static let VIDEO_URL = "videoUrl"
+            static let KEY_TAKEAWAYS = "keyTakeaways"
         }
     }
 }

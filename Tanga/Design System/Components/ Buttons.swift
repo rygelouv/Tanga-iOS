@@ -343,7 +343,7 @@ struct TangaPremiumButton: View {
 }
 
 /// A floating action button for audio
-struct AudioFloatingActionButton: View {
+/*struct AudioFloatingActionButton: View {
     var summary: Summary
     
     init(summary: Summary) {
@@ -351,7 +351,7 @@ struct AudioFloatingActionButton: View {
     }
     
     var body: some View {
-        NavigationLink(destination: AudioPlayerView(summary: summary)) {
+        NavigationLink(destination: AudioPlayerView(summary: summary, audioFormat: .audiobook)) {
             VStack {
                 Spacer()
                 HStack {
@@ -380,7 +380,7 @@ struct AudioFloatingActionButton: View {
             }
         }.buttonStyle(PlainButtonStyle())
     }
-}
+}*/
 
 /// A circular close button with customizable styling
 struct CloseButtonView: View {
@@ -428,7 +428,7 @@ struct CloseButtonView: View {
         // Premium button
         TangaPremiumButton()
         
-        AudioFloatingActionButton(summary: dummySummaries[0])
+        //AudioFloatingActionButton(summary: dummySummaries[0])
     }
     .padding()
     .background(Color(.systemGroupedBackground))

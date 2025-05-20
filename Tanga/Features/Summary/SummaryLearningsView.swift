@@ -8,16 +8,30 @@
 import SwiftUI
 
 struct SummaryLearningsView: View {
-    let keyLearnings: [String]
+    let summary: Summary
+    
+    private var keyLearnings: [String] {
+        return summary.keyLearnings ?? []
+    }
     
     var body : some View {
         ZStack {
             RoundedRectangle(cornerRadius: 6).stroke(Color.auroMetalSaurus.opacity(0.3), lineWidth: 1)
             VStack(alignment: .leading, spacing: 10) {
-                Text("Key Ideas")
-                    .fontWeight(.bold)
-                    .font(Font.custom("Montserrat", size: 16, relativeTo: .title))
-                    .foregroundColor(Color.navy)
+                HStack {
+                    Text("Key Ideas")
+                        .fontWeight(.bold)
+                        .font(Font.custom("Montserrat", size: 16, relativeTo: .title))
+                        .foregroundColor(Color.navy)
+                    
+                    Spacer()
+                    
+                    if let teaserUrl = summary.teaserVideoUrl {
+                        VideoTeaserButtonView(videoUrl: teaserUrl)
+                    }
+                    // VideoTeaserButtonView(videoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4")
+                }
+                
                 ForEach (keyLearnings, id: \.self) { keyLearning in
                     KeyLearningsItemView(text: keyLearning)
                 }.padding(.vertical, 2)
@@ -25,6 +39,37 @@ struct SummaryLearningsView: View {
         }
     }
     
+    struct VideoTeaserButtonView: View {
+        let videoUrl: String
+        @State private var showVideoTeaser = false
+        
+        var body: some View {
+            Button(action: {
+                showVideoTeaser = true
+            }) {
+                // Keep the same HStack content with the play icon and text
+                HStack(spacing: 8) {
+                    Image(systemName: "play.circle.fill")
+                        .foregroundColor(Color.orange)
+                    
+                    Text("Video Teaser")
+                        .font(Font.custom("Montserrat", size: 14, relativeTo: .body))
+                        .fontWeight(.medium)
+                        .foregroundColor(Color.orange)
+                }
+                .padding(.vertical, 6)
+                .padding(.horizontal, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 20).fill(.white)
+                        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                )
+            }
+            .sheet(isPresented: $showVideoTeaser) {
+                VideoTeaserPlayerView(videoUrl: videoUrl)
+            }
+        }
+    }
+
     struct KeyLearningsItemView: View {
         let text: String
         
@@ -49,6 +94,21 @@ struct SummaryLearningsView: View {
 
 #if DEBUG
 #Preview {
-    SummaryLearningsView(keyLearnings: dummySummaries[0].keyLearnings ?? [])
+    let previewSummary = dummySummaries[0]
+    // Add teaserVideoUrl for preview
+    var summary = Summary(
+        id: previewSummary.id,
+        title: previewSummary.title,
+        author: previewSummary.author,
+        synopsis: previewSummary.synopsis,
+        coverImageUrl: previewSummary.coverImageUrl,
+        playingLength: previewSummary.playingLength,
+        purchaseBookUrl: previewSummary.purchaseBookUrl,
+        categories: previewSummary.categories,
+        keyLearnings: previewSummary.keyLearnings,
+        teaserVideoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4"
+    )
+    
+    return SummaryLearningsView(summary: summary)
 }
 #endif
