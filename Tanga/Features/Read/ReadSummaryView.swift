@@ -97,7 +97,7 @@ struct ReadSummaryView: View {
                         }
                     }
                     
-                    AudioFloatingActionButton(summary: summary).padding(.trailing, 28).padding(.bottom, 28)
+                    //AudioFloatingActionButton(summary: summary).padding(.trailing, 28).padding(.bottom, 28)
                 }
                 .navigationBarBackButtonHidden(true)
                 .toolbar {

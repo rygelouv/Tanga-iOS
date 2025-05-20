@@ -16,12 +16,17 @@ class DownloadUrlGenerator {
         self.storage = storage
     }
     
-    func generate(summaryId: SummaryId) async throws -> URL? {
+    func generate(summaryId: SummaryId, audioFormat: AudioFormat) async throws -> URL? {
         let summaryRef = storage.summaryReference(summaryId: summaryId)
-        let audioFileRef = summaryRef.child(SummaryFormatType.audio.rawValue)
+        
+        // Select the appropriate file reference based on the audio format
+        let formatType = audioFormat == .podcast ? SummaryFormatType.podcast : SummaryFormatType.audio
+        let fileRef = summaryRef.child(formatType.rawValue)
+        
+        Logger.audioPlayer.info("Generating URL for format: \(formatType.rawValue)")
         
         return try await withCheckedThrowingContinuation { continuation in
-            audioFileRef.downloadURL() { url, error in
+            fileRef.downloadURL() { url, error in
                 if let error {
                     Logger.audioPlayer.error("Error downloading file: \(error)")
                     continuation.resume(throwing: error)

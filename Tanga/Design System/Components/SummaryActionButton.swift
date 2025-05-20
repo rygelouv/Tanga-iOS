@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import OSLog
+import Combine
 
 struct ActionButton: View {
     let actionType: ActionType
@@ -14,8 +16,14 @@ struct ActionButton: View {
     
     @State private var showAuth = false
     @State private var showSubscription = false
-    @State private var shouldNavigate = false
+    @State private var showAudioFormatSelection = false
     @State private var actionCheckResult: ProtectedActionCheckResult?
+    
+    // Navigation state
+    @State private var navigateToAudioPlayer = false
+    @State private var navigateToReadSummary = false
+    @State private var navigateToRichInsights = false
+    @State private var selectedAudioFormat: AudioFormat = .audiobook
     
     var body: some View {
         Button(action: {
@@ -39,13 +47,6 @@ struct ActionButton: View {
             .background(backgroundColor.opacity(0.1))
             .cornerRadius(12)
         }
-        .background(
-            NavigationLink(
-                destination: actionView(),
-                isActive: $shouldNavigate,
-                label: { EmptyView() }
-            )
-        )
         .sheet(isPresented: $showAuth) {
             AuthView()
                 .onDisappear {
@@ -58,6 +59,39 @@ struct ActionButton: View {
                     showSubscription = false
                 }
         }
+        .sheet(isPresented: $showAudioFormatSelection) {
+            AudioFormatSelectionView(
+                summary: summary,
+                isPresented: $showAudioFormatSelection,
+                onFormatSelected: { format in
+                    print("✅ Format selected in action button: \(format)")
+                    selectedAudioFormat = format
+                    navigateToAudioPlayer = true
+                }
+            )
+            .presentationDetents([.medium])
+        }
+        // Individual NavigationLinks for each destination type
+        .background(
+            NavigationLink(destination: AudioPlayerView(summary: summary, audioFormat: selectedAudioFormat), isActive: $navigateToAudioPlayer) {
+                EmptyView()
+            }
+        )
+        .background(
+            NavigationLink(destination: ReadSummaryView(summary: summary), isActive: $navigateToReadSummary) {
+                EmptyView()
+            }
+        )
+        .background(
+            NavigationLink(destination: 
+                summary.id.flatMap { id in 
+                    summary.coverImageUrl.map { url in 
+                        RichInsightsView(summaryId: id, bookCoverUrl: url)
+                    }
+                }, isActive: $navigateToRichInsights) {
+                EmptyView()
+            }
+        )
     }
     
     private var textColor: Color {
@@ -93,20 +127,39 @@ struct ActionButton: View {
         case .subscriptionRequired:
             showSubscription = true
         case .allowed:
-            shouldNavigate = true
+            if actionType == .listen {
+                showAudioFormatSelection = true
+            } else {
+                // Navigate directly based on action type
+                navigateToDestination()
+            }
         }
     }
     
-    @ViewBuilder
-    private func actionView() -> some View {
+    // Navigate directly based on action type
+    private func navigateToDestination() {
+        print("⏩ Navigating to destination for action: \(actionType)")
+        
         switch actionType {
         case .read:
-            ReadSummaryView(summary: summary)
+            navigateToReadSummary = true
+            
         case .listen:
-            AudioPlayerView(summary: summary)
+            // This case is handled by the format selection sheet
+            break
+            
         case .graphic:
-            RichInsightsView(summaryId: summary.id!, bookCoverUrl: summary.coverImageUrl!)
+            navigateToRichInsights = true
         }
+    }
+}
+
+
+// Navigation helper extension
+extension View {
+    func debugPrint(_ message: String) -> Self {
+        print(message)
+        return self
     }
 }
 

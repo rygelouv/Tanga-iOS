@@ -29,7 +29,7 @@ struct SummaryLearningsView: View {
                     if let teaserUrl = summary.teaserVideoUrl {
                         VideoTeaserButtonView(videoUrl: teaserUrl)
                     }
-                    VideoTeaserButtonView(videoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4")
+                    // VideoTeaserButtonView(videoUrl: "https://ik.imagekit.io/tangaimages/4506871-hd_720_1366_50fps.mp4")
                 }
                 
                 ForEach (keyLearnings, id: \.self) { keyLearning in

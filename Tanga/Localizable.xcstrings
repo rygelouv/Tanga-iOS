@@ -28,6 +28,9 @@
     "Ask Tanga AI" : {
 
     },
+    "Audiobook" : {
+
+    },
     "Best Value" : {
 
     },
@@ -47,6 +50,9 @@
 
     },
     "Check It Out Now!" : {
+
+    },
+    "Choose Audio Format" : {
 
     },
     "Choose your format" : {
@@ -106,6 +112,9 @@
     "Life-changing books" : {
 
     },
+    "Listen to %@" : {
+
+    },
     "Loading video..." : {
 
     },
@@ -127,10 +136,10 @@
     "Personal development •Productivity •Self-improvement •Self-developmens" : {
 
     },
-    "Play" : {
+    "Please confirm you want to delete your account. This action is permanent and cannot be undone." : {
 
     },
-    "Please confirm you want to delete your account. This action is permanent and cannot be undone." : {
+    "Podcast" : {
 
     },
     "Premium Account" : {
@@ -146,6 +155,9 @@
 
     },
     "See all" : {
+
+    },
+    "Select how you'd like to listen to this summary" : {
 
     },
     "Self-Help" : {

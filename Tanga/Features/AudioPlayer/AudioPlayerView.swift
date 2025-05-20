@@ -8,10 +8,18 @@
 import SwiftUI
 import AVFoundation
 import FirebaseStorage
+import OSLog
 
 
 struct AudioPlayerView: View {
-    let  summary: Summary
+    let summary: Summary
+    let audioFormat: AudioFormat
+    
+    init(summary: Summary, audioFormat: AudioFormat) {
+        self.summary = summary
+        self.audioFormat = audioFormat
+        print("🔍 AudioPlayerView initialized with format: \(audioFormat) for summary: \(summary.title ?? "Untitled")")
+    }
     
     @EnvironmentObject var audioPlayerViewModel: AudioPlayerViewModel
     
@@ -28,6 +36,25 @@ struct AudioPlayerView: View {
                         Divider().frame( width: 30, height: 4).overlay(.gray.opacity(0.1)).padding(.vertical, 30)
                         
                         Spacer()
+                        
+                        // Format Badge
+                        VStack {
+                            HStack(spacing: 6) {
+                                Image(systemName: audioFormat == .podcast ? "mic.fill" : "headphones")
+                                    .foregroundColor(.yaleBlue)
+                                    .font(.system(size: 14, weight: .semibold))
+                                Text(audioFormat == .podcast ? "Podcast" : "Audiobook")
+                                    .font(Font.custom("Montserrat", size: 12, relativeTo: .caption))
+                                    .foregroundColor(.yaleBlue)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.yaleBlue.opacity(0.1))
+                            .cornerRadius(16)
+                            .padding(.trailing, 16)
+
+                            Spacer(minLength: 20)
+                        }
                         
                         // Header Section
                         AudioPlayerHeader(title: summary.title ?? "", author: summary.author ?? "")
@@ -86,9 +113,11 @@ struct AudioPlayerView: View {
             }
             .toolbarBackground(Color.cultured, for: .navigationBar)
             .background(Color.cultured)
-            .onAppear {
+            .task {
+                print("💻 AudioPlayerView task - Using format: \(audioFormat)")
+                // Load audio with the directly passed format parameter
+                audioPlayerViewModel.loadAudio(summary: summary, audioFormat: audioFormat)
                 audioPlayerViewModel.hideMiniPlayerView()
-                audioPlayerViewModel.loadAudio(summary: summary)
             }
             .onDisappear {
                 audioPlayerViewModel.showMiniPlayerView()
@@ -204,6 +233,10 @@ struct AudioPlayerView: View {
 
 #if DEBUG
 #Preview {
-    AudioPlayerView(summary: dummySummaries[0])
+    AudioPlayerView(summary: dummySummaries[0], audioFormat: .podcast)
+        .environmentObject(AudioPlayerViewModel(
+            urlDownloadGenerator: DownloadUrlGenerator(storage: Storage.storage()),
+            audioController: AudioController()
+        ))
 }
 #endif
