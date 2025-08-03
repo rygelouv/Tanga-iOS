@@ -396,7 +396,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -n \"$CI\" ]; then\n    echo \"⚠️ Skipping Git hook check in CI environment.\"\n    exit 0\nfi\n\nsh ~/Library/Developer/Xcode/UserScripts/check-hooks.sh\n";
+			shellScript = "if [ -n \"$CI\" ]; then\n    echo \"⚠️ Skipping Git hook check in CI environment.\"\n    exit 0\nfi\n\nsh ~/Library/Developer/Xcode/UserScripts/check-hooks.sh\nsh ~/Library/Developer/Xcode/UserScripts/setup-hooks.sh\n";
 		};
 		98E58B0C2D68B9BB002547EC /* Upload Sentry Debug Symbols */ = {
 			isa = PBXShellScriptBuildPhase;

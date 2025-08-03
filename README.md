@@ -49,7 +49,9 @@ Before your first build, run:
 ```sh
 mkdir -p ~/Library/Developer/Xcode/UserScripts/
 cp scripts/check-hooks.sh ~/Library/Developer/Xcode/UserScripts/
+cp scripts/setup-hooks.sh ~/Library/Developer/Xcode/UserScripts/
 chmod +x ~/Library/Developer/Xcode/UserScripts/check-hooks.sh
+chmod +x ~/Library/Developer/Xcode/UserScripts/setup-hooks.sh
 ```
 
 ### **📌Swiftlint setup**
